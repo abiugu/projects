@@ -6,3 +6,4 @@ altura = float(input("Digite sua altura:"))
 print(nome)
 print(idade)
 print(altura)
+

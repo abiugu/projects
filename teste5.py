@@ -44,3 +44,4 @@ while True:
         total = total + fc['valor']
 
         print(("Saldo atual: R$"), total)
+
