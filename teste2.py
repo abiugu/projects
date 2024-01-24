@@ -14,4 +14,3 @@ elif salario >= 10000 and salario < 15000:
 
 else:
     print("Merecedor demais de tudo isso, parabéns !!")
-    

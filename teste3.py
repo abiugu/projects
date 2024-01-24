@@ -22,3 +22,4 @@ for n in notas:
         print("O aluno", nome, "da matrícula", matricula, "está aprovado !")
     else:
         print("O aluno", nome, "da matrícula", matricula, "está reprovado !")
+    
