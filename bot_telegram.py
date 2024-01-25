@@ -1,72 +1,70 @@
-#!/usr/bin/env python
-# pylint: disable=unused-argument
-# This program is dedicated to the public domain under the CC0 license.
+import requests
+from bs4 import BeautifulSoup
+import time
 
-"""
-Simple Bot to reply to Telegram messages.
+# Configuração do bot Telegram
+TOKEN = '6739402312:AAFB-etL3rw9N29myNo5bmdKSvuJ3ppdamY'
+CHAT_ID = '6739402312'
 
-First, a few handler functions are defined. Then, those functions are passed to
-the Application and registered at their respective places.
-Then, the bot is started and runs until we press Ctrl-C on the command line.
-
-Usage:
-Basic Echobot example, repeats messages.
-Press Ctrl-C on the command line or send a signal to the process to stop the
-bot.
-"""
-
-import logging
-
-from telegram import ForceReply, Update
-from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
-
-# Enable logging
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
-)
-# set higher logging level for httpx to avoid all GET and POST requests being logged
-logging.getLogger("httpx").setLevel(logging.WARNING)
-
-logger = logging.getLogger(__name__)
+# Função para extrair informações e enviar para o bot
 
 
-# Define a few command handlers. These usually take the two arguments update and
-# context.
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Send a message when the command /start is issued."""
-    user = update.effective_user
-    await update.message.reply_html(
-        rf"Hi {user.mention_html()}!",
-        reply_markup=ForceReply(selective=True),
-    )
+def iniciar_bot():
+    while True:
+        try:
+            # URL do site
+            url = 'https://livecasino.bet365.com/Play/MegaFireBlazeRoulette'
+
+            # Cabeçalhos para simular um navegador Mozilla
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+            }
+
+            # Fazendo a requisição HTTP para obter o HTML da página
+            response = requests.get(url, headers=headers)
+
+            if response.status_code == 200:
+                # Parseando o HTML com BeautifulSoup
+                soup = BeautifulSoup(response.text, 'html.parser')
+
+                # Encontrando a tabela de resultados anteriores
+                tabela_resultados_anteriores = soup.find(
+                    'div', class_='roulette-history-results')  # Substitua 'div' pela tag correta
+
+                # Exibindo as informações dos resultados anteriores
+                for resultado in tabela_resultados_anteriores.find_all('div', class_='roulette-history-item'):
+                    cor_resultado = determinar_cor_resultado_anterior(
+                        resultado)
+                    print(cor_resultado, end='\t')
+
+                # Adapte conforme necessário para enviar para o bot do Telegram
+                # send_telegram_message('Informações extraídas com sucesso!')
+
+                time.sleep(2)  # Espera 2 segundos antes de verificar novamente
+
+            else:
+                print(f'Erro ao acessar a página. Status code: {
+                      response.status_code}')
+                time.sleep(2)  # Espera 2 segundos antes de tentar novamente
+
+        except Exception as e:
+            print(f"Erro: {e}")
+            time.sleep(2)  # Espera 2 segundos antes de tentar novamente
+
+# Função para determinar a cor do resultado anterior
 
 
-async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Send a message when the command /help is issued."""
-    await update.message.reply_text("Help!")
+def determinar_cor_resultado_anterior(resultado):
+    classes = resultado.get('class', [])
+    if 'roulette-history-item_red' in classes:
+        return 'vermelho'
+    elif 'roulette-history-item_black' in classes:
+        return 'preto'
+    elif 'roulette-history-item_green' in classes:
+        return 'verde'
+    else:
+        return 'desconhecida'
 
 
-async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Echo the user message."""
-    await update.message.reply_text(update.message.text)
-
-
-def main() -> None:
-    """Start the bot."""
-    # Create the Application and pass it your bot's token.
-    application = Application.builder().token("6739402312:AAFB-etL3rw9N29myNo5bmdKSvuJ3ppdamY").build()
-
-    # on different commands - answer in Telegram
-    application.add_handler(CommandHandler("start", start))
-    application.add_handler(CommandHandler("help", help_command))
-
-    # on non command i.e message - echo the message on Telegram
-    application.add_handler(MessageHandler(
-        filters.TEXT & ~filters.COMMAND, echo))
-
-    # Run the bot until the user presses Ctrl-C
-    application.run_polling(allowed_updates=Update.ALL_TYPES)
-
-
-if __name__ == "__main__":
-    main()
+# Iniciar o bot
+iniciar_bot()
