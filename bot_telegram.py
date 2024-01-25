@@ -1,55 +1,60 @@
-import requests
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
+from telegram import Update
+from telegram.ext import Updater, CommandHandler, CallbackContext
 import time
 
 # Configuração do bot Telegram
 TOKEN = '6739402312:AAFB-etL3rw9N29myNo5bmdKSvuJ3ppdamY'
 CHAT_ID = '6739402312'
 
-# Função para extrair informações e enviar para o bot
+# Função para extrair informações e verificar a sequência estratégica
 
 
-def iniciar_bot():
-    while True:
-        try:
-            # URL do site
-            url = 'https://livecasino.bet365.com/Play/MegaFireBlazeRoulette'
+def iniciar_bot(update: Update, context: CallbackContext):
+    # Configuração do Selenium
+    chrome_options = Options()
+    chrome_options.add_argument('--headless')  # Para execução em background
 
-            # Cabeçalhos para simular um navegador Mozilla
-            headers = {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-            }
+    # Substitua 'caminho/para/seu/chromedriver' pelo caminho real para o seu chromedriver
+    chrome_path = r'caminho\para\seu\chromedriver'
 
-            # Fazendo a requisição HTTP para obter o HTML da página
-            response = requests.get(url, headers=headers)
+    driver = webdriver.Chrome(
+        executable_path=chrome_path, options=chrome_options)
 
-            if response.status_code == 200:
-                # Parseando o HTML com BeautifulSoup
-                soup = BeautifulSoup(response.text, 'html.parser')
+    try:
+        # URL do site
+        url = 'https://livecasino.bet365.com/Play/MegaFireBlazeRoulette'
 
-                # Encontrando a tabela de resultados anteriores
-                tabela_resultados_anteriores = soup.find(
-                    'div', class_='roulette-history-results')  # Substitua 'div' pela tag correta
+        # Fazendo a requisição HTTP para obter o HTML da página usando o Selenium
+        driver.get(url)
 
-                # Exibindo as informações dos resultados anteriores
-                for resultado in tabela_resultados_anteriores.find_all('div', class_='roulette-history-item'):
-                    cor_resultado = determinar_cor_resultado_anterior(
-                        resultado)
-                    print(cor_resultado, end='\t')
+        # Aguarde o carregamento da página
+        time.sleep(5)
 
-                # Adapte conforme necessário para enviar para o bot do Telegram
-                # send_telegram_message('Informações extraídas com sucesso!')
+        # Pegue o HTML da página após o carregamento completo
+        html = driver.page_source
 
-                time.sleep(2)  # Espera 2 segundos antes de verificar novamente
+        # Parseando o HTML com BeautifulSoup
+        soup = BeautifulSoup(html, 'html.parser')
 
-            else:
-                print(f'Erro ao acessar a página. Status code: {
-                      response.status_code}')
-                time.sleep(2)  # Espera 2 segundos antes de tentar novamente
+        # Encontrando a tabela de resultados anteriores
+        tabela_resultados_anteriores = soup.find(
+            'div', class_='roulette-history-results')  # Substitua 'div' pela tag correta
 
-        except Exception as e:
-            print(f"Erro: {e}")
-            time.sleep(2)  # Espera 2 segundos antes de tentar novamente
+        # Exibindo as informações dos resultados anteriores
+        for resultado in tabela_resultados_anteriores.find_all('div', class_='roulette-history-item'):
+            cor_resultado = determinar_cor_resultado_anterior(resultado)
+            context.bot.send_message(
+                chat_id=CHAT_ID, text=f'Cor do resultado anterior: {cor_resultado}')
+
+    except Exception as e:
+        context.bot.send_message(chat_id=CHAT_ID, text=f'Erro: {e}')
+
+    finally:
+        # Feche o navegador ao finalizar
+        driver.quit()
 
 # Função para determinar a cor do resultado anterior
 
@@ -66,5 +71,19 @@ def determinar_cor_resultado_anterior(resultado):
         return 'desconhecida'
 
 
-# Iniciar o bot
-iniciar_bot()
+def main():
+    # Configuração do bot e adicionando o manipulador de comando
+    updater = Updater(token=TOKEN, use_context=True)
+
+    # Registrar um manipulador para o comando 'iniciar'
+    updater.dispatcher.add_handler(CommandHandler("iniciar", iniciar_bot))
+
+    # Iniciando o bot
+    updater.start_polling()
+
+    # Mantendo o script em execução
+    updater.idle()
+
+
+if __name__ == '__main__':
+    main()
