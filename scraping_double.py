@@ -25,7 +25,11 @@ class Double:
         cur_hour = self.get_current_time_hours()
         url = f"https://blaze-7.com/api/roulette_games/history?startDate=2023-12-27T14:27:14.680Z&endDate=2024-01-26T14:27:14.680Z&page=1"
 
-        r = requests.get(url)
+        headers = {
+            "Cache-Control": "no-cache",
+        }
+
+        r = requests.get(url, headers=headers)
 
         if r.status_code != 200:
             print(f"Erro ao acessar a página. Status code: {r.status_code}")
