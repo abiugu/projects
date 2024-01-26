@@ -23,7 +23,7 @@ class Double:
 
     def get_blaze_data(self):
         cur_hour = self.get_current_time_hours()
-        url = f"https://blaze-7.com/api/roulette_games/history?startDate=2023-12-27T14:27:14.680Z&endDate=2024-01-26T14:27:14.680Z&page=1"
+        url = f"https://blaze-7.com/api/roulette_games/history?startDate=2023-12-27T14:49:30.818Z&endDate=2024-01-26T14:49:30.818Z&page=1"
 
         headers = {
             "Cache-Control": "no-cache",
