@@ -12,11 +12,11 @@ driver = webdriver.Chrome(service=service, options=options)
 url = 'https://blaze-7.com/pt/games/double?modal=double_history_index'
 driver.get(url)
 
-# Aguarda até que a classe history__double seja carregada
+# Aguarda até que o elemento com o ID history__double seja carregado
 driver.implicitly_wait(10)
 
-# Extrai informações da classe history__double
-history_double_element = driver.find_element(By.CLASS_NAME, "history__double")
+# Extrai informações do elemento com o ID history__double
+history_double_element = driver.find_element(By.ID, "history__double")
 history_text = history_double_element.text
 
 # Imprime as informações
