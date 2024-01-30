@@ -42,20 +42,17 @@ def verificar_sequencias():
                     mensagem_sequencia = f"{
                         current_datetime} - Sequência de {quantidade_sequencia} cores iguais encontrada!\n"
 
-                    if mensagem_sequencia.strip() != existing_content.strip():
+                    if mensagem_sequencia not in existing_content:
                         sinal_file.seek(0)
-                        sinal_file.truncate()
-                        sinal_file.write(
-                            mensagem_sequencia + existing_content[len(mensagem_sequencia):])
+                        sinal_file.write(mensagem_sequencia + existing_content)
                 else:
                     mensagem_sem_sequencia = f"{
                         current_datetime} - Sem sequências\n"
 
-                    if mensagem_sem_sequencia.strip() != existing_content.strip():
+                    if mensagem_sem_sequencia not in existing_content:
                         sinal_file.seek(0)
-                        sinal_file.truncate()
                         sinal_file.write(
-                            mensagem_sem_sequencia + existing_content[len(mensagem_sem_sequencia):])
+                            mensagem_sem_sequencia + existing_content)
 
             # Verificar se o arquivo "stop.txt" existe
             if os.path.exists(stop_file_path):
