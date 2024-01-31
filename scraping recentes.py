@@ -66,9 +66,6 @@ try:
                 result_line = f"Número: {number}, Cor: {
                     color}, Data e Hora: {current_datetime}"
 
-                # Imprimir no console
-                print(result_line)
-
                 # Escrever no arquivo .txt
                 txt_file.write(result_line + "\n")
 
