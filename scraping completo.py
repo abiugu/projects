@@ -3,6 +3,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 import os
 import time
+from datetime import datetime
 
 # Configurações do ChromeDriver
 service = Service()
@@ -15,7 +16,7 @@ desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
 txt_file_path = os.path.join(desktop_path, "resultados double.txt")
 
 # Limitar o número de páginas a serem extraídas
-limite_paginas = 3
+limite_paginas = 5
 
 # Iniciar o WebDriver
 driver = webdriver.Chrome(service=service, options=options)
@@ -26,7 +27,7 @@ try:
     driver.get(url)
 
     # Clicar no botão de avanço nas páginas para ir até a décima página
-    for _ in range(2):
+    for _ in range(4):
         botao_avanco = driver.find_elements(
             By.CLASS_NAME, "pagination__button")[1]
         botao_avanco.click()
@@ -69,10 +70,21 @@ try:
                 # Encontrar o elemento de data e hora
                 date_element = container_element.find_element(
                     By.CLASS_NAME, "history__double__date")
-                date_time = date_element.text
+                
+                time_element = container_element.find_element(
+                    By.CLASS_NAME, "history__double__time")
+                
+                date_text = date_element.text
+                time_text = time_element.text
+
+                date_time_text = f"{date_text} {time_text}"
+
+                date_time_obj = datetime.strptime(date_time_text, "%d/%m/%Y %H:%M:%S")
+
+                formatted_date_time = date_time_obj.strftime("%d/%m/%Y %H:%M:%S")
 
                 # Concatenar os resultados em uma única linha
-                result_line = f"Número: {number}, Cor: {color}, e {date_time}"
+                result_line = f"Número: {number}, Cor: {color} - {formatted_date_time}"
 
                 # Imprimir no console
                 print(result_line)
@@ -94,4 +106,3 @@ except Exception as e:
 finally:
     # Fechar o navegador
     driver.quit()
-    
