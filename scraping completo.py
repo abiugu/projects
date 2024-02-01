@@ -9,6 +9,14 @@ from datetime import datetime
 service = Service()
 options = webdriver.ChromeOptions()
 
+# Executar em modo headless (sem interface gráfica)
+options.add_argument('--headless')
+options.add_argument('--disable-gpu')
+
+# Desativar carregamento de imagens para acelerar o processo
+prefs = {"profile.managed_default_content_settings.images": 2}
+options.add_experimental_option("prefs", prefs)
+
 # Caminho para a área de trabalho
 desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
 
@@ -16,7 +24,7 @@ desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
 txt_file_path = os.path.join(desktop_path, "resultados double.txt")
 
 # Limitar o número de páginas a serem extraídas
-limite_paginas = 5
+limite_paginas = 30
 
 # Iniciar o WebDriver
 driver = webdriver.Chrome(service=service, options=options)
@@ -27,7 +35,7 @@ try:
     driver.get(url)
 
     # Clicar no botão de avanço nas páginas para ir até a décima página
-    for _ in range(4):
+    for _ in range(29):
         botao_avanco = driver.find_elements(
             By.CLASS_NAME, "pagination__button")[1]
         botao_avanco.click()
@@ -70,21 +78,15 @@ try:
                 # Encontrar o elemento de data e hora
                 date_element = container_element.find_element(
                     By.CLASS_NAME, "history__double__date")
-                
-                time_element = container_element.find_element(
-                    By.CLASS_NAME, "history__double__time")
-                
-                date_text = date_element.text
-                time_text = time_element.text
 
-                date_time_text = f"{date_text} {time_text}"
+                # Obter a segunda linha do elemento, que contém a hora
+                time_text = date_element.text.split('\n')[1]
 
-                date_time_obj = datetime.strptime(date_time_text, "%d/%m/%Y %H:%M:%S")
-
-                formatted_date_time = date_time_obj.strftime("%d/%m/%Y %H:%M:%S")
+                current_datetime = time.strftime("%d/%m/%y %H:%M:%S")
 
                 # Concatenar os resultados em uma única linha
-                result_line = f"Número: {number}, Cor: {color} - {formatted_date_time}"
+                result_line = f"Número: {number}, Cor: {
+                    color}, Data e Hora: {current_datetime}"
 
                 # Imprimir no console
                 print(result_line)
@@ -98,7 +100,7 @@ try:
         botao_retrocesso.click()
 
         # Aguardar um curto intervalo antes de passar para a próxima página
-        time.sleep(2)  # Pode ajustar conforme necessário
+        time.sleep(3)  # Pode ajustar conforme necessário
 
 except Exception as e:
     print(f"Erro: {e}")
