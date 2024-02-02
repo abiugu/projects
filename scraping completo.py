@@ -24,7 +24,7 @@ desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
 txt_file_path = os.path.join(desktop_path, "resultados double.txt")
 
 # Limitar o número de páginas a serem extraídas
-limite_paginas = 30
+limite_paginas = 288
 
 # Iniciar o WebDriver
 driver = webdriver.Chrome(service=service, options=options)
@@ -35,7 +35,7 @@ try:
     driver.get(url)
 
     # Clicar no botão de avanço nas páginas para ir até a décima página
-    for _ in range(29):
+    for _ in range(9):
         botao_avanco = driver.find_elements(
             By.CLASS_NAME, "pagination__button")[1]
         botao_avanco.click()
@@ -82,11 +82,8 @@ try:
                 # Obter a segunda linha do elemento, que contém a hora
                 time_text = date_element.text.split('\n')[1]
 
-                current_datetime = time.strftime("%d/%m/%y %H:%M:%S")
-
                 # Concatenar os resultados em uma única linha
-                result_line = f"Número: {number}, Cor: {
-                    color}, Data e Hora: {current_datetime}"
+                result_line = f"Número: {number}, Cor: {color} - {time_text}"
 
                 # Imprimir no console
                 print(result_line)
@@ -100,7 +97,7 @@ try:
         botao_retrocesso.click()
 
         # Aguardar um curto intervalo antes de passar para a próxima página
-        time.sleep(3)  # Pode ajustar conforme necessário
+        time.sleep(2)  # Pode ajustar conforme necessário
 
 except Exception as e:
     print(f"Erro: {e}")
