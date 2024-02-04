@@ -35,7 +35,7 @@ try:
     driver.get(url)
 
     # Clicar no botão de avanço nas páginas para ir até a décima página
-    for _ in range(9):
+    for _ in range(287):
         botao_avanco = driver.find_elements(
             By.CLASS_NAME, "pagination__button")[1]
         botao_avanco.click()

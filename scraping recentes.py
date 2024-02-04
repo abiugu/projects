@@ -30,7 +30,8 @@ try:
     url = 'https://blaze-7.com/pt/games/double'
     driver.get(url)
 
-    while True:
+    # Adicionar lógica para encerrar o loop quando o arquivo "stop.txt" estiver presente
+    while not os.path.exists(os.path.join(desktop_path, "stop.txt")):
         # Encontrar o elemento pelo ID 'roulette-recent'
         recent_results_element = driver.find_element(By.ID, "roulette-recent")
 
@@ -63,8 +64,7 @@ try:
                 current_datetime = time.strftime("%Y-%m-%d %H:%M:%S")
 
                 # Concatenar os resultados em uma única linha
-                result_line = f"Número: {number}, Cor: {
-                    color}, Data e Hora: {current_datetime}"
+                result_line = f"Número: {number}, Cor: {color}, Data e Hora: {current_datetime}"
 
                 # Escrever no arquivo .txt
                 txt_file.write(result_line + "\n")
