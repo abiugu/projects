@@ -23,6 +23,7 @@ desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
 txt_file_path = os.path.join(desktop_path, "resultados_recentes.txt")
 
 try:
+
     # Iniciar o WebDriver
     driver = webdriver.Chrome(service=service, options=options)
 
@@ -64,13 +65,21 @@ try:
                 current_datetime = time.strftime("%Y-%m-%d %H:%M:%S")
 
                 # Concatenar os resultados em uma única linha
-                result_line = f"Número: {number}, Cor: {color}, Data e Hora: {current_datetime}"
+                result_line = f"Número: {number}, Cor: {
+                    color}, Data e Hora: {current_datetime}"
 
                 # Escrever no arquivo .txt
                 txt_file.write(result_line + "\n")
 
+                def verificar_stop():
+                    # Verificar se o arquivo "stop.txt" existe no desktop
+                    desktop_path = os.path.join(
+                        os.path.expanduser("~"), "Desktop")
+                    stop_file_path = os.path.join(desktop_path, "stop.txt")
+                    return os.path.exists(stop_file_path)
+
         # Aguardar um intervalo de tempo antes de recomeçar o loop
-        time.sleep(10)  # Espera 10 segundos antes de recomeçar
+        time.sleep(20)  # Espera 20 segundos antes de recomeçar
 
 except Exception as e:
     print(f"Erro: {e}")
