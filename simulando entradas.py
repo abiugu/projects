@@ -4,6 +4,8 @@ from selenium.webdriver.common.by import By
 import os
 import time
 
+erros_anterior = 0
+
 
 def verificar_stop():
     stop_path = os.path.join(os.path.expanduser("~"), "Desktop", "stop.txt")
@@ -11,20 +13,33 @@ def verificar_stop():
 
 
 def somar_resultados(acertos, erros, sequencia):
+    global erros_anterior
+
     cores_anteriores = sequencia[1:4]
     cor_atual = sequencia[0]
 
     if all(cor == cores_anteriores[0] for cor in cores_anteriores) and cor_atual != cores_anteriores[0]:
         acertos += 1
-        print("Acerto!")
+        print("Acerto !!")
+        erros_anterior = 0  # Reinicia os erros após um acerto
+        return acertos, erros, 60  # Retornar intervalo_contagem como 60 após acerto
     elif all(cor == cores_anteriores[0] for cor in cores_anteriores) and cor_atual == cores_anteriores[0]:
         erros += 1
-        print("Erro!")
+        erros_anterior += 1
+        if erros_anterior == 1:  # Primeiro erro
+            print("Erro !!")
+            return acertos, erros, 25  # Retornar intervalo_contagem como 15 após o primeiro erro
+        elif erros_anterior == 2:  # Segundo erro (erro Martingale)
+            print("Erro Martingale !!")
+            erros_anterior = 0  # Zera os erros após o erro Martingale
+            return acertos, erros, 60  # Retornar intervalo_contagem como 60 após erro Martingale
 
-    return acertos, erros
+    return acertos, erros, 25  # Retornar intervalo_contagem como 25 por padrão
 
 
 def main():
+    global erros_anterior
+
     service = Service()
     options = webdriver.ChromeOptions()
     options.add_argument('--headless')
@@ -36,8 +51,7 @@ def main():
     resultados_path = os.path.join(desktop_path, "acertos_erros.txt")
 
     acertos, erros = 0, 0
-    acertos_anterior, erros_anterior = 0, 0
-    intervalo_contagem = 15
+    intervalo_contagem = 60  # Começa com 60 segundos
 
     try:
         driver = webdriver.Chrome(service=service, options=options)
@@ -51,25 +65,18 @@ def main():
                 By.CLASS_NAME, "sm-box")
 
             sequencia = [box_element.get_attribute(
-                "class").split()[-1] for box_element in box_elements[:4]]
+                "class").split()[-1] for box_element in box_elements[:5]]
 
-            acertos, erros = somar_resultados(acertos, erros, sequencia)
+            acertos, erros, intervalo_contagem = somar_resultados(
+                acertos, erros, sequencia)
 
-            # Escrever resultados no arquivo a cada 60 segundos ou 15 segundos
-            if acertos + erros > acertos_anterior + erros_anterior:
-                with open(resultados_path, "w") as file:
-                    file.write(f"Acertos: {acertos}\nErros: {erros}\n")
-                    file.write("Últimas 4 linhas:\n")
-                    file.write("\n".join(sequencia) + "\n")
+            with open(resultados_path, "w") as file:
+                file.write(f"Acertos: {acertos}\nErros: {erros}\n")
+                file.write(f"Segundos do loop atual: {intervalo_contagem}\n")
+                file.write("Últimas 5 linhas:\n")
+                file.write("\n".join(sequencia) + "\n")
 
-                # Atualiza o número de acertos e erros do loop anterior
-                acertos_anterior, erros_anterior = acertos, erros
-
-                # Reinicia o contador de contagem para o próximo intervalo
-                intervalo_contagem = 60
-            else:
-                # Decrementa o contador de contagem para o próximo loop
-                intervalo_contagem = max(15, intervalo_contagem - 15)
+            print(f"Segundos do loop atual: {intervalo_contagem}")
 
             time.sleep(intervalo_contagem)
 
