@@ -20,21 +20,26 @@ def somar_resultados(acertos, erros, sequencia):
 
     if all(cor == cores_anteriores[0] for cor in cores_anteriores) and cor_atual != cores_anteriores[0]:
         acertos += 1
-        print("Acerto !!")
-        erros_anterior = 0  # Reinicia os erros após um acerto
-        return acertos, erros, 60  # Retornar intervalo_contagem como 60 após acerto
-    elif all(cor == cores_anteriores[0] for cor in cores_anteriores) and cor_atual == cores_anteriores[0]:
-        erros += 1
-        erros_anterior += 1
-        if erros_anterior == 1:  # Primeiro erro
-            print("Erro !!")
-            return acertos, erros, 25  # Retornar intervalo_contagem como 15 após o primeiro erro
-        elif erros_anterior == 2:  # Segundo erro (erro Martingale)
-            print("Erro Martingale !!")
-            erros_anterior = 0  # Zera os erros após o erro Martingale
-            return acertos, erros, 60  # Retornar intervalo_contagem como 60 após erro Martingale
+        if erros_anterior == 1:  
+            print("Acerto no Martingale !!")
+            erros_anterior = 0  
+        else:
+            print("Acerto !!")
+        return acertos, erros, 60  
 
-    return acertos, erros, 25  # Retornar intervalo_contagem como 25 por padrão
+    elif all(cor == cores_anteriores[0] for cor in cores_anteriores) and cor_atual == cores_anteriores[0]:
+        erros_anterior += 1
+        if erros_anterior == 1: 
+            print("Erro !!")
+            return acertos, erros, 25  
+
+        elif erros_anterior == 2:  
+            print("Erro no Martingale !!")
+            erros_anterior = 0
+            erros +=3
+            return acertos, erros, 60  
+        
+    return acertos, erros, 25
 
 
 def main():
