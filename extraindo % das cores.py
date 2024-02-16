@@ -1,43 +1,67 @@
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import Select
+import time
 
-# Configuração do webdriver
+# Configuração do serviço e do webdriver para executar em modo headless
+service = Service()
 options = webdriver.ChromeOptions()
-options.add_argument("--start-maximized")  # Maximiza a janela do navegador
-driver = webdriver.Chrome(options=options)
+options.add_argument("--headless")  # Executar em modo headless
+options.add_argument("--start-maximized")  # Maximizar a janela do navegador
+driver = webdriver.Chrome(service=service, options=options)
 
 # Abrir o site
 driver.get("https://blaze-7.com/pt/games/double?modal=double_history_index")
 
-# Esperar até que o botão de histórico esteja disponível e clicar nele
-history_button = WebDriverWait(driver, 10).until(
-    EC.element_to_be_clickable((By.CLASS_NAME, "buttons-history")))
-history_button.click()
+# Esperar até que a div "tabs-crash-analytics" esteja visível
+tabs_div = WebDriverWait(driver, 10).until(
+    EC.visibility_of_element_located((By.CLASS_NAME, "tabs-crash-analytics")))
 
-# Clicar no botão "Padrões"
-padroes_button = WebDriverWait(driver, 10).until(
-    EC.element_to_be_clickable((By.XPATH, "//button[text()='Padrões']")))
+# Clicar no botão "Padrões" dentro da div "tabs-crash-analytics"
+padroes_button = tabs_div.find_element(By.XPATH, ".//button[text()='Padrões']")
 padroes_button.click()
 
 # Esperar até que o botão "Padrões" se torne ativo
 padroes_active_button = WebDriverWait(driver, 10).until(
     EC.presence_of_element_located((By.XPATH, "//button[@class='tab active']")))
 
-# Selecionar o valor de 50 nas últimas 50 rodadas
-select_menu = WebDriverWait(driver, 10).until(EC.presence_of_element_located(
-    (By.XPATH, "//div[@class='select-menu']//select")))
-select_menu.find_element_by_css_selector("option[value='50']").click()
+# Selecionar o valor de 25 nas últimas rodadas
+select_element = driver.find_element(By.XPATH, "//select[@tabindex='0']")
+select = Select(select_element)
 
-# Extrair os valores de texto nas coordenadas y="288" e font-family="SofiaPro"
-valores = []
-texts = driver.find_elements_by_xpath(
-    "//text[@y='288' and @font-family='SofiaPro']")
-for text in texts:
-    valores.append(text.text)
+select.select_by_value("50")
 
-print(valores)  # Imprime os valores extraídos
+# Esperar até que os elementos de texto estejam presentes na página
+text_elements_present = WebDriverWait(driver, 10).until(
+    EC.presence_of_all_elements_located((By.TAG_NAME, "text")))
+
+# Aguardar até que os elementos de texto estejam visíveis na página
+text_elements_visible = WebDriverWait(driver, 10).until(
+    EC.visibility_of_all_elements_located((By.TAG_NAME, "text")))
+
+# Extrair os valores das últimas 50 rodadas
+valores_50 = [element.get_attribute("textContent") for element in text_elements_present 
+              if element.get_attribute("y") == "288" and "SofiaPro" in element.get_attribute("font-family")]
+
+
+select.select_by_value("25")
+
+# Aguardar 1 segundo após selecionar as últimas 25 rodadas
+time.sleep(1)
+
+# Encontrar todos os elementos de texto
+text_elements = driver.find_elements(By.TAG_NAME, "text")
+
+# Filtrar os elementos que têm a coordenada y igual a 288 e a fonte SofiaPro
+valores_25 = [element.get_attribute("textContent") for element in text_elements
+              if element.get_attribute("y") == "288" and "SofiaPro" in element.get_attribute("font-family")]
+
+# Imprimir os valores extraídos com a indicação das últimas 25 rodadas
+print("Ultimas 25 rodadas:", valores_25)
+print("Ultimas 50 rodadas:", valores_50)
 
 # Fechar o navegador
 driver.quit()
