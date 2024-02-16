@@ -21,11 +21,26 @@ def somar_resultados(acertos, erros, sequencia):
     if all(cor == cores_anteriores[0] for cor in cores_anteriores) and cor_atual != cores_anteriores[0]:
         acertos += 1
         if erros_anterior == 1:  
-            print("Acerto no Martingale !!")
+            print(f"Acerto no Martingale !! Cor atual: {cor_atual}")
             erros_anterior = 0  
         else:
-            print("Acerto !!")
+            print(f"Acerto !! Cor atual: {cor_atual}")
         return acertos, erros, 60  
+
+    elif all(cor == cores_anteriores[0] for cor in cores_anteriores) and cor_atual == cores_anteriores[0]:
+        erros_anterior += 1
+        if erros_anterior == 1: 
+            print(f"Erro !! Cor atual: {cor_atual}")
+            return acertos, erros, 25  
+
+        elif erros_anterior == 2:  
+            print(f"Erro no Martingale !! Cor atual: {cor_atual}")
+            erros_anterior = 0
+            erros += 3
+            return acertos, erros, 60  
+        
+        return acertos, erros, 25
+
 
     elif all(cor == cores_anteriores[0] for cor in cores_anteriores) and cor_atual == cores_anteriores[0]:
         erros_anterior += 1
