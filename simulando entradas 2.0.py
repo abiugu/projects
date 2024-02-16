@@ -8,6 +8,7 @@ import os
 import time
 
 erros_anterior = 0
+driver = None  # Variável global para o driver
 
 
 def verificar_stop():
@@ -27,13 +28,13 @@ def somar_resultados(acertos, erros, sequencia):
             print(f"Acerto no Martingale !! Cor atual: {cor_atual}")
             erros_anterior = 0
             intervalo_contagem = 60
-            extrair_cores_25_50()
+            extrair_cores_25_50()  # Extrair cores após acerto martingale
             return acertos, erros, intervalo_contagem
 
         else:
             print(f"Acerto !! Cor atual: {cor_atual}")
             intervalo_contagem = 60
-            extrair_cores_25_50()
+            extrair_cores_25_50()  # Extrair cores após acerto
             return acertos, erros, intervalo_contagem
 
     elif all(cor == cores_anteriores[0] for cor in cores_anteriores) and cor_atual == cores_anteriores[0]:
@@ -48,7 +49,7 @@ def somar_resultados(acertos, erros, sequencia):
             erros_anterior = 0
             erros += 3
             intervalo_contagem = 60
-            extrair_cores_25_50()
+            extrair_cores_25_50()  # Extrair cores após erro martingale
             return acertos, erros, intervalo_contagem
 
         return acertos, erros, 25
@@ -61,15 +62,12 @@ def extrair_cores_25_50():
 
     select_element = driver.find_element(By.XPATH, "//select[@tabindex='0']")
     select = Select(select_element)
-
     select.select_by_value("50")
 
     text_elements_present = WebDriverWait(driver, 10).until(
         EC.presence_of_all_elements_located((By.TAG_NAME, "text")))
-
     text_elements_visible = WebDriverWait(driver, 10).until(
         EC.visibility_of_all_elements_located((By.TAG_NAME, "text")))
-
     valores_50 = [element.get_attribute("textContent") for element in text_elements_present
                   if element.get_attribute("y") == "288" and "SofiaPro" in element.get_attribute("font-family")]
 
@@ -77,10 +75,8 @@ def extrair_cores_25_50():
 
     text_elements_present = WebDriverWait(driver, 10).until(
         EC.presence_of_all_elements_located((By.TAG_NAME, "text")))
-
     text_elements_visible = WebDriverWait(driver, 10).until(
         EC.visibility_of_all_elements_located((By.TAG_NAME, "text")))
-
     valores_25 = [element.get_attribute("textContent") for element in text_elements_present
                   if element.get_attribute("y") == "288" and "SofiaPro" in element.get_attribute("font-family")]
 
@@ -136,7 +132,8 @@ def main():
         print(f"Erro: {e}")
 
     finally:
-        driver.quit()
+        if driver:
+            driver.quit()
 
 
 if __name__ == "__main__":
