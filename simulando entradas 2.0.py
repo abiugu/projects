@@ -10,6 +10,12 @@ import time
 erros_anterior = 0
 driver = None  # Variável global para o driver
 
+service = Service()
+options = webdriver.ChromeOptions()
+options.add_argument("--headless")  # Executar em modo headless
+options.add_argument("--start-maximized")  # Maximizar a janela do navegador
+driver = webdriver.Chrome(service=service, options=options)
+
 
 def verificar_stop():
     stop_path = os.path.join(os.path.expanduser("~"), "Desktop", "stop.txt")
@@ -60,9 +66,30 @@ def somar_resultados(acertos, erros, sequencia):
 def extrair_cores_25_50():
     global driver
 
-    select_element = driver.find_element(By.XPATH, "//select[@tabindex='0']")
+    # Abrir o site se ainda não estiver aberto
+    if driver.current_url != "https://blaze-7.com/pt/games/double?modal=double_history_index":
+        driver.get(
+            "https://blaze-7.com/pt/games/double?modal=double_history_index")
+        # Esperar até que a div "tabs-crash-analytics" esteja visível
+        tabs_div = WebDriverWait(driver, 10).until(
+            EC.visibility_of_element_located((By.CLASS_NAME, "tabs-crash-analytics")))
+        # Clicar no botão "Padrões" dentro da div "tabs-crash-analytics"
+        padroes_button = tabs_div.find_element(
+            By.XPATH, ".//button[text()='Padrões']")
+        padroes_button.click()
+        # Esperar até que o botão "Padrões" se torne ativo
+        padroes_active_button = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//button[@class='tab active']")))
+
+    select_element = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.XPATH, "//select[@tabindex='0']")))
     select = Select(select_element)
+
+    time.sleep(2)
+
     select.select_by_value("50")
+
+    time.sleep(5)
 
     text_elements_present = WebDriverWait(driver, 10).until(
         EC.presence_of_all_elements_located((By.TAG_NAME, "text")))
@@ -71,7 +98,11 @@ def extrair_cores_25_50():
     valores_50 = [element.get_attribute("textContent") for element in text_elements_present
                   if element.get_attribute("y") == "288" and "SofiaPro" in element.get_attribute("font-family")]
 
+    time.sleep(2)
+
     select.select_by_value("25")
+
+    time.sleep(5)
 
     text_elements_present = WebDriverWait(driver, 10).until(
         EC.presence_of_all_elements_located((By.TAG_NAME, "text")))
@@ -80,20 +111,13 @@ def extrair_cores_25_50():
     valores_25 = [element.get_attribute("textContent") for element in text_elements_present
                   if element.get_attribute("y") == "288" and "SofiaPro" in element.get_attribute("font-family")]
 
-    print("Últimas 25 rodadas:", valores_25)
-    print("Últimas 50 rodadas:", valores_50)
+    print("Ultimas 25 rodadas:", valores_25)
+    print("Ultimas 50 rodadas:", valores_50)
 
 
 def main():
     global erros_anterior
     global driver
-
-    service = Service()
-    options = webdriver.ChromeOptions()
-    options.add_argument('--headless')
-    options.add_argument('--disable-gpu')
-    prefs = {"profile.managed_default_content_settings.images": 2}
-    options.add_experimental_option("prefs", prefs)
 
     desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
     resultados_path = os.path.join(desktop_path, "acertos_erros.txt")
