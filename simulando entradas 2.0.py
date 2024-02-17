@@ -154,16 +154,15 @@ def main():
             acertos, erros, intervalo_contagem, log_text = somar_resultados(
                 acertos, erros, sequencia)
 
-            with open(acertos_erros_path, "a") as acertos_erros_file:
+            with open(acertos_erros_path, "w") as acertos_erros_file:
                 acertos_erros_file.write(f"Acertos: {acertos}\nErros: {erros}\n")
                 acertos_erros_file.write(f"Segundos do loop atual: {intervalo_contagem}\n")
                 acertos_erros_file.write("Últimas 5 linhas:\n")
                 acertos_erros_file.write("\n".join(sequencia) + "\n")
-                acertos_erros_file.write(log_text + "\n")
-                acertos_erros_file.write("\n")
+                
 
             with open(log_file_path, "a") as log_file:
-                log_file.write(log_text + "\n")
+                log_file.write(log_text)
                 log_file.write(f"Segundos do loop atual: {intervalo_contagem}\n")
 
             print(f"Segundos do loop atual: {intervalo_contagem}")
