@@ -45,15 +45,15 @@ def somar_resultados(acertos, erros, sequencia):
             print(log_text)
             erros_anterior = 0
             intervalo_contagem = 60
-            extrair_cores_25_50()  # Extrair cores após acerto martingale
-            return acertos, erros, intervalo_contagem, log_text
+            log_result = extrair_cores_25_50()  # Extrair cores após acerto martingale
+            return acertos, erros, intervalo_contagem, log_text, log_result
 
         else:
             log_text = f"Acerto !! Cor atual: {cor_atual}"
             print(log_text)
             intervalo_contagem = 60
-            extrair_cores_25_50()  # Extrair cores após acerto
-            return acertos, erros, intervalo_contagem, log_text
+            log_result = extrair_cores_25_50()  # Extrair cores após acerto
+            return acertos, erros, intervalo_contagem, log_text, log_result
 
     elif all(cor == cores_anteriores[0] for cor in cores_anteriores) and cor_atual == cores_anteriores[0]:
         erros_anterior += 1
@@ -61,7 +61,7 @@ def somar_resultados(acertos, erros, sequencia):
             log_text = f"Erro !! Cor atual: {cor_atual}"
             print(log_text)
             intervalo_contagem = 25
-            return acertos, erros, intervalo_contagem, log_text
+            return acertos, erros, intervalo_contagem, log_text, ""
 
         elif erros_anterior == 2:
             log_text = f"Erro no Martingale !! Cor atual: {cor_atual}"
@@ -69,12 +69,12 @@ def somar_resultados(acertos, erros, sequencia):
             erros_anterior = 0
             erros += 3
             intervalo_contagem = 60
-            extrair_cores_25_50()  # Extrair cores após erro martingale
-            return acertos, erros, intervalo_contagem, log_text
+            log_result = extrair_cores_25_50()  # Extrair cores após erro martingale
+            return acertos, erros, intervalo_contagem, log_text, log_result
 
-        return acertos, erros, 25, ""
+        return acertos, erros, 25, "", ""
 
-    return acertos, erros, 25, ""
+    return acertos, erros, 25, "", ""
 
 
 def extrair_cores_25_50():
@@ -125,9 +125,10 @@ def extrair_cores_25_50():
     valores_25 = [element.get_attribute("textContent") for element in text_elements_present
                   if element.get_attribute("y") == "288" and "SofiaPro" in element.get_attribute("font-family")]
 
-    log_text = "Ultimas 25 rodadas:" + str(valores_25) + "\nUltimas 50 rodadas:" + str(valores_50)
-    print(log_text)
-    return log_text
+    log_result = "Ultimas 25 rodadas:" + \
+        str(valores_25) + "\nUltimas 50 rodadas:" + str(valores_50)
+    print(log_result)
+    return log_result
 
 
 def main():
@@ -151,19 +152,26 @@ def main():
             sequencia = [box_element.get_attribute(
                 "class").split()[-1] for box_element in box_elements[:5]]
 
-            acertos, erros, intervalo_contagem, log_text = somar_resultados(
+            acertos, erros, intervalo_contagem, log_text, log_result = somar_resultados(
                 acertos, erros, sequencia)
 
             with open(acertos_erros_path, "w") as acertos_erros_file:
-                acertos_erros_file.write(f"Acertos: {acertos}\nErros: {erros}\n")
-                acertos_erros_file.write(f"Segundos do loop atual: {intervalo_contagem}\n")
+                acertos_erros_file.write(
+                    f"Acertos: {acertos}\nErros: {erros}\n")
+                acertos_erros_file.write(f"Segundos do loop atual: {
+                                         intervalo_contagem}\n")
                 acertos_erros_file.write("Últimas 5 linhas:\n")
                 acertos_erros_file.write("\n".join(sequencia) + "\n")
-                
 
             with open(log_file_path, "a") as log_file:
-                log_file.write(log_text)
-                log_file.write(f"Segundos do loop atual: {intervalo_contagem}\n")
+                if log_text:
+                    log_file.write(log_text + "\n")
+
+                if log_result:
+                    log_file.write(log_result + "\n")
+
+                log_file.write(f"Segundos do loop atual: {
+                               intervalo_contagem}" + "\n")
 
             print(f"Segundos do loop atual: {intervalo_contagem}")
 
