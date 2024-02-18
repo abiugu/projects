@@ -3,7 +3,7 @@ import re
 
 # Definindo o caminho do arquivo de texto no desktop
 desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
-file_name = "historico acertos e erros 17.02.txt"
+file_name = "historico acertos e erros 18.02.txt"
 file_path = os.path.join(desktop_path, file_name)
 
 
