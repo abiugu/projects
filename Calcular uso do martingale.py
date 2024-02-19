@@ -1,13 +1,13 @@
 def calcular_resultado_sem_martingale(erro_direto, acerto_direto, erros_martingale, acertos_martingale):
-    return erro_direto - acerto_direto
+    return acerto_direto - erro_direto
 
 
 def calcular_resultado_com_martingale(erro_direto, acerto_direto, erros_martingale, acertos_martingale):
-    return (erros_martingale * 3) - acerto_direto - acertos_martingale
+    return (acerto_direto + acertos_martingale) - (erros_martingale * 3)
 
 
-def inverter_sinal(valor):
-    return -valor
+def resultado (valor):
+    return valor
 
 
 def comparar_possibilidades():
@@ -24,9 +24,9 @@ def comparar_possibilidades():
         erro_direto, acerto_direto, erros_martingale, acertos_martingale)
 
     # Invertendo o sinal dos resultados
-    resultado_sem_martingale_invertido = inverter_sinal(
+    resultado_sem_martingale_invertido = resultado(
         resultado_sem_martingale)
-    resultado_com_martingale_invertido = inverter_sinal(
+    resultado_com_martingale_invertido = resultado(
         resultado_com_martingale)
 
     # Exibindo as duas possibilidades
