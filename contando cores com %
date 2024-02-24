@@ -1,0 +1,61 @@
+import os
+
+desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
+log_file_path = os.path.join(desktop_path, "historico acertos e erros 20.02.txt")
+
+acertos = 0
+acertos_martingale = 0
+erros_martingale = 0
+total_linhas_acerto = 0
+total_linhas_acerto_martingale = 0
+total_linhas_erro_martingale = 0
+
+with open(log_file_path, "r") as file:
+    lines = file.readlines()
+
+index = 0
+while index < len(lines):
+    line = lines[index].strip()
+    if "Acerto !! Cor atual:" in line:
+        total_linhas_acerto += 1
+        cor_atual = line.split(":")[-1].strip()
+        index += 1
+        porcentagens = lines[index].split("Ultimas 25 rodadas:")[-1].replace("[", "").replace("]", "").split(", ")
+        porcentagem_cor_atual = porcentagens[["white", "black", "red"].index(cor_atual)].replace("%", "").strip()
+        if porcentagem_cor_atual:
+            # Remove todos os caracteres não numéricos e converte para inteiro
+            porcentagem_cor_atual = int(''.join(filter(str.isdigit, porcentagem_cor_atual)))
+            if porcentagem_cor_atual <= 52:
+                acertos += 1
+    elif "Acerto no Martingale !! Cor atual:" in line:
+        total_linhas_acerto_martingale += 1
+        cor_atual = line.split(":")[-1].strip()
+        index += 1
+        porcentagens = lines[index].split("Ultimas 25 rodadas:")[-1].replace("[", "").replace("]", "").split(", ")
+        porcentagem_cor_atual = porcentagens[["white", "black", "red"].index(cor_atual)].replace("%", "").strip()
+        if porcentagem_cor_atual:
+            # Remove todos os caracteres não numéricos e converte para inteiro
+            porcentagem_cor_atual = int(''.join(filter(str.isdigit, porcentagem_cor_atual)))
+            if porcentagem_cor_atual <= 52:
+                acertos_martingale += 1
+    elif "Erro no Martingale !! Cor atual:" in line:
+        total_linhas_erro_martingale += 1
+        cor_atual = line.split(":")[-1].strip()
+        index += 1
+        porcentagens = lines[index].split("Ultimas 25 rodadas:")[-1].replace("[", "").replace("]", "").split(", ")
+        porcentagem_cor_atual = porcentagens[["white", "black", "red"].index(cor_atual)].replace("%", "").strip()
+        if porcentagem_cor_atual:
+            # Remove todos os caracteres não numéricos e converte para inteiro
+            porcentagem_cor_atual = int(''.join(filter(str.isdigit, porcentagem_cor_atual)))
+            if porcentagem_cor_atual > 52:
+                erros_martingale += 1
+    index += 1
+
+# Calcula o total de cada categoria
+total_acertos = acertos
+total_acertos_martingale = acertos_martingale
+total_erros_martingale = erros_martingale
+
+print("Acertos com 52% ou menos:", acertos, "(total", total_linhas_acerto, ")")
+print("Acertos Martingale com 52% ou menos:", acertos_martingale, "(total", total_linhas_acerto_martingale, ")")
+print("Erros Martingale com mais de 52%:", erros_martingale, "(total", total_linhas_erro_martingale, ")")
