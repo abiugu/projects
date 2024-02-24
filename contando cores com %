@@ -1,14 +1,14 @@
 import os
 
 desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
-log_file_path = os.path.join(desktop_path, "historico acertos e erros 20.02.txt")
+log_file_path = os.path.join(desktop_path, "historico acertos e erros 17.02.txt")
 
 acertos = 0
 acertos_martingale = 0
 erros_martingale = 0
-total_linhas_acerto = 0
-total_linhas_acerto_martingale = 0
-total_linhas_erro_martingale = 0
+total_acertos = 0
+total_acertos_martingale = 0
+total_erros_martingale = 0
 
 with open(log_file_path, "r") as file:
     lines = file.readlines()
@@ -17,7 +17,7 @@ index = 0
 while index < len(lines):
     line = lines[index].strip()
     if "Acerto !! Cor atual:" in line:
-        total_linhas_acerto += 1
+        total_acertos += 1
         cor_atual = line.split(":")[-1].strip()
         index += 1
         porcentagens = lines[index].split("Ultimas 25 rodadas:")[-1].replace("[", "").replace("]", "").split(", ")
@@ -28,7 +28,7 @@ while index < len(lines):
             if porcentagem_cor_atual <= 52:
                 acertos += 1
     elif "Acerto no Martingale !! Cor atual:" in line:
-        total_linhas_acerto_martingale += 1
+        total_acertos_martingale += 1
         cor_atual = line.split(":")[-1].strip()
         index += 1
         porcentagens = lines[index].split("Ultimas 25 rodadas:")[-1].replace("[", "").replace("]", "").split(", ")
@@ -39,7 +39,7 @@ while index < len(lines):
             if porcentagem_cor_atual <= 52:
                 acertos_martingale += 1
     elif "Erro no Martingale !! Cor atual:" in line:
-        total_linhas_erro_martingale += 1
+        total_erros_martingale += 1
         cor_atual = line.split(":")[-1].strip()
         index += 1
         porcentagens = lines[index].split("Ultimas 25 rodadas:")[-1].replace("[", "").replace("]", "").split(", ")
@@ -51,11 +51,11 @@ while index < len(lines):
                 erros_martingale += 1
     index += 1
 
-# Calcula o total de cada categoria
-total_acertos = acertos
-total_acertos_martingale = acertos_martingale
-total_erros_martingale = erros_martingale
+# Calcula a porcentagem de cada categoria em relação ao total de sua respectiva categoria
+porcentagem_acertos = (acertos / total_acertos) * 100 if total_acertos else 0
+porcentagem_acertos_martingale = (acertos_martingale / total_acertos_martingale) * 100 if total_acertos_martingale else 0
+porcentagem_erros_martingale = (erros_martingale / total_erros_martingale) * 100 if total_erros_martingale else 0
 
-print("Acertos com 52% ou menos:", acertos, "(total", total_linhas_acerto, ")")
-print("Acertos Martingale com 52% ou menos:", acertos_martingale, "(total", total_linhas_acerto_martingale, ")")
-print("Erros Martingale com mais de 52%:", erros_martingale, "(total", total_linhas_erro_martingale, ")")
+print("Acertos com 52% ou menos:", acertos, "(total", total_acertos, ") -", round(porcentagem_acertos, 2), "%")
+print("Acertos Martingale com 52% ou menos:", acertos_martingale, "(total", total_acertos_martingale, ") -", round(porcentagem_acertos_martingale, 2), "%")
+print("Erros Martingale com mais de 52%:", erros_martingale, "(total", total_erros_martingale, ") -", round(porcentagem_erros_martingale, 2), "%")
