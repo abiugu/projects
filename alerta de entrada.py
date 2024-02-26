@@ -35,49 +35,13 @@ def verificar_stop():
     return os.path.exists(stop_path)
 
 
-def somar_resultados(acertos, erros, sequencia):
+def somar_resultados(sequencia):
     global erros_anterior
 
     cores_anteriores = sequencia[1:4]
     cor_atual = sequencia[0]
 
-    if all(cor == cores_anteriores[0] for cor in cores_anteriores) and cor_atual != cores_anteriores[0]:
-        acertos += 1
-        if erros_anterior == 1:
-            log_text = f"Acerto no Martingale !! Cor atual: {cor_atual}"
-            print(log_text)
-            erros_anterior = 0
-            intervalo_contagem = 60
-            log_result = extrair_cores_25()  # Extrair cores após acerto martingale
-            return acertos, erros, intervalo_contagem, log_text, log_result
-
-        else:
-            log_text = f"Acerto !! Cor atual: {cor_atual}"
-            print(log_text)
-            intervalo_contagem = 60
-            log_result = extrair_cores_25()  # Extrair cores após acerto
-            return acertos, erros, intervalo_contagem, log_text, log_result
-
-    elif all(cor == cores_anteriores[0] for cor in cores_anteriores) and cor_atual == cores_anteriores[0]:
-        erros_anterior += 1
-        if erros_anterior == 1:
-            log_text = f"Erro !! Cor atual: {cor_atual}"
-            print(log_text)
-            intervalo_contagem = 25
-            return acertos, erros, intervalo_contagem, log_text, ""
-
-        elif erros_anterior == 2:
-            log_text = f"Erro no Martingale !! Cor atual: {cor_atual}"
-            print(log_text)
-            erros_anterior = 0
-            erros += 3
-            intervalo_contagem = 60
-            log_result = extrair_cores_25()  # Extrair cores após erro martingale
-            return acertos, erros, intervalo_contagem, log_text, log_result
-
-        return acertos, erros, 25, "", ""
-
-    return acertos, erros, 25, "", ""
+    return
 
 
 def extrair_cores_25():
@@ -143,17 +107,30 @@ def main():
             sequencia = [box_element.get_attribute(
                 "class").split()[-1] for box_element in box_elements[:3]]
 
-            if len(set(sequencia)) == 1:
-                # Sequência de 3 cores iguais
-                # Sinalizar com som "MONEY ALARM.mp3"
-                alarm_sound.play()
-
             log_result = extrair_cores_25()
 
             print("Ultimos 3 resultados:", sequencia)
             print("")
 
-            time.sleep(25)
+            if len(set(sequencia)) == 1:
+                # Sequência de 3 cores iguais
+                cor_atual = sequencia[0]
+                if cor_atual == 'red':
+                    cor_oposta = 'black'
+                elif cor_atual == 'black':
+                    cor_oposta = 'red'
+                else:
+                    cor_oposta = None  # Se a sequência não for vermelha nem preta, não faz sentido verificar
+                if cor_oposta:
+                    percentuais = [int(valor[:-1]) for valor in log_result.split(", ")[1:-1]]  # Extrai os percentuais como números inteiros
+                    indice_cor_oposta = ['white', 'black', 'red'].index(cor_oposta)
+                    percentual_oposto = percentuais[indice_cor_oposta]
+                    if int(percentual_oposto[:-1]) <= 44:
+                        alarm_sound.play()
+            else:
+                print("Sequencia de cores diferente.")
+
+            time.sleep(10)
 
     except Exception as e:
         print(f"Erro: {e}")
