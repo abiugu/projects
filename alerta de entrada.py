@@ -86,7 +86,7 @@ def extrair_cores_25():
     # Extrair apenas os valores de porcentagem e remover o símbolo '%'
     percentuais = [valor.split('%')[0] for valor in valores_25]
 
-    log_result = "Ultimas 25 rodadas:" + ', '.join(percentuais)
+    log_result = "Ultimas 25 rodadas: " + ', '.join(percentuais)
     print(log_result)
     return percentuais
 
@@ -128,10 +128,9 @@ def main():
                     percentual_oposto = int(percentuais[['white', 'black', 'red'].index(cor_oposta)])
                     if percentual_oposto <= 44:
                         alarm_sound.play()
-            else:
-                print("Sequencia de cores diferente.")
 
-            time.sleep(10)
+
+            time.sleep(2)
 
     except Exception as e:
         print(f"Erro: {e}")
