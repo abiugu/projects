@@ -49,13 +49,22 @@ def extrair_cores_25():
     if driver.current_url != "https://blaze-7.com/pt/games/double?modal=double_history_index":
         driver.get(
             "https://blaze-7.com/pt/games/double?modal=double_history_index")
+        
+        time.sleep(2)
+
         # Esperar até que a div "tabs-crash-analytics" esteja visível
         tabs_div = WebDriverWait(driver, 10).until(
             EC.visibility_of_element_located((By.CLASS_NAME, "tabs-crash-analytics")))
+        
+        time.sleep(2)
+
         # Clicar no botão "Padrões" dentro da div "tabs-crash-analytics"
         padroes_button = tabs_div.find_element(
             By.XPATH, ".//button[text()='Padrões']")
         padroes_button.click()
+
+        time.sleep(2)
+
         # Esperar até que o botão "Padrões" se torne ativo
         padroes_active_button = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.XPATH, "//button[@class='tab active']")))
@@ -64,15 +73,15 @@ def extrair_cores_25():
         EC.presence_of_element_located((By.XPATH, "//select[@tabindex='0']")))
     select = Select(select_element)
 
-    time.sleep(2)
+    time.sleep(1)
 
     select.select_by_value("50")
 
-    time.sleep(2)
+    time.sleep(1)
 
     select.select_by_value("25")
 
-    time.sleep(2)
+    time.sleep(1)
 
     text_elements_present = WebDriverWait(driver, 10).until(
         EC.presence_of_all_elements_located((By.TAG_NAME, "text")))
@@ -126,7 +135,7 @@ def main():
                     if percentual_atual <= 42:
                         alarm_sound.play()
 
-            time.sleep(2)
+            time.sleep(1)
 
     except Exception as e:
         print(f"Erro: {e}")
