@@ -29,7 +29,6 @@ sound_file_path = "MONEY ALARM.mp3"
 # Carrega o som
 alarm_sound = pygame.mixer.Sound(sound_file_path)
 
-
 def verificar_stop():
     stop_path = os.path.join(desktop_path, "stop.txt")
     return os.path.exists(stop_path)
@@ -42,7 +41,6 @@ def somar_resultados(sequencia):
     cor_atual = sequencia[0]
 
     return
-
 
 def extrair_cores_25():
     global driver
@@ -90,8 +88,6 @@ def extrair_cores_25():
     print(log_result)
     return percentuais
 
-
-
 def main():
     global erros_anterior
     global driver
@@ -125,14 +121,10 @@ def main():
             else:
                 cor_oposta = None  # Se a sequência não for vermelha nem preta, não faz sentido verificar
             if cor_oposta:
-                percentual_oposto = int(percentuais[['white', 'black', 'red'].index(cor_oposta)])
                 percentual_atual = int(percentuais[['white', 'black', 'red'].index(cor_atual)])
-                if percentual_oposto is not None and percentual_atual is not None:
-                    if percentual_oposto <= 52 and percentual_atual <= 38:
+                if percentual_atual is not None:
+                    if percentual_atual <= 42:
                         alarm_sound.play()
-
-
-
 
             time.sleep(2)
 
@@ -142,7 +134,6 @@ def main():
     finally:
         if driver:
             driver.quit()
-
 
 if __name__ == "__main__":
     main()
