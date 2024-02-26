@@ -58,9 +58,9 @@ def extrair_cores_25():
         
         time.sleep(2)
 
+
         # Clicar no botão "Padrões" dentro da div "tabs-crash-analytics"
-        padroes_button = tabs_div.find_element(
-            By.XPATH, ".//button[text()='Padrões']")
+        padroes_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, ".//button[text()='Padrões']")))
         padroes_button.click()
 
         time.sleep(2)
@@ -73,15 +73,15 @@ def extrair_cores_25():
         EC.presence_of_element_located((By.XPATH, "//select[@tabindex='0']")))
     select = Select(select_element)
 
-    time.sleep(1)
+    time.sleep(2)
 
     select.select_by_value("50")
 
-    time.sleep(1)
+    time.sleep(2)
 
     select.select_by_value("25")
 
-    time.sleep(1)
+    time.sleep(2)
 
     text_elements_present = WebDriverWait(driver, 10).until(
         EC.presence_of_all_elements_located((By.TAG_NAME, "text")))
@@ -135,7 +135,7 @@ def main():
                     if percentual_atual <= 42:
                         alarm_sound.play()
 
-            time.sleep(1)
+            time.sleep(2)
 
     except Exception as e:
         print(f"Erro: {e}")
