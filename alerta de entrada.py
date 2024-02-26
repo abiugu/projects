@@ -66,15 +66,15 @@ def extrair_cores_25():
         EC.presence_of_element_located((By.XPATH, "//select[@tabindex='0']")))
     select = Select(select_element)
 
-    time.sleep(1)
+    time.sleep(2)
 
     select.select_by_value("50")
 
-    time.sleep(1)
+    time.sleep(2)
 
     select.select_by_value("25")
 
-    time.sleep(1)
+    time.sleep(2)
 
     text_elements_present = WebDriverWait(driver, 10).until(
         EC.presence_of_all_elements_located((By.TAG_NAME, "text")))
@@ -134,7 +134,7 @@ def main():
 
 
 
-            time.sleep(1)
+            time.sleep(2)
 
     except Exception as e:
         print(f"Erro: {e}")
