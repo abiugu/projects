@@ -1,7 +1,7 @@
 import os
 
 desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
-log_file_path = os.path.join(desktop_path, "historico acertos e erros 25.02.txt")
+log_file_path = os.path.join(desktop_path, "historico acertos e erros 26.02.txt")
 
 acertos = 0
 acertos_martingale = 0
