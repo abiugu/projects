@@ -128,7 +128,7 @@ def main():
                 percentual_oposto = int(percentuais[['white', 'black', 'red'].index(cor_oposta)])
                 percentual_atual = int(percentuais[['white', 'black', 'red'].index(cor_atual)])
                 if percentual_oposto is not None and percentual_atual is not None:
-                    if percentual_oposto <= 44 and percentual_atual <= 38:
+                    if percentual_oposto <= 52 and percentual_atual <= 38:
                         alarm_sound.play()
 
 
