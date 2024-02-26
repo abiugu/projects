@@ -115,20 +115,22 @@ def main():
             print("Ultimos 3 resultados:", sequencia)
             print("")
 
-            if len(set(sequencia)) == 1:
+        if len(set(sequencia)) == 1:
     # Sequência de 3 cores iguais
-                cor_atual = sequencia[0]
-                if cor_atual == 'red':
-                    cor_oposta = 'black'
-                elif cor_atual == 'black':
-                    cor_oposta = 'red'
+            cor_atual = sequencia[0]
+            if cor_atual == 'red':
+                cor_oposta = 'black'
+            elif cor_atual == 'black':
+                cor_oposta = 'red'
             else:
                 cor_oposta = None  # Se a sequência não for vermelha nem preta, não faz sentido verificar
             if cor_oposta:
                 percentual_oposto = int(percentuais[['white', 'black', 'red'].index(cor_oposta)])
                 percentual_atual = int(percentuais[['white', 'black', 'red'].index(cor_atual)])
-            if percentual_oposto <= 48 and percentual_atual <= 38:
-                alarm_sound.play()
+                if percentual_oposto is not None and percentual_atual is not None:
+                    if percentual_oposto <= 44 and percentual_atual <= 38:
+                        alarm_sound.play()
+
 
 
 
