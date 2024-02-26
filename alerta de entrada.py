@@ -84,11 +84,12 @@ def extrair_cores_25():
                   if element.get_attribute("y") == "288" and "SofiaPro" in element.get_attribute("font-family")]
 
     # Extrair apenas os valores de porcentagem e remover o símbolo '%'
-    percentuais = [valor.split('%')[0] + '%' for valor in valores_25]
+    percentuais = [valor.split('%')[0] for valor in valores_25]
 
-    log_result = "Ultimas 25 rodadas: " + ', '.join(percentuais)
+    log_result = "Ultimas 25 rodadas:" + ', '.join(percentuais)
     print(log_result)
     return percentuais
+
 
 
 def main():
@@ -124,14 +125,13 @@ def main():
                 else:
                     cor_oposta = None  # Se a sequência não for vermelha nem preta, não faz sentido verificar
                 if cor_oposta:
-                    percentual_oposto = int(
-                        percentuais[['white', 'black', 'red'].index(cor_oposta)])
+                    percentual_oposto = int(percentuais[['white', 'black', 'red'].index(cor_oposta)])
                     if percentual_oposto <= 44:
                         alarm_sound.play()
             else:
                 print("Sequencia de cores diferente.")
 
-            time.sleep(2)
+            time.sleep(10)
 
     except Exception as e:
         print(f"Erro: {e}")
