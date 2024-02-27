@@ -146,11 +146,13 @@ def main():
                     cor_oposta = 'black'
                 elif cor_atual == 'black':
                     cor_oposta = 'red'
+                    log("mostrando cor oposta")
                 else:
                     cor_oposta = None  # Se a sequência não for vermelha nem preta, não faz sentido verificar
                 if cor_oposta:
                     percentual_atual = int(
                         percentuais[['white', 'black', 'red'].index(cor_atual)])
+                    log("mostrando a sequencia de cores das três %")
                     if percentual_atual is not None:
                         if percentual_atual <= 42:
                             log("caçando porcentagem <= 42")
