@@ -117,27 +117,28 @@ def extrair_cores_25_50():
         str(valores_25)
     print(log_result)
 
-    roll_container = driver.find_element(By.CLASS_NAME, "roll__container")
+    roll_containers = driver.find_elements(By.CLASS_NAME, "roll__container")
+    cores_numeros = []
+    for container in roll_containers:
+        cor_class = container.find_element(
+            By.CLASS_NAME, "roll__square").get_attribute("class")
+        if "roll__square--red" in cor_class:
+            cor = "red"
+        elif "roll__square--black" in cor_class:
+            cor = "black"
+        elif "roll__square--white" in cor_class:
+            cor = "white"
 
-    cor_class = roll_container.find_element(
-        By.CLASS_NAME, "roll__square").get_attribute("class")
-    if "roll__square--red" in cor_class:
-        cor = "red"
-    elif "roll__square--black" in cor_class:
-        cor = "black"
-    elif "roll__square--white" in cor_class:
-        cor = "white"
+        numero_str = container.find_element(By.TAG_NAME, "span").text
+        # Remove os caracteres '<' e '>' antes de converter para inteiro
+        numero_str_limpo = ''.join(filter(lambda x: x.isdigit() or x == '.', numero_str))
+        numero_float = float(numero_str_limpo)
+        numero_int = int(numero_float)
 
-    numero_str = roll_container.find_element(By.TAG_NAME, "span").text
-    # Remove os caracteres '<' e '>' antes de converter para inteiro
-    numero_str_limpo = ''.join(filter(lambda x: x.isdigit() or x == '.', numero_str))
-    numero_float = float(numero_str_limpo)
-    numero_int = int(numero_float)
+        ocorrencias_str = container.find_element(By.TAG_NAME, "p").text
+        ocorrencias_int = int(ocorrencias_str)
 
-    ocorrencias_str = roll_container.find_element(By.TAG_NAME, "p").text
-    ocorrencias_int = int(ocorrencias_str)
-
-    cores_numeros = [(numero_int, cor, ocorrencias_int)]
+        cores_numeros.append((numero_int, cor, ocorrencias_int))
 
     log_result = "Resultados detalhados das últimas 25 rodadas:\n"
     for tupla in cores_numeros:
