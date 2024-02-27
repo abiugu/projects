@@ -119,13 +119,6 @@ def extrair_cores_25_50():
     log_result = "Ultimas 25 rodadas:" + \
         str(valores_25)
     print(log_result)
-    return log_result
-
-
-def extrair_cores_numeros():
-    global driver
-
-    driver.get("https://blaze1.space/pt/games/double?modal=double_history_index")
 
     time.sleep(5)
 
@@ -140,7 +133,7 @@ def extrair_cores_numeros():
         ocorrencias = container.find_element(By.TAG_NAME, "p").text
         cores_numeros.append((cor, numero, ocorrencias))
 
-    return cores_numeros
+    return log_result, cores_numeros
 
 
 def main():
@@ -152,7 +145,7 @@ def main():
 
     try:
         driver = webdriver.Chrome(service=service, options=options)
-        url = 'https://blaze-7.com/pt/games/double'
+        url = 'https://blaze1.space/pt/games/double'
         driver.get(url)
 
         while not verificar_stop():
