@@ -140,6 +140,7 @@ def main():
                             count_alarm += 1  # Incrementa o contador
                             print(f"Alarme acionado. Contagem: {
                                   count_alarm}")  # Imprime a contagem
+                            time.sleep(60)
 
             time.sleep(2)
 
