@@ -81,33 +81,47 @@ def somar_resultados(acertos, erros, sequencia):
 def extrair_cores_25_50():
     global driver
 
-    # Abrir o site se ainda não estiver aberto
     if driver.current_url != "https://blaze1.space/pt/games/double?modal=double_history_index":
-        driver.get("https://blaze1.space/pt/games/double?modal=double_history_index")
-        # Esperar até que a div "tabs-crash-analytics" esteja visível
-        tabs_div = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CLASS_NAME, "tabs-crash-analytics")))
-        # Clicar no botão "Padrões" dentro da div "tabs-crash-analytics"
-        padroes_button = tabs_div.find_element(By.XPATH, ".//button[text()='Padrões']")
+        driver.get(
+            "https://blaze1.space/pt/games/double?modal=double_history_index")
+        tabs_div = WebDriverWait(driver, 10).until(
+            EC.visibility_of_element_located((By.CLASS_NAME, "tabs-crash-analytics")))
+        padroes_button = tabs_div.find_element(
+            By.XPATH, ".//button[text()='Padrões']")
         padroes_button.click()
-        # Esperar até que o botão "Padrões" se torne ativo
-        padroes_active_button = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//button[@class='tab active']")))
+        padroes_active_button = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//button[@class='tab active']")))
 
-    # Selecionar as últimas 25 rodadas
-    select_element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//select[@tabindex='0']")))
+    select_element = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.XPATH, "//select[@tabindex='0']")))
     select = Select(select_element)
-    select.select_by_value("50")
-    time.sleep (1)
-    select.select_by_value("25")
-    time.sleep(1)
 
-    # Extrair informações sobre as cores e números das últimas 25 rodadas
-    cores_numeros = []
-    cores_contagem = {}
-    numeros_contagem = {}
+    time.sleep(2)
+
+    select.select_by_value("50")
+
+    time.sleep(2)
+
+    select.select_by_value("25")
+
+    time.sleep(2)
+
+    text_elements_present = WebDriverWait(driver, 10).until(
+        EC.presence_of_all_elements_located((By.TAG_NAME, "text")))
+    text_elements_visible = WebDriverWait(driver, 10).until(
+        EC.visibility_of_all_elements_located((By.TAG_NAME, "text")))
+    valores_25 = [element.get_attribute("textContent") for element in text_elements_present
+                  if element.get_attribute("y") == "288" and "SofiaPro" in element.get_attribute("font-family")]
+
+    log_result = "Ultimas 25 rodadas:" + \
+        str(valores_25)
+    print(log_result)
 
     roll_containers = driver.find_elements(By.CLASS_NAME, "roll__container")
+    cores_numeros = []
     for container in roll_containers:
-        cor_class = container.find_element(By.CLASS_NAME, "roll__square").get_attribute("class")
+        cor_class = container.find_element(
+            By.CLASS_NAME, "roll__square").get_attribute("class")
         if "roll__square--red" in cor_class:
             cor = "red"
         elif "roll__square--black" in cor_class:
@@ -116,35 +130,21 @@ def extrair_cores_25_50():
             cor = "white"
 
         numero_str = container.find_element(By.TAG_NAME, "span").text
-        numero_int = int(numero_str.strip('<>x'))  # Remove os caracteres '<' e '>' antes de converter para inteiro
+        # Remove os caracteres '<' e '>' antes de converter para inteiro
+        numero_int = int(numero_str.strip('<>x'))
 
         ocorrencias_str = container.find_element(By.TAG_NAME, "p").text
         ocorrencias_int = int(ocorrencias_str)
 
-        cores_numeros.append((cor, numero_int, ocorrencias_int))
+        cores_numeros.append((numero_int, cor, ocorrencias_int))
 
-        # Atualizar a contagem de cores
-        if cor in cores_contagem:
-            cores_contagem[cor] += 1
-        else:
-            cores_contagem[cor] = 1
+    log_result = "Resultados detalhados das últimas 25 rodadas:\n"
+    for tupla in cores_numeros:
+        numero, cor, ocorrencias = tupla
+        log_result += f"({numero}) {cor}: {ocorrencias} vezes\n"
 
-        # Atualizar a contagem de números
-        if numero_int in numeros_contagem:
-            numeros_contagem[numero_int] += 1
-        else:
-            numeros_contagem[numero_int] = 1
-
-    # Calcular a porcentagem de cada cor nas últimas 25 rodadas
-    total_cores = sum(cores_contagem.values())
-    porcentagens_cores = {cor: (contagem / total_cores * 100) for cor, contagem in cores_contagem.items()}
-
-    log_result = "Porcentagem de cores nas últimas 25 rodadas:\n"
-    for cor, porcentagem in porcentagens_cores.items():
-        log_result += f"{cor}: {porcentagem:.2f}%\n"
-
-    # Retornar as informações extraídas
-    return log_result, cores_numeros, cores_contagem, numeros_contagem
+    print(log_result)
+    return log_result
 
 
 def main():
