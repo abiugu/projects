@@ -117,8 +117,24 @@ def extrair_cores_25_50():
         str(valores_25)
     print(log_result)
 
-    roll_containers = driver.find_elements(By.CLASS_NAME, "roll__container")
+    role_desde_section = driver.find_element(By.XPATH, "//div[@class='roll-title'][contains(text(), 'Role desde')]")
+
+    # Localizar os elementos que contêm os números dentro da seção "role desde"
+    numeros_elements = role_desde_section.find_elements(By.TAG_NAME, "text")
+
+    # Extrair os números sem o símbolo de porcentagem (%) da seção "role desde"
+    numeros = [element.text.replace('%', '') for element in numeros_elements]
+
+    # Filtrar apenas os números que são inteiros
+    numeros_inteiros = [int(numero) for numero in numeros if numero.isdigit()]
+
+    log_result = "Ultimas 25 rodadas:" + str(numeros_inteiros)
+    print(log_result)
+
+    # Inicializa a lista para armazenar os números e suas respectivas cores
     cores_numeros = []
+
+    roll_containers = driver.find_elements(By.CLASS_NAME, "roll__container")
     for container in roll_containers:
         cor_class = container.find_element(
             By.CLASS_NAME, "roll__square").get_attribute("class")
@@ -131,9 +147,8 @@ def extrair_cores_25_50():
 
         numero_str = container.find_element(By.TAG_NAME, "span").text
         # Remove os caracteres '<' e '>' antes de converter para inteiro
-        numero_str_limpo = ''.join(filter(lambda x: x.isdigit(), numero_str))
+        numero_str_limpo = ''.join(filter(str.isdigit, numero_str))
         numero_int = int(numero_str_limpo)
-        
 
         ocorrencias_str = container.find_element(By.TAG_NAME, "p").text
         ocorrencias_int = int(ocorrencias_str)
@@ -147,6 +162,9 @@ def extrair_cores_25_50():
 
     print(log_result)
     return log_result
+
+
+
 
 
 def main():
