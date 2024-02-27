@@ -130,7 +130,7 @@ def extrair_cores_25_50():
             cor = "white"
 
         numero_str = container.find_element(By.TAG_NAME, "span").text
-# Remove os caracteres '<' e '>' antes de converter para inteiro
+        # Remove os caracteres '<' e '>' antes de converter para inteiro
         numero_str_limpo = ''.join(filter(lambda x: x.isdigit(), numero_str))
         numero_int = int(numero_str_limpo)
         
