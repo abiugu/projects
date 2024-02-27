@@ -8,7 +8,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 
 # Variáveis globais
-driver = None  # Variável global para o driver
 erros_anterior = 0
 
 # Redefine o caminho da área de trabalho para o sistema operacional
@@ -117,8 +116,8 @@ def extrair_cores_25_50():
     valores_25 = [element.get_attribute("textContent") for element in text_elements_present
                   if element.get_attribute("y") == "288" and "SofiaPro" in element.get_attribute("font-family")]
 
-    log_result = "Ultimas 25 rodadas:" + \
-        str(valores_25)
+    log_result = "Ultimas 25 rodadas: " + \
+        ', '.join(valores_25)
     print(log_result)
 
     time.sleep(5)
@@ -145,7 +144,6 @@ def main():
     intervalo_contagem = 60  # Começa com 60 segundos
 
     try:
-        driver = webdriver.Chrome(service=service, options=options)
         url = 'https://blaze1.space/pt/games/double'
         driver.get(url)
 
@@ -174,7 +172,8 @@ def main():
                     log_file.write(log_text + "\n")
 
                 if log_result:
-                    log_file.write(log_result + "\n")
+                    log_file.write(log_result[0] + "\n")  # Ajuste aqui
+                    log_file.write("\n".join(map(str, log_result[1])) + "\n")  # Ajuste aqui
 
                 log_file.write(f"Segundos do loop atual: {
                                intervalo_contagem}" + "\n")

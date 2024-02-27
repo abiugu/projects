@@ -61,6 +61,7 @@ def somar_resultados(acertos, erros, sequencia):
             log_text = f"Erro !! Cor atual: {cor_atual}"
             print(log_text)
             intervalo_contagem = 25
+            log_result = extrair_cores_25_50()
             return acertos, erros, intervalo_contagem, log_text, ""
 
         elif erros_anterior == 2:
