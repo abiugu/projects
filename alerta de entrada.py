@@ -18,9 +18,12 @@ desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
 log_file_path = os.path.join(desktop_path, "log.txt")
 
 # Função para imprimir logs no arquivo
+
+
 def log(message):
     with open(log_file_path, "a") as log_file:
         log_file.write(f"{time.strftime('%Y-%m-%d %H:%M:%S')} - {message}\n")
+
 
 log("Iniciando o programa")
 
@@ -44,7 +47,9 @@ def verificar_stop():
     stop_path = os.path.join(desktop_path, "stop.txt")
     return os.path.exists(stop_path)
 
+
 log("verificando stop")
+
 
 def extrair_cores_25(driver):
     # Abrir o site se ainda não estiver aberto
@@ -111,6 +116,7 @@ def extrair_cores_25(driver):
 
     log("printando ultimas 25 rodadas")
 
+
 def main():
     global erros_anterior
     global driver
@@ -162,7 +168,8 @@ def main():
                                 log("acionando alarme")
                                 count_alarm += 1  # Incrementa o contador
                                 log("adicionando contagem ao alarme")
-                                print(f"Alarme acionado. Contagem: {count_alarm}")  # Imprime a contagem
+                                print(f"Alarme acionado. Contagem: {
+                                      count_alarm}")  # Imprime a contagem
                                 log("imprimindo contagem alarme")
                                 last_alarm_time = current_time  # Atualiza o tempo do último alarme
                                 log("atualizando tempo do ultimo alarme")
