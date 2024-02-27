@@ -44,9 +44,7 @@ def somar_resultados(sequencia):
     return
 
 
-def extrair_cores_25():
-    global driver
-
+def extrair_cores_25(driver):
     # Abrir o site se ainda não estiver aberto
     if driver.current_url != "https://blaze-7.com/pt/games/double?modal=double_history_index":
         driver.get(
@@ -105,7 +103,6 @@ def main():
     global driver
 
     try:
-        driver = webdriver.Chrome(service=service, options=options)
         url = 'https://blaze-7.com/pt/games/double'
         driver.get(url)
 
@@ -118,7 +115,7 @@ def main():
             sequencia = [box_element.get_attribute(
                 "class").split()[-1] for box_element in box_elements[:3]]
 
-            percentuais = extrair_cores_25()
+            percentuais = extrair_cores_25(driver)
 
             print("Ultimos 3 resultados:", sequencia)
             print("")
