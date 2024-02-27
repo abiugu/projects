@@ -117,7 +117,9 @@ def extrair_cores_25_50():
         str(valores_25)
     print(log_result)
 
-    roll_containers = driver.find_elements(By.CLASS_NAME, "roll__container")
+    # Encontrar o primeiro elemento div com a classe "roll"
+    roll_div = driver.find_element(By.CLASS_NAME, "roll")
+    roll_containers = roll_div.find_elements(By.CLASS_NAME, "roll__container")
     cores_numeros = []
     for container in roll_containers:
         cor_class = container.find_element(
@@ -136,9 +138,10 @@ def extrair_cores_25_50():
         numero_int = int(numero_float)
 
         ocorrencias_str = container.find_element(By.TAG_NAME, "p").text
-        ocorrencias_int = int(ocorrencias_str)
-
-        cores_numeros.append((numero_int, cor, ocorrencias_int))
+        # Verifica se ocorrencias_str contém porcentagem
+        if '%' not in ocorrencias_str:
+            ocorrencias_int = int(ocorrencias_str)
+            cores_numeros.append((numero_int, cor, ocorrencias_int))
 
     log_result = "Resultados detalhados das últimas 25 rodadas:\n"
     for tupla in cores_numeros:
