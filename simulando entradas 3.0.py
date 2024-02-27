@@ -131,8 +131,9 @@ def extrair_cores_25_50():
 
         numero_str = container.find_element(By.TAG_NAME, "span").text
         # Remove os caracteres '<' e '>' antes de converter para inteiro
-        numero_str_limpo = ''.join(filter(str.isdigit, numero_str))
-        numero_int = int(numero_str_limpo)
+        numero_str_limpo = ''.join(filter(lambda x: x.isdigit() or x == '.', numero_str))
+        numero_float = float(numero_str_limpo)
+        numero_int = int(numero_float)
         
 
         ocorrencias_str = container.find_element(By.TAG_NAME, "p").text
