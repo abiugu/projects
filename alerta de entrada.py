@@ -136,11 +136,13 @@ def main():
                         percentuais[['white', 'black', 'red'].index(cor_atual)])
                     if percentual_atual is not None:
                         if percentual_atual <= 38:
-                            alarm_sound.play()
-                            count_alarm += 1  # Incrementa o contador
-                            print(f"Alarme acionado. Contagem: {
-                                  count_alarm}")  # Imprime a contagem
-                            time.sleep(60)
+                            current_time = time.time()
+                            if current_time - last_alarm_time >= 60:  # Verifica se passaram 60 segundos desde o último alarme
+                                alarm_sound.play()
+                                count_alarm += 1  # Incrementa o contador
+                                print(f"Alarme acionado. Contagem: {count_alarm}")  # Imprime a contagem
+                                last_alarm_time = current_time  # Atualiza o tempo do último alarme
+
 
             time.sleep(2)
 
