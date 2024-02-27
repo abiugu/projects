@@ -77,6 +77,7 @@ def somar_resultados(acertos, erros, sequencia):
             return acertos, erros, intervalo_contagem, log_text, log_result_double, log_result_percentagens
 
         return acertos, erros, 25, "", "", ""
+    return acertos, erros, 25, "", "", ""
 
 
 def percentual_ultimas_25_rodadas():
