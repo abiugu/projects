@@ -46,8 +46,10 @@ def somar_resultados(sequencia):
 
 
 def extrair_cores_25(driver):
-    # Abrir o site se ainda não estiver aberto
-    if driver.get("https://blaze-7.com/pt/games/double?modal=double_history_index"):
+    
+    if driver.current_url != "https://blaze-7.com/pt/games/double?modal=double_history_index":
+        driver.get(
+            "https://blaze-7.com/pt/games/double?modal=double_history_index")
 
         time.sleep(5)
 
