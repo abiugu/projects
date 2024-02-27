@@ -47,24 +47,22 @@ def somar_resultados(sequencia):
 
 def extrair_cores_25(driver):
     # Abrir o site se ainda não estiver aberto
-    if driver.current_url != "https://blaze-7.com/pt/games/double?modal=double_history_index":
-        driver.get(
-            "https://blaze-7.com/pt/games/double?modal=double_history_index")
+    if driver.get("https://blaze-7.com/pt/games/double?modal=double_history_index"):
 
-        time.sleep(2)
+        time.sleep(5)
 
         # Esperar até que a div "tabs-crash-analytics" esteja visível
         tabs_div = WebDriverWait(driver, 10).until(
             EC.visibility_of_element_located((By.CLASS_NAME, "tabs-crash-analytics")))
 
-        time.sleep(2)
+        time.sleep(5)
 
         # Clicar no botão "Padrões" dentro da div "tabs-crash-analytics"
         padroes_button = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.XPATH, ".//button[text()='Padrões']")))
         padroes_button.click()
 
-        time.sleep(2)
+        time.sleep(5)
 
         # Esperar até que o botão "Padrões" se torne ativo
         padroes_active_button = WebDriverWait(driver, 10).until(
@@ -74,15 +72,15 @@ def extrair_cores_25(driver):
         EC.presence_of_element_located((By.XPATH, "//select[@tabindex='0']")))
     select = Select(select_element)
 
-    time.sleep(2)
+    time.sleep(3)
 
     select.select_by_value("50")
 
-    time.sleep(2)
+    time.sleep(3)
 
     select.select_by_value("25")
 
-    time.sleep(2)
+    time.sleep(3)
 
     text_elements_present = WebDriverWait(driver, 10).until(
         EC.presence_of_all_elements_located((By.TAG_NAME, "text")))
@@ -144,7 +142,7 @@ def main():
                                 last_alarm_time = current_time  # Atualiza o tempo do último alarme
 
 
-            time.sleep(2)
+            time.sleep(3)
 
     except Exception as e:
         print(f"Erro: {e}")
