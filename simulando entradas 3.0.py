@@ -183,7 +183,7 @@ def main():
                     log_file.write(log_text + "\n")
 
                 if log_result:
-                    log_file.write(log_result[0] + "\n")  # Ajuste aqui
+                    log_file.write(log_result + "\n")  # Ajuste aqui
                     # Ajuste aqui
                     log_file.write("\n".join(map(str, log_result[1])) + "\n")
 
