@@ -61,7 +61,7 @@ def somar_resultados(acertos, erros, sequencia):
             log_text = f"Erro !! Cor atual: {cor_atual}"
             print(log_text)
             intervalo_contagem = 25
-            log_result = extrair_cores_25_50()
+            log_result = extrair_cores_25_50() # Extrair cores após erro
             return acertos, erros, intervalo_contagem, log_text, ""
 
         elif erros_anterior == 2:
@@ -74,8 +74,6 @@ def somar_resultados(acertos, erros, sequencia):
             return acertos, erros, intervalo_contagem, log_text, log_result
 
         return acertos, erros, 25, "", ""
-
-    return acertos, erros, 25, "", ""
 
 
 def extrair_cores_25_50():
@@ -133,7 +131,8 @@ def extrair_cores_25_50():
 
         numero_str = container.find_element(By.TAG_NAME, "span").text
         # Remove os caracteres '<' e '>' antes de converter para inteiro
-        numero_str_limpo = ''.join(filter(lambda x: x.isdigit() or x == '.', numero_str))
+        numero_str_limpo = ''.join(
+            filter(lambda x: x.isdigit() or x == '.', numero_str))
         numero_float = float(numero_str_limpo)
         numero_int = int(numero_float)
 
