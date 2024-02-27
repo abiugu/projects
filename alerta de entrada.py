@@ -10,6 +10,7 @@ import pygame
 
 erros_anterior = 0
 driver = None  # Variável global para o driver
+count_alarm = 0  # Contador global para o número de vezes que o alarme é acionado
 
 # Redefine o caminho da área de trabalho para o sistema operacional
 desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
@@ -101,6 +102,7 @@ def extrair_cores_25(driver):
 def main():
     global erros_anterior
     global driver
+    global count_alarm
 
     try:
         url = 'https://blaze-7.com/pt/games/double'
@@ -135,6 +137,9 @@ def main():
                     if percentual_atual is not None:
                         if percentual_atual <= 38:
                             alarm_sound.play()
+                            count_alarm += 1  # Incrementa o contador
+                            print(f"Alarme acionado. Contagem: {
+                                  count_alarm}")  # Imprime a contagem
 
             time.sleep(2)
 
