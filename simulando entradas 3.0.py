@@ -83,8 +83,7 @@ def obter_logs():
 def percentual_ultimas_25_rodadas():
     global driver
 
-    if "operacao_realizada" not in globals():
-        if driver.current_url != "https://blaze-7.com/pt/games/double?modal=double_history_index":
+    if driver.current_url != "https://blaze-7.com/pt/games/double?modal=double_history_index":
             driver.get(
                 "https://blaze-7.com/pt/games/double?modal=double_history_index")
             tabs_div = WebDriverWait(driver, 10).until(
@@ -93,8 +92,7 @@ def percentual_ultimas_25_rodadas():
                 By.XPATH, ".//button[text()='Padrões']")
             padroes_button.click()
             padroes_active_button = WebDriverWait(driver, 10).until(
-                EC.presence_of_element_located((By.XPATH, "//button[@class='tab active']")))
-            globals()["operacao_realizada"] = True
+                EC.presence_of_element_located((By.XPATH, "//button[@class='tab active']"))) 
 
     select_element = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.XPATH, "//select[@tabindex='0']")))
