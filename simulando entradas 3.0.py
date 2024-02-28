@@ -85,20 +85,24 @@ def percentual_ultimas_25_rodadas():
 
     # Verificar se a URL atual não corresponde à página desejada
     if "double_history_index" not in driver.current_url:
-        driver.get("https://blaze-7.com/pt/games/double?modal=double_history_index")
+        driver.get(
+            "https://blaze-7.com/pt/games/double?modal=double_history_index")
 
         # Aguardar até que a parte relevante da página seja carregada
-        WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CLASS_NAME, "tabs-crash-analytics")))
+        WebDriverWait(driver, 10).until(EC.visibility_of_element_located(
+            (By.CLASS_NAME, "tabs-crash-analytics")))
 
         # Aguardar até que o botão "Padrões" esteja presente
-        padroes_button = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, ".//button[text()='Padrões']")))
+        padroes_button = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, ".//button[text()='Padrões']")))
 
         # Clicar no botão "Padrões" se ainda não estiver ativo
         if "active" not in padroes_button.get_attribute("class"):
             padroes_button.click()
 
     # Selecionar as opções no menu suspenso
-    select_element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//select[@tabindex='0']")))
+    select_element = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.XPATH, "//select[@tabindex='0']")))
     select = Select(select_element)
     time.sleep(2)
     select.select_by_value("50")
@@ -107,12 +111,15 @@ def percentual_ultimas_25_rodadas():
     time.sleep(2)
 
     # Extrair os valores das últimas 25 rodadas
-    text_elements_present = WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.TAG_NAME, "text")))
-    valores_25 = [element.get_attribute("textContent") for element in text_elements_present if element.get_attribute("y") == "288" and "SofiaPro" in element.get_attribute("font-family")]
+    text_elements_present = WebDriverWait(driver, 10).until(
+        EC.presence_of_all_elements_located((By.TAG_NAME, "text")))
+    valores_25 = [element.get_attribute("textContent") for element in text_elements_present if element.get_attribute(
+        "y") == "288" and "SofiaPro" in element.get_attribute("font-family")]
 
     log_result = "Últimas 25 rodadas:" + str(valores_25)
     print(log_result)
     return log_result
+
 
 def resultados_vistos_ultimas_25_rodadas():
     global driver
@@ -146,7 +153,7 @@ def resultados_vistos_ultimas_25_rodadas():
 
         cores_numeros.sort(key=lambda x: x[0])
 
-        log_result = "Resultados detalhados das últimas 25 rodadas:\n"
+        log_result = "Resultados detalhados das 25 rodadas:\n"
         log_result += '\n'.join([f"({tupla[0]}) {tupla[1]
                                                  }: {tupla[2]} vezes" for tupla in cores_numeros])
         print(log_result)
