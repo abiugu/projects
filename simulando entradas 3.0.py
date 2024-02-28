@@ -23,7 +23,7 @@ log_file_path = os.path.join(desktop_path, "historico_do_dia.txt")
 service = Service()
 options = webdriver.ChromeOptions()
 # Remova a opção --headless para tornar o navegador visível
-#options.add_argument("--headless")
+options.add_argument("--headless")
 driver = webdriver.Chrome(service=service, options=options)
 
 
@@ -45,16 +45,16 @@ def somar_resultados(acertos, erros, sequencia):
             print(log_text)
             erros_anterior = 0
             intervalo_contagem = 60
-            log_result_double = resultados_vistos_ultimas_25_rodadas()  # Extrair cores após acerto martingale
             log_result_percentagens = percentual_ultimas_25_rodadas()
+            log_result_double = resultados_vistos_ultimas_25_rodadas()  # Extrair cores após acerto martingale
             return acertos, erros, intervalo_contagem, log_text, log_result_double, log_result_percentagens
 
         else:
             log_text = f"Acerto !! Cor atual: {cor_atual}"
             print(log_text)
             intervalo_contagem = 60
-            log_result_double = resultados_vistos_ultimas_25_rodadas()  # Extrair cores após acerto
             log_result_percentagens = percentual_ultimas_25_rodadas()
+            log_result_double = resultados_vistos_ultimas_25_rodadas()
             return acertos, erros, intervalo_contagem, log_text, log_result_double, log_result_percentagens
 
     elif all(cor == cores_anteriores[0] for cor in cores_anteriores) and cor_atual == cores_anteriores[0]:
@@ -63,8 +63,8 @@ def somar_resultados(acertos, erros, sequencia):
             log_text = f"Erro !! Cor atual: {cor_atual}"
             print(log_text)
             intervalo_contagem = 25
-            log_result_double = resultados_vistos_ultimas_25_rodadas()
             log_result_percentagens = percentual_ultimas_25_rodadas()
+            log_result_double = resultados_vistos_ultimas_25_rodadas()
             return acertos, erros, intervalo_contagem, log_text, "", ""
 
         elif erros_anterior == 2:
@@ -73,8 +73,9 @@ def somar_resultados(acertos, erros, sequencia):
             erros_anterior = 0
             erros += 3
             intervalo_contagem = 60
-            log_result_double = resultados_vistos_ultimas_25_rodadas()  # Extrair cores após erro martingale
+              # Extrair cores após erro martingale
             log_result_percentagens = percentual_ultimas_25_rodadas()
+            log_result_double = resultados_vistos_ultimas_25_rodadas()
             return acertos, erros, intervalo_contagem, log_text, log_result_double, log_result_percentagens
 
         return acertos, erros, 25, "", "", ""
@@ -129,6 +130,8 @@ def resultados_vistos_ultimas_25_rodadas():
     global driver
 
     try:
+
+        time.sleep(5)
         roll_div = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "roll")))
         roll_containers = roll_div.find_elements(By.CLASS_NAME, "roll__container")
         cores_numeros = []
