@@ -65,7 +65,7 @@ def somar_resultados(acertos, erros, sequencia):
             intervalo_contagem = 25
             log_result_double = resultados_vistos_ultimas_25_rodadas()
             log_result_percentagens = percentual_ultimas_25_rodadas()
-            return acertos, erros, intervalo_contagem, log_text, "", log_result_percentagens
+            return acertos, erros, intervalo_contagem, log_text, "",log_result_double, log_result_percentagens
 
         elif erros_anterior == 2:
             log_text = f"Erro no Martingale !! Cor atual: {cor_atual}"
