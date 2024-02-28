@@ -22,8 +22,8 @@ log_file_path = os.path.join(desktop_path, "historico_do_dia.txt")
 # Serviço e opções do webdriver Chrome
 service = Service()
 options = webdriver.ChromeOptions()
-options.add_argument("--headless")  # Executar em modo headless
-options.add_argument("--start-maximized")  # Maximizar a janela do navegador
+# Remova a opção --headless para tornar o navegador visível
+# options.add_argument("--headless")
 driver = webdriver.Chrome(service=service, options=options)
 
 
@@ -63,7 +63,6 @@ def somar_resultados(acertos, erros, sequencia):
             log_text = f"Erro !! Cor atual: {cor_atual}"
             print(log_text)
             intervalo_contagem = 25
-            log_result_double = resultados_vistos_ultimas_25_rodadas()
             log_result_percentagens = percentual_ultimas_25_rodadas()
             return acertos, erros, intervalo_contagem, log_text, "", log_result_percentagens
 
@@ -84,20 +83,25 @@ def somar_resultados(acertos, erros, sequencia):
 def percentual_ultimas_25_rodadas():
     global driver
 
-    # Abrir o site se ainda não estiver aberto
-    if driver.current_url != "https://blaze-7.com/pt/games/double?modal=double_history_index":
-        driver.get(
-            "https://blaze-7.com/pt/games/double?modal=double_history_index")
-        # Esperar até que a div "tabs-crash-analytics" esteja visível
-        tabs_div = WebDriverWait(driver, 10).until(
-            EC.visibility_of_element_located((By.CLASS_NAME, "tabs-crash-analytics")))
-        # Clicar no botão "Padrões" dentro da div "tabs-crash-analytics"
-        padroes_button = tabs_div.find_element(
-            By.XPATH, ".//button[text()='Padrões']")
-        padroes_button.click()
-        # Esperar até que o botão "Padrões" se torne ativo
-        padroes_active_button = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, "//button[@class='tab active']")))
+    # Verificar se a operação já foi realizada
+    if "operacao_realizada" not in globals():
+        # Abrir o site se ainda não estiver aberto
+        if driver.current_url != "https://blaze-7.com/pt/games/double?modal=double_history_index":
+            driver.get(
+                "https://blaze-7.com/pt/games/double?modal=double_history_index")
+            # Esperar até que a div "tabs-crash-analytics" esteja visível
+            tabs_div = WebDriverWait(driver, 10).until(
+                EC.visibility_of_element_located((By.CLASS_NAME, "tabs-crash-analytics")))
+            # Clicar no botão "Padrões" dentro da div "tabs-crash-analytics"
+            padroes_button = tabs_div.find_element(
+                By.XPATH, ".//button[text()='Padrões']")
+            padroes_button.click()
+            # Esperar até que o botão "Padrões" se torne ativo
+            padroes_active_button = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, "//button[@class='tab active']")))
+            
+            # Definir a variável de controle para indicar que a operação foi realizada
+            globals()["operacao_realizada"] = True
 
     select_element = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.XPATH, "//select[@tabindex='0']")))
@@ -115,6 +119,7 @@ def percentual_ultimas_25_rodadas():
     log_result = "Ultimas 25 rodadas:" + str(valores_25)
     print(log_result)
     return log_result
+
 
 
 def resultados_vistos_ultimas_25_rodadas():
@@ -144,7 +149,7 @@ def resultados_vistos_ultimas_25_rodadas():
             ocorrencias_int = int(ocorrencias_str)
             cores_numeros.append((numero_int, cor, ocorrencias_int))
 
-    log_result = "Resultados detalhados das ultimas 25 rodadas:\n"
+    log_result = "Resultados detalhados das últimas 25 rodadas:\n"
     for tupla in cores_numeros:
         numero, cor, ocorrencias = tupla
         log_result += f"({numero}) {cor}: {ocorrencias} vezes\n"
