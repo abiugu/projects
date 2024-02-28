@@ -83,19 +83,22 @@ def obter_logs():
 def percentual_ultimas_25_rodadas():
     global driver
 
-    if driver.current_url != "https://blaze-7.com/pt/games/double?modal=double_history_index":
-            driver.get(
-                "https://blaze-7.com/pt/games/double?modal=double_history_index")
-            tabs_div = WebDriverWait(driver, 10).until(
-                EC.visibility_of_element_located((By.CLASS_NAME, "tabs-crash-analytics")))
-            padroes_button = tabs_div.find_element(
-                By.XPATH, ".//button[text()='Padrões']")
-            padroes_button.click()
-            padroes_active_button = WebDriverWait(driver, 10).until(
-                EC.presence_of_element_located((By.XPATH, "//button[@class='tab active']"))) 
+    # Verificar se a URL atual não corresponde à página desejada
+    if "double_history_index" not in driver.current_url:
+        driver.get("https://blaze-7.com/pt/games/double?modal=double_history_index")
 
-    select_element = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.XPATH, "//select[@tabindex='0']")))
+        # Aguardar até que a parte relevante da página seja carregada
+        WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CLASS_NAME, "tabs-crash-analytics")))
+
+        # Aguardar até que o botão "Padrões" esteja presente
+        padroes_button = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, ".//button[text()='Padrões']")))
+
+        # Clicar no botão "Padrões" se ainda não estiver ativo
+        if "active" not in padroes_button.get_attribute("class"):
+            padroes_button.click()
+
+    # Selecionar as opções no menu suspenso
+    select_element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//select[@tabindex='0']")))
     select = Select(select_element)
     time.sleep(2)
     select.select_by_value("50")
@@ -103,15 +106,13 @@ def percentual_ultimas_25_rodadas():
     select.select_by_value("25")
     time.sleep(2)
 
-    text_elements_present = WebDriverWait(driver, 10).until(
-        EC.presence_of_all_elements_located((By.TAG_NAME, "text")))
-    valores_25 = [element.get_attribute("textContent") for element in text_elements_present if element.get_attribute(
-        "y") == "288" and "SofiaPro" in element.get_attribute("font-family")]
+    # Extrair os valores das últimas 25 rodadas
+    text_elements_present = WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.TAG_NAME, "text")))
+    valores_25 = [element.get_attribute("textContent") for element in text_elements_present if element.get_attribute("y") == "288" and "SofiaPro" in element.get_attribute("font-family")]
 
     log_result = "Últimas 25 rodadas:" + str(valores_25)
     print(log_result)
     return log_result
-
 
 def resultados_vistos_ultimas_25_rodadas():
     global driver
@@ -162,6 +163,7 @@ def main():
 
     acertos, erros = 0, 0
     intervalo_contagem = 60
+    print_intervalo = True  # Variável para controlar a impressão do intervalo
 
     try:
         url = 'https://blaze1.space/pt/games/double'
@@ -193,15 +195,15 @@ def main():
 
                 if log_result_percentagens:
                     log_file.write(log_result_percentagens + "\n")
-                    print("")
+                    print("\n")
+                    print_intervalo = True  # Ativar a impressão do intervalo após o log
 
                 if log_result_double:
                     log_file.write(log_result_double + "\n")
 
-                log_file.write(f"Segundos do loop atual: {
-                               intervalo_contagem}\n")
-
-            print(f"Segundos do loop atual: {intervalo_contagem}")
+                if print_intervalo:  # Verificar se é necessário imprimir o intervalo
+                    print(f"Segundos do loop atual: {intervalo_contagem}")
+                    print_intervalo = False  # Desativar a impressão do intervalo após imprimir
 
             time.sleep(intervalo_contagem)
 
