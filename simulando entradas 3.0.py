@@ -16,7 +16,7 @@ log_file_path = os.path.join(desktop_path, "historico_do_dia.txt")
 # Serviço e opções do webdriver Chrome
 service = Service()
 options = webdriver.ChromeOptions()
-options.add_argument("--headless")
+#options.add_argument("--headless")
 driver = webdriver.Chrome(service=service, options=options)
 
 
