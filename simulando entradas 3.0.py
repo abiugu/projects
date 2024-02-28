@@ -82,6 +82,7 @@ def somar_resultados(acertos, erros, sequencia):
 
 
 
+
 def percentual_ultimas_25_rodadas():
     global driver
 
