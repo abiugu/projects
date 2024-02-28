@@ -63,6 +63,7 @@ def somar_resultados(acertos, erros, sequencia):
             log_text = f"Erro !! Cor atual: {cor_atual}"
             print(log_text)
             intervalo_contagem = 25
+            log_result_double = resultados_vistos_ultimas_25_rodadas()
             log_result_percentagens = percentual_ultimas_25_rodadas()
             return acertos, erros, intervalo_contagem, log_text, "", log_result_percentagens
 
@@ -76,8 +77,9 @@ def somar_resultados(acertos, erros, sequencia):
             log_result_percentagens = percentual_ultimas_25_rodadas()
             return acertos, erros, intervalo_contagem, log_text, log_result_double, log_result_percentagens
 
-        return acertos, erros, 25, "", "", ""
-    return acertos, erros, 25, "", "", ""
+        return acertos, erros, 25, "", "", "", ""
+    return acertos, erros, 25, "", "", "", ""
+
 
 
 def percentual_ultimas_25_rodadas():
