@@ -23,7 +23,7 @@ log_file_path = os.path.join(desktop_path, "historico_do_dia.txt")
 service = Service()
 options = webdriver.ChromeOptions()
 # Remova a opção --headless para tornar o navegador visível
-options.add_argument("--headless")
+#options.add_argument("--headless")
 driver = webdriver.Chrome(service=service, options=options)
 
 
@@ -128,37 +128,43 @@ def percentual_ultimas_25_rodadas():
 def resultados_vistos_ultimas_25_rodadas():
     global driver
 
-    roll_div = driver.find_element(By.CLASS_NAME, "roll")
-    roll_containers = roll_div.find_elements(By.CLASS_NAME, "roll__container")
-    cores_numeros = []
-    for container in roll_containers:
-        cor_class = container.find_element(By.CLASS_NAME, "roll__square").get_attribute("class")
-        if "roll__square--red" in cor_class:
-            cor = "red"
-        elif "roll__square--black" in cor_class:
-            cor = "black"
-        elif "roll__square--white" in cor_class:
-            cor = "white"
+    try:
+        roll_div = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "roll")))
+        roll_containers = roll_div.find_elements(By.CLASS_NAME, "roll__container")
+        cores_numeros = []
+        for container in roll_containers:
+            cor_class = container.find_element(By.CLASS_NAME, "roll__square").get_attribute("class")
+            if "roll__square--red" in cor_class:
+                cor = "red"
+            elif "roll__square--black" in cor_class:
+                cor = "black"
+            elif "roll__square--white" in cor_class:
+                cor = "white"
 
-        numero_str = container.find_element(By.TAG_NAME, "span").text
-        # Remove os caracteres '<' e '>' antes de converter para inteiro
-        numero_str_limpo = ''.join(filter(lambda x: x.isdigit() or x == '.', numero_str))
-        numero_float = float(numero_str_limpo)
-        numero_int = int(numero_float)
+            numero_str = container.find_element(By.TAG_NAME, "span").text
+            # Remove os caracteres '<' e '>' antes de converter para inteiro
+            numero_str_limpo = ''.join(filter(lambda x: x.isdigit() or x == '.', numero_str))
+            numero_float = float(numero_str_limpo)
+            numero_int = int(numero_float)
 
-        ocorrencias_str = container.find_element(By.TAG_NAME, "p").text
-        # Verifica se ocorrencias_str contém porcentagem
-        if '%' not in ocorrencias_str:
-            ocorrencias_int = int(ocorrencias_str)
-            cores_numeros.append((numero_int, cor, ocorrencias_int))
+            ocorrencias_str = container.find_element(By.TAG_NAME, "p").text
+            # Verifica se ocorrencias_str contém porcentagem
+            if '%' not in ocorrencias_str:
+                ocorrencias_int = int(ocorrencias_str)
+                cores_numeros.append((numero_int, cor, ocorrencias_int))
 
-    log_result = "Resultados detalhados das últimas 25 rodadas:\n"
-    for tupla in cores_numeros:
-        numero, cor, ocorrencias = tupla
-        log_result += f"({numero}) {cor}: {ocorrencias} vezes\n"
+        log_result = "Resultados detalhados das últimas 25 rodadas:\n"
+        for tupla in cores_numeros:
+            numero, cor, ocorrencias = tupla
+            log_result += f"({numero}) {cor}: {ocorrencias} vezes\n"
 
-    print(log_result)
-    return log_result
+        print(log_result)
+        return log_result
+
+    except Exception as e:
+        print(f"Erro ao extrair resultados das últimas 25 rodadas: {e}")
+        return ""
+
 
 
 def main():
