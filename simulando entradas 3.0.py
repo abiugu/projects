@@ -23,7 +23,7 @@ log_file_path = os.path.join(desktop_path, "historico_do_dia.txt")
 service = Service()
 options = webdriver.ChromeOptions()
 # Remova a opção --headless para tornar o navegador visível
-# options.add_argument("--headless")
+options.add_argument("--headless")
 driver = webdriver.Chrome(service=service, options=options)
 
 
