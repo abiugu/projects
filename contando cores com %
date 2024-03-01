@@ -1,16 +1,16 @@
 import os
 
-desktop_path = os.path.join(os.path.expanduser("~"), "Desktop", "Historico acertos e erros")
-log_file_path = os.path.join(desktop_path, "historico acertos e erros 17.02.txt")
+desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
+log_file_path = os.path.join(desktop_path, "historico_do_dia.txt")
 
 acertos = 0
 acertos_martingale = 0
 acertos_oposta = 0
 acertos_martingale_oposta = 0
-erros_martingale_52ouMenos_oposta = 0
-erros_martingale_maisDe52_oposta = 0
-erros_martingale_52ouMenos_mesmaCor = 0
-erros_martingale_maisDe52_mesmaCor = 0
+erros_martingale_42ouMenos_oposta = 0
+erros_martingale_maisDe42_oposta = 0
+erros_martingale_42ouMenos_mesmaCor = 0
+erros_martingale_maisDe42_mesmaCor = 0
 total_acertos = 0
 total_acertos_martingale = 0
 total_erros_martingale = 0
@@ -58,13 +58,13 @@ while index < len(lines):
             if porcentagem_cor_oposta:
                 porcentagem_cor_oposta = int(''.join(filter(str.isdigit, porcentagem_cor_oposta)))
                 if porcentagem_cor_oposta <= 42:
-                    erros_martingale_52ouMenos_oposta += 1
+                    erros_martingale_42ouMenos_oposta += 1
                 else:
-                    erros_martingale_maisDe52_oposta += 1
+                    erros_martingale_maisDe42_oposta += 1
             if porcentagem_cor_atual <= 42:
-                erros_martingale_52ouMenos_mesmaCor += 1
+                erros_martingale_42ouMenos_mesmaCor += 1
             else:
-                erros_martingale_maisDe52_mesmaCor += 1
+                erros_martingale_maisDe42_mesmaCor += 1
     index += 1
 
 # Calcula a porcentagem de cada categoria em relação ao total de sua respectiva categoria
@@ -72,16 +72,16 @@ porcentagem_acertos = (acertos / total_acertos) * 100 if total_acertos else 0
 porcentagem_acertos_martingale = (acertos_martingale / total_acertos_martingale) * 100 if total_acertos_martingale else 0
 porcentagem_acertos_oposta = (acertos_oposta / total_acertos) * 100 if total_acertos else 0
 porcentagem_acertos_martingale_oposta = (acertos_martingale_oposta / total_acertos_martingale) * 100 if total_acertos_martingale else 0
-porcentagem_erros_martingale_52ouMenos_oposta = (erros_martingale_52ouMenos_oposta / total_erros_martingale) * 100 if total_erros_martingale else 0
-porcentagem_erros_martingale_maisDe52_oposta = (erros_martingale_maisDe52_oposta / total_erros_martingale) * 100 if total_erros_martingale else 0
-porcentagem_erros_martingale_52ouMenos_mesmaCor = (erros_martingale_52ouMenos_mesmaCor / total_erros_martingale) * 100 if total_erros_martingale else 0
-porcentagem_erros_martingale_maisDe52_mesmaCor = (erros_martingale_maisDe52_mesmaCor / total_erros_martingale) * 100 if total_erros_martingale else 0
+porcentagem_erros_martingale_52ouMenos_oposta = (erros_martingale_42ouMenos_oposta / total_erros_martingale) * 100 if total_erros_martingale else 0
+porcentagem_erros_martingale_maisDe52_oposta = (erros_martingale_maisDe42_oposta / total_erros_martingale) * 100 if total_erros_martingale else 0
+porcentagem_erros_martingale_52ouMenos_mesmaCor = (erros_martingale_42ouMenos_mesmaCor / total_erros_martingale) * 100 if total_erros_martingale else 0
+porcentagem_erros_martingale_maisDe52_mesmaCor = (erros_martingale_maisDe42_mesmaCor / total_erros_martingale) * 100 if total_erros_martingale else 0
 
 print("Acertos com 52% ou menos:", acertos, "(total", total_acertos, ") -", round(porcentagem_acertos, 2), "%")
 print("Acertos Martingale com 52% ou menos:", acertos_martingale, "(total", total_acertos_martingale, ") -", round(porcentagem_acertos_martingale, 2), "%")
 print("Acertos com 42% ou menos da cor oposta:", acertos_oposta, "(total", total_acertos, ") -", round(porcentagem_acertos_oposta, 2), "%")
 print("Acertos Martingale com 42% ou menos da cor oposta:", acertos_martingale_oposta, "(total", total_acertos_martingale, ") -", round(porcentagem_acertos_martingale_oposta, 2), "%")
-print("Erros Martingale com 42% ou menos da cor oposta:", erros_martingale_52ouMenos_oposta, "(total", total_erros_martingale, ") -", round(porcentagem_erros_martingale_52ouMenos_oposta, 2), "%")
-print("Erros Martingale com mais de 42% da cor oposta:", erros_martingale_maisDe52_oposta, "(total", total_erros_martingale, ") -", round(porcentagem_erros_martingale_maisDe52_oposta, 2), "%")
-print("Erros Martingale com 42% ou menos da mesma cor:", erros_martingale_52ouMenos_mesmaCor, "(total", total_erros_martingale, ") -", round(porcentagem_erros_martingale_52ouMenos_mesmaCor, 2), "%")
-print("Erros Martingale com mais de 42% da mesma cor:", erros_martingale_maisDe52_mesmaCor, "(total", total_erros_martingale, ") -", round(porcentagem_erros_martingale_maisDe52_mesmaCor, 2), "%")
+print("Erros Martingale com 42% ou menos da cor oposta:", erros_martingale_42ouMenos_oposta, "(total", total_erros_martingale, ") -", round(porcentagem_erros_martingale_52ouMenos_oposta, 2), "%")
+print("Erros Martingale com mais de 42% da cor oposta:", erros_martingale_maisDe42_oposta, "(total", total_erros_martingale, ") -", round(porcentagem_erros_martingale_maisDe52_oposta, 2), "%")
+print("Erros Martingale com 42% ou menos da mesma cor:", erros_martingale_42ouMenos_mesmaCor, "(total", total_erros_martingale, ") -", round(porcentagem_erros_martingale_52ouMenos_mesmaCor, 2), "%")
+print("Erros Martingale com mais de 42% da mesma cor:", erros_martingale_maisDe42_mesmaCor, "(total", total_erros_martingale, ") -", round(porcentagem_erros_martingale_maisDe52_mesmaCor, 2), "%")
