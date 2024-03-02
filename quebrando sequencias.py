@@ -1,5 +1,4 @@
 import os
-from collections import Counter
 
 def ler_lista_cores():
     desktop_path = os.path.join(os.path.expanduser('~'), 'Desktop')
@@ -8,34 +7,35 @@ def ler_lista_cores():
         linhas = arquivo.readlines()
     lista_cores = []
     for linha in linhas:
-        cor = linha.strip().split(",")[1].split(":")[1].strip()
-        lista_cores.append(cor)
+        if 'Cor:' in linha:  
+            cor = linha.strip().split("Cor:")[1].strip().split()[0].lower()  
+            lista_cores.append(cor)
     return lista_cores
 
-def encontrar_sequencias_cores(lista_cores):
-    sequencias_cores = []
-    for i in range(len(lista_cores) - 6):
-        sequencia_cinco_cores = tuple(lista_cores[i:i+5])
-        proxima_cor = lista_cores[i+5]
-        if len(set(sequencia_cinco_cores)) == 1 and proxima_cor != sequencia_cinco_cores[0]:
-            sequencia_anterior = tuple(lista_cores[i-3:i])
-            sequencias_cores.append((sequencia_anterior, sequencia_cinco_cores))
-    sequencias_cores_counter = Counter(sequencias_cores)
-    top_5_sequencias_cores = sequencias_cores_counter.most_common(5)
-    return top_5_sequencias_cores
+def encontrar_sequencia(lista_cores, sequencia_anterior, sequencia_seguinte):
+    sequencias_contagem = {}
+    for i in range(sequencia_seguinte, len(lista_cores) - sequencia_anterior):
+        sequencia = tuple(lista_cores[i-sequencia_anterior:i] + lista_cores[i:i+sequencia_seguinte])
+        sequencias_contagem[sequencia] = sequencias_contagem.get(sequencia, 0) + 1
+    sequencias_mais_ocorridas = sorted(sequencias_contagem.items(), key=lambda x: x[1], reverse=True)
+    return sequencias_mais_ocorridas
 
 def main():
     lista_cores = ler_lista_cores()
-    top_5_sequencias_cores = encontrar_sequencias_cores(lista_cores)
 
-    if top_5_sequencias_cores:
-        print("As 5 sequências mais vistas de cinco cores iguais seguidas por uma quebra de cor:")
-        for i, ((sequencia_anterior, sequencia_cinco_cores), frequencia) in enumerate(top_5_sequencias_cores, start=1):
-            print(f"Sequência {i}: Frequência: {frequencia}")
-            print("  Cores Anteriores:", sequencia_anterior)
-            print("  Sequência de Cinco Cores Iguais:", sequencia_cinco_cores)
+    # Solicitar ao usuário o tamanho das sequências
+    sequencia_anterior = int(input("Digite o tamanho da sequência anterior desejada: "))
+    sequencia_seguinte = int(input("Digite o tamanho da sequência seguinte desejada: "))
+
+    # Encontrar a sequência mais vista
+    sequencias_mais_ocorridas = encontrar_sequencia(lista_cores, sequencia_anterior, sequencia_seguinte)
+
+    if sequencias_mais_ocorridas:
+        print(f"As sequências de tamanho {sequencia_anterior} antes e {sequencia_seguinte} após mais vistas são:")
+        for i, (sequencia, ocorrencias) in enumerate(sequencias_mais_ocorridas[:5], start=1):
+            print(f"Sequência {i}: {sequencia} - Ocorrências: {ocorrencias}")
     else:
-        print("Não foram encontradas sequências de cinco cores iguais seguidas por uma quebra de cor na lista.")
+        print("Nenhuma sequência encontrada com os critérios especificados.")
 
 if __name__ == "__main__":
     main()
