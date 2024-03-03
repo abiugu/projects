@@ -24,7 +24,7 @@ desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
 txt_file_path = os.path.join(desktop_path, "resultados double.txt")
 
 # Limitar o número de páginas a serem extraídas
-limite_paginas = 170
+limite_paginas = 863
 
 # Iniciar o WebDriver
 driver = webdriver.Chrome(service=service, options=options)
@@ -35,7 +35,7 @@ try:
     driver.get(url)
 
     # Clicar no botão de avanço nas páginas para ir até a décima página
-    for _ in range(169):
+    for _ in range(862):
         botao_avanco = driver.find_elements(
             By.CLASS_NAME, "pagination__button")[1]
         botao_avanco.click()

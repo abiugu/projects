@@ -7,35 +7,38 @@ def ler_lista_cores():
         linhas = arquivo.readlines()
     lista_cores = []
     for linha in linhas:
-        if 'Cor:' in linha:  
-            cor = linha.strip().split("Cor:")[1].strip().split()[0].lower()  
-            lista_cores.append(cor)
+        cor = linha.strip().split(",")[1].split(":")[1].strip()
+        lista_cores.append(cor)
     return lista_cores
 
-def encontrar_sequencia(lista_cores, sequencia_anterior, sequencia_seguinte):
-    sequencias_contagem = {}
-    for i in range(sequencia_seguinte, len(lista_cores) - sequencia_anterior):
-        sequencia = tuple(lista_cores[i-sequencia_anterior:i] + lista_cores[i:i+sequencia_seguinte])
-        sequencias_contagem[sequencia] = sequencias_contagem.get(sequencia, 0) + 1
-    sequencias_mais_ocorridas = sorted(sequencias_contagem.items(), key=lambda x: x[1], reverse=True)
-    return sequencias_mais_ocorridas
+def contar_acertos_erros(lista_cores, tamanho_sequencia):
+    acertos = 0
+    erros = 0
+    for i in range(len(lista_cores) - tamanho_sequencia):
+        sequencia = lista_cores[i:i+tamanho_sequencia]
+        if len(set(sequencia)) == 1:  # Verifica se todas as cores na sequência são iguais
+            proxima_cor = lista_cores[i+tamanho_sequencia]
+            if proxima_cor == sequencia[0]:
+                erros += 1
+            else:
+                acertos += 1
+    return acertos, erros
+
+def calcular_proporcao(acertos, erros):
+    proporcao = (acertos / (acertos + erros)) * 100
+    return proporcao
 
 def main():
     lista_cores = ler_lista_cores()
+    tamanho_sequencia = int(input("Digite o tamanho da sequência de cores que deseja analisar: "))
+    acertos, erros = contar_acertos_erros(lista_cores, tamanho_sequencia)
 
-    # Solicitar ao usuário o tamanho das sequências
-    sequencia_anterior = int(input("Digite o tamanho da sequência anterior desejada: "))
-    sequencia_seguinte = int(input("Digite o tamanho da sequência seguinte desejada: "))
-
-    # Encontrar a sequência mais vista
-    sequencias_mais_ocorridas = encontrar_sequencia(lista_cores, sequencia_anterior, sequencia_seguinte)
-
-    if sequencias_mais_ocorridas:
-        print(f"As sequências de tamanho {sequencia_anterior} antes e {sequencia_seguinte} após mais vistas são:")
-        for i, (sequencia, ocorrencias) in enumerate(sequencias_mais_ocorridas[:5], start=1):
-            print(f"Sequência {i}: {sequencia} - Ocorrências: {ocorrencias}")
-    else:
-        print("Nenhuma sequência encontrada com os critérios especificados.")
+    print(f"Contagem de acertos e erros após sequências de {tamanho_sequencia} cores iguais:")
+    print(f"Acertos: {acertos}")
+    print(f"Erros: {erros}")
+    
+    proporcao = calcular_proporcao(acertos, erros)
+    print(f"Proporção de acertos: {proporcao:.2f}%")
 
 if __name__ == "__main__":
     main()
