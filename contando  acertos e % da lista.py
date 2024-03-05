@@ -96,7 +96,7 @@ def calcular_acertos_erros(linhas):
             porcentagem_cor_atual = porcentagens[["white", "black", "red"].index(cor_atual)].replace("%", "").strip()
             if porcentagem_cor_atual:
                 porcentagem_cor_atual = int(''.join(filter(str.isdigit, porcentagem_cor_atual)))
-                if porcentagem_cor_atual <= 52:
+                if porcentagem_cor_atual <= 42:
                     acertos += 1
                 if porcentagem_cor_atual <= 42:
                     acertos_oposta += 1
@@ -108,7 +108,7 @@ def calcular_acertos_erros(linhas):
             porcentagem_cor_atual = porcentagens[["white", "black", "red"].index(cor_atual)].replace("%", "").strip()
             if porcentagem_cor_atual:
                 porcentagem_cor_atual = int(''.join(filter(str.isdigit, porcentagem_cor_atual)))
-                if porcentagem_cor_atual <= 52:
+                if porcentagem_cor_atual <= 42:
                     acertos_martingale += 1
                 if porcentagem_cor_atual <= 42:
                     acertos_martingale_oposta += 1
@@ -151,8 +151,8 @@ def main():
     linhas = ler_arquivo()
     numeros_faltando = extrair_info(linhas)
     acertos, acertos_martingale, acertos_oposta, acertos_martingale_oposta, erros_martingale_42ouMenos_oposta, erros_martingale_maisDe42_oposta, erros_martingale_42ouMenos_mesmaCor, erros_martingale_maisDe42_mesmaCor = calcular_acertos_erros(linhas)
-    print("Acertos com 52% ou menos:", acertos[0], "(total", acertos[1], ") -", acertos[2], "%")
-    print("Acertos Martingale com 52% ou menos:", acertos_martingale[0], "(total", acertos_martingale[1], ") -", acertos_martingale[2], "%")
+    print("Acertos com 42% ou menos:", acertos[0], "(total", acertos[1], ") -", acertos[2], "%")
+    print("Acertos Martingale com 42% ou menos:", acertos_martingale[0], "(total", acertos_martingale[1], ") -", acertos_martingale[2], "%")
     print("Acertos com 42% ou menos da cor oposta:", acertos_oposta[0], "(total", acertos_oposta[1], ") -", acertos_oposta[2], "%")
     print("Acertos Martingale com 42% ou menos da cor oposta:", acertos_martingale_oposta[0], "(total", acertos_martingale_oposta[1], ") -", acertos_martingale_oposta[2], "%")
     print("Erros Martingale com 42% ou menos da cor oposta:", erros_martingale_42ouMenos_oposta[0], "(total", erros_martingale_42ouMenos_oposta[1], ") -", erros_martingale_42ouMenos_oposta[2], "%")

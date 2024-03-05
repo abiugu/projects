@@ -116,7 +116,7 @@ def percentual_ultimas_25_rodadas():
     valores_25 = [element.get_attribute("textContent") for element in text_elements_present if element.get_attribute(
         "y") == "288" and "SofiaPro" in element.get_attribute("font-family")]
 
-    log_result = "Últimas 25 rodadas:" + str(valores_25)
+    log_result = "Ultimas 25 rodadas:" + str(valores_25)
     print(log_result)
     return log_result
 
@@ -160,7 +160,7 @@ def resultados_vistos_ultimas_25_rodadas():
         return log_result
 
     except Exception as e:
-        print(f"Erro ao extrair resultados das últimas 25 rodadas: {e}")
+        print(f"Erro ao extrair resultados das ultimas 25 rodadas: {e}")
         return ""
 
 
