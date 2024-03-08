@@ -12,17 +12,11 @@ count_alarm = 0
 erros_anterior = 0
 acertos = 0
 erros = 0
+last_alarm_time = 0  # Inicializar last_alarm_time
 driver = None  # Variável global para o driver
 
 # Redefine o caminho da área de trabalho para o sistema operacional
 desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
-
-
-service = Service()
-options = webdriver.ChromeOptions()
-# Remova a opção --headless para tornar o navegador visível
-options.add_argument("--headless")
-driver = webdriver.Chrome(service=service, options=options)
 
 # Inicializa o mixer de áudio do pygame
 pygame.mixer.init()
@@ -44,7 +38,7 @@ def extrair_cores_25(driver):
     if driver.current_url != "https://blaze-7.com/pt/games/double?modal=double_history_index":
         driver.get(
             "https://blaze-7.com/pt/games/double?modal=double_history_index")
-        time.sleep(1)
+        time.sleep(5)
 
         # Esperar até que a div "tabs-crash-analytics" esteja visível
         tabs_div = WebDriverWait(driver, 10).until(
@@ -63,13 +57,13 @@ def extrair_cores_25(driver):
         EC.presence_of_element_located((By.XPATH, "//select[@tabindex='0']")))
     select = Select(select_element)
 
-    time.sleep(2)
+    time.sleep(3)
     select.select_by_value("50")
 
-    time.sleep(2)
+    time.sleep(3)
     select.select_by_value("25")
 
-    time.sleep(2)
+    time.sleep(3)
 
     text_elements_present = WebDriverWait(driver, 10).until(
         EC.presence_of_all_elements_located((By.TAG_NAME, "text")))
@@ -86,19 +80,16 @@ def extrair_cores_25(driver):
     return percentuais
 
 
-
-def verificar_padrao(sequencia):
+def verificar_padrao(sequencia, cor_atual_percentual):
     count_cores_iguais = 1
     cor_anterior = sequencia[0]
     for cor_atual in sequencia[1:]:
         if cor_atual == cor_anterior:
             count_cores_iguais += 1
             if count_cores_iguais >= 5:
-                return "erro"  # Se encontrar 5 ou mais cores iguais em sequência, retorna erro
-        else:
-            count_cores_iguais = 1
-            cor_anterior = cor_atual
-    return "acerto"  # Se não encontrar 5 ou mais cores iguais em sequência, retorna acerto
+                if cor_atual_percentual <= 38:
+                    return
+    return None  # Adicionando uma instrução de retorno padrão
 
 
 def main():
@@ -108,13 +99,13 @@ def main():
     global acertos
     global erros
     global last_alarm_time
-    global padrao
 
     last_alarm_time = time.time()  # Inicializa o tempo do último alarme
     sequencia_anterior = []  # Inicializa a sequência anterior como vazia
 
     try:
         url = 'https://blaze-7.com/pt/games/double'
+        driver = webdriver.Chrome()  # Crie o driver aqui para evitar problemas de escopo
         driver.get(url)
 
         while not verificar_stop():
@@ -130,23 +121,6 @@ def main():
             print("Ultimos 3 resultados:", sequencia)
             print("")
 
-            # Verifica o padrão da sequência atual
-            padrao = verificar_padrao(sequencia)
-
-            if count_alarm > 0:
-                # Se o alarme já tiver sido acionado, verificar a sequência atual
-                if padrao == "erro":
-                    # Se encontrar uma quebra de padrão após o alarme, incrementa o contador de erros
-                    erros_anterior += 1
-                else:
-                    # Se a sequência atual não quebrar o padrão, reinicia o contador de erros
-                    erros_anterior = 0
-
-                if erros_anterior >= 5:
-                    # Se houverem 5 ou mais quebras de padrão consecutivas após o alarme, reinicia o contador do alarme
-                    count_alarm = 0
-                    erros_anterior = 0
-
             if len(set(sequencia)) == 1:
                 # Sequência de 3 cores iguais
                 cor_atual = sequencia[0]
@@ -157,11 +131,11 @@ def main():
                     cor_oposta = 'red'
                 if cor_oposta:
                     # Obtém o percentual da cor oposta
-                    percentual_oposto = int(
-                        percentuais[['white', 'black', 'red'].index(cor_oposta)])
+                    cor_atual_percentual = int(
+                        percentuais[['white', 'black', 'red'].index(cor_atual)])
 
-                    if percentual_oposto is not None:
-                        if percentual_oposto <= 42:
+                    if cor_atual_percentual is not None:
+                        if cor_atual_percentual <= 38:
 
                             current_time = time.time()
                             if current_time - last_alarm_time >= 60:  # Verifica se passaram 60 segundos desde o último alarme
@@ -169,19 +143,18 @@ def main():
 
                                 count_alarm += 1  # Incrementa o contador
 
-                                print(f"Alarme acionado. Contagem: {
-                                      count_alarm}")  # Imprime a contagem
+                                print(f"Alarme acionado. Contagem: {count_alarm}")  # Imprime a contagem
 
                                 last_alarm_time = current_time  # Atualiza o tempo do último alarme
 
-            if count_alarm > 0:
-                # Verifica se a sequência atual quebra o padrão após o alarme
-                if padrao == "acerto":
-                    acertos += 1  # Incrementa a contagem de acertos
-                else:
-                    erros += 1  # Incrementa a contagem de erros
+                                # Verifica o padrão da sequência atual
+                                padrao = verificar_padrao(sequencia, cor_atual_percentual)
+                                if padrao:
+                                    acertos += 1
+                                else:
+                                    erros += 1
 
-            time.sleep(2)
+            time.sleep(5)
 
     except Exception as e:
         print(f"Erro: {e}")
