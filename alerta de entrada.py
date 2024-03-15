@@ -36,9 +36,11 @@ sound_file_path = "MONEY ALARM.mp3"
 # Carrega o som
 alarm_sound = pygame.mixer.Sound(sound_file_path)
 
+
 def log_to_file(message):
     with open(log_file_path, "a") as log_file:
         log_file.write(message + "\n")
+
 
 def verificar_stop():
     stop_path = os.path.join(desktop_path, "stop.txt")
@@ -144,7 +146,8 @@ def main():
             percentuais = extrair_cores_25(driver)
 
             print("Ultimos 3 resultados:", sequencia)
-            log_to_file("Ultimos 3 resultados: " + ', '.join(sequencia))  # Adiciona os resultados ao log
+            # Adiciona os resultados ao log
+            log_to_file("Ultimos 3 resultados: " + ', '.join(sequencia))
             print("")
 
             if len(set(sequencia)) == 1:
@@ -166,8 +169,10 @@ def main():
                             if current_time - last_alarm_time >= 60:  # Verifica se passaram 60 segundos desde o último alarme
                                 alarm_sound.play()
                                 count_alarm += 1  # Incrementa o contador
-                                print(f"Alarme acionado. Contagem: {count_alarm}")  # Imprime a contagem
-                                log_to_file("Alarme acionado. Contagem: {count_alarm}")
+                                print(f"Alarme acionado. Contagem: {
+                                      count_alarm}")  # Imprime a contagem
+                                log_to_file(
+                                    f"Alarme acionado. Contagem: {count_alarm}")
                                 last_alarm_time = current_time  # Atualiza o tempo do último alarme
 
             if len(set(sequencia)) == 1:
