@@ -1,22 +1,31 @@
 import os
 import time
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 import pygame
+
+service = Service()
+options = webdriver.ChromeOptions()
+options.add_argument("--headless")  # Executar em modo headless
+options.add_argument("--start-maximized")  # Maximizar a janela do navegador
+driver = webdriver.Chrome(service=service, options=options)
 
 count_alarm = 0
 erros_anterior = 0
 acertos = 0
 erros = 0
 last_alarm_time = 0  # Inicializar last_alarm_time
-driver = None  # Variável global para o driver
+
 
 # Redefine o caminho da área de trabalho para o sistema operacional
 desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
+
+# Caminho completo para o arquivo de log
+log_file_path = os.path.join(desktop_path, "log.txt")
 
 # Inicializa o mixer de áudio do pygame
 pygame.mixer.init()
@@ -27,6 +36,9 @@ sound_file_path = "MONEY ALARM.mp3"
 # Carrega o som
 alarm_sound = pygame.mixer.Sound(sound_file_path)
 
+def log_to_file(message):
+    with open(log_file_path, "a") as log_file:
+        log_file.write(message + "\n")
 
 def verificar_stop():
     stop_path = os.path.join(desktop_path, "stop.txt")
@@ -35,35 +47,33 @@ def verificar_stop():
 
 def extrair_cores_25(driver):
     # Abrir o site se ainda não estiver aberto
-    if driver.current_url != "https://blaze-7.com/pt/games/double?modal=double_history_index":
+    if driver.current_url != "https://blaze1.space/pt/games/double?modal=double_history_index":
         driver.get(
-            "https://blaze-7.com/pt/games/double?modal=double_history_index")
-        time.sleep(5)
+            "https://blaze1.space/pt/games/double?modal=double_history_index")
+        # Aguarda até 5 segundos para elementos aparecerem
+        driver.implicitly_wait(5)
 
         # Esperar até que a div "tabs-crash-analytics" esteja visível
-        tabs_div = WebDriverWait(driver, 10).until(
+        WebDriverWait(driver, 10).until(
             EC.visibility_of_element_located((By.CLASS_NAME, "tabs-crash-analytics")))
 
         # Clicar no botão "Padrões" dentro da div "tabs-crash-analytics"
-        padroes_button = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, ".//button[text()='Padrões']")))
-        padroes_button.click()
+        WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, ".//button[text()='Padrões']"))).click()
 
         # Esperar até que o botão "Padrões" se torne ativo
-        padroes_active_button = WebDriverWait(driver, 10).until(
+        WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.XPATH, "//button[@class='tab active']")))
 
     select_element = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.XPATH, "//select[@tabindex='0']")))
     select = Select(select_element)
 
-    time.sleep(3)
     select.select_by_value("50")
-
-    time.sleep(3)
+    driver.implicitly_wait(3)
     select.select_by_value("25")
-
-    time.sleep(3)
+    # Aguarda até 3 segundos para elementos aparecerem
+    driver.implicitly_wait(3)
 
     text_elements_present = WebDriverWait(driver, 10).until(
         EC.presence_of_all_elements_located((By.TAG_NAME, "text")))
@@ -77,19 +87,35 @@ def extrair_cores_25(driver):
 
     log_result = "Ultimas 25 rodadas: " + ', '.join(percentuais)
     print(log_result)
+    log_to_file(log_result)  # Adiciona o resultado ao log
     return percentuais
 
 
 def verificar_padrao(sequencia, cor_atual_percentual):
+    global acertos
+    global erros
+
     count_cores_iguais = 1
     cor_anterior = sequencia[0]
     for cor_atual in sequencia[1:]:
         if cor_atual == cor_anterior:
             count_cores_iguais += 1
-            if count_cores_iguais >= 5:
-                if cor_atual_percentual <= 38:
-                    return
-    return None  # Adicionando uma instrução de retorno padrão
+            if count_cores_iguais == 4:
+                # Verifica se a próxima cor é a mesma
+                if cor_atual == sequencia[sequencia.index(cor_atual) + 1]:
+                    error_message = "Erro: Próxima cor igual."
+                    print(error_message)
+                    log_to_file(error_message)  # Adiciona o erro ao log
+                    erros += 1
+                else:
+                    success_message = "Acerto: Quebra de sequência."
+                    print(success_message)
+                    log_to_file(success_message)  # Adiciona o sucesso ao log
+                    acertos += 1
+                break
+        else:
+            count_cores_iguais = 1
+        cor_anterior = cor_atual
 
 
 def main():
@@ -105,7 +131,6 @@ def main():
 
     try:
         url = 'https://blaze-7.com/pt/games/double'
-        driver = webdriver.Chrome()  # Crie o driver aqui para evitar problemas de escopo
         driver.get(url)
 
         while not verificar_stop():
@@ -119,6 +144,7 @@ def main():
             percentuais = extrair_cores_25(driver)
 
             print("Ultimos 3 resultados:", sequencia)
+            log_to_file("Ultimos 3 resultados: " + ', '.join(sequencia))  # Adiciona os resultados ao log
             print("")
 
             if len(set(sequencia)) == 1:
@@ -135,29 +161,26 @@ def main():
                         percentuais[['white', 'black', 'red'].index(cor_atual)])
 
                     if cor_atual_percentual is not None:
-                        if cor_atual_percentual <= 38:
-
+                        if cor_atual_percentual <= 40:
                             current_time = time.time()
                             if current_time - last_alarm_time >= 60:  # Verifica se passaram 60 segundos desde o último alarme
                                 alarm_sound.play()
-
                                 count_alarm += 1  # Incrementa o contador
-
                                 print(f"Alarme acionado. Contagem: {count_alarm}")  # Imprime a contagem
-
+                                log_to_file("Alarme acionado. Contagem: {count_alarm}")
                                 last_alarm_time = current_time  # Atualiza o tempo do último alarme
 
-                                # Verifica o padrão da sequência atual
-                                padrao = verificar_padrao(sequencia, cor_atual_percentual)
-                                if padrao:
-                                    acertos += 1
-                                else:
-                                    erros += 1
+            if len(set(sequencia)) == 1:
+                verificar_padrao(sequencia, cor_atual_percentual)
+            # Aguarda até 2 segundos para elementos aparecerem
+            driver.implicitly_wait(3)
 
-            time.sleep(5)
+            time.sleep(20)
 
     except Exception as e:
-        print(f"Erro: {e}")
+        error_message = f"Erro: {e}"
+        print(error_message)
+        log_to_file(error_message)  # Adiciona o erro ao log
 
     finally:
         if driver:
