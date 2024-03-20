@@ -164,7 +164,7 @@ def main():
                         percentuais[['white', 'black', 'red'].index(cor_atual)])
 
                     if cor_atual_percentual is not None:
-                        if cor_atual_percentual <= 40:
+                        if cor_atual_percentual <= 38:
                             current_time = time.time()
                             if current_time - last_alarm_time >= 60:  # Verifica se passaram 60 segundos desde o último alarme
                                 alarm_sound.play()
