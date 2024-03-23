@@ -25,7 +25,7 @@ def calcular_acertos_erros(linhas):
                 except ValueError:
                     porcentagem_cor_atual = 0
                 
-                if porcentagem_cor_atual <= 44:
+                if porcentagem_cor_atual <= 40:
                     acertos_martingale_XouMenos += 1
                 else:
                     acertos_martingale_maisDeX += 1
@@ -37,7 +37,7 @@ def calcular_acertos_erros(linhas):
                     except ValueError:
                         porcentagem_cor_oposta = 0
 
-                    if porcentagem_cor_oposta <= 44:
+                    if porcentagem_cor_oposta <= 40:
                         acertos_martingale_XouMenos_oposta += 1
                     else:
                         acertos_martingale_maisDeX_oposta += 1
@@ -60,11 +60,11 @@ def calcular_acertos_erros(linhas):
                     except ValueError:
                         porcentagem_cor_oposta = 0
 
-                    if porcentagem_cor_oposta <= 44:
+                    if porcentagem_cor_oposta <= 40:
                         erros_martingale_XouMenos_oposta += 1
                     else:
                         erros_martingale_maisDeX_oposta += 1
-                    if porcentagem_cor_atual <= 44:
+                    if porcentagem_cor_atual <= 40:
                         erros_martingale_XouMenos_mesmaCor += 1
                     else:
                         erros_martingale_maisDeX_mesmaCor += 1
@@ -96,14 +96,16 @@ def main():
     porcentagem_erros_martingale_XouMenos_mesmaCor = (erros_martingale_XouMenos_mesmaCor / total_erros_martingale) * 100 if total_erros_martingale else 0
     porcentagem_erros_martingale_maisDeX_mesmaCor = (erros_martingale_maisDeX_mesmaCor / total_erros_martingale) * 100 if total_erros_martingale else 0
 
-    print("Acertos Martingale com 44% ou menos:", acertos_martingale_XouMenos, f"({porcentagem_acertos_martingale_XouMenos:.2f}%)")
-    print("Acertos Martingale com mais de 44%:", acertos_martingale_maisDeX, f"({porcentagem_acertos_martingale_maisDeX:.2f}%)")
-    print("*******************Acertos Martingale com 44% ou menos da cor oposta:", acertos_martingale_XouMenos_oposta, f"({porcentagem_acertos_martingale_XouMenos_oposta:.2f}%)")
-    print("Acertos Martingale com mais de 44% da cor oposta:", acertos_martingale_maisDeX_oposta, f"({porcentagem_acertos_martingale_maisDeX_oposta:.2f}%)")
-    print("Erros Martingale com 44% ou menos da cor oposta:", erros_martingale_XouMenos_oposta, f"({porcentagem_erros_martingale_XouMenos_oposta:.2f}%)")
-    print("Erros Martingale com mais de 44% da cor oposta:", erros_martingale_maisDeX_oposta, f"({porcentagem_erros_martingale_maisDeX_oposta:.2f}%)")
-    print("*******************Erros Martingale com 44% ou menos da mesma cor:", erros_martingale_XouMenos_mesmaCor, f"({porcentagem_erros_martingale_XouMenos_mesmaCor:.2f}%)")
-    print("Erros Martingale com mais de 44% da mesma cor:", erros_martingale_maisDeX_mesmaCor, f"({porcentagem_erros_martingale_maisDeX_mesmaCor:.2f}%)")
+    print("Acertos Martingale com 40% ou menos:", acertos_martingale_XouMenos, f"({porcentagem_acertos_martingale_XouMenos:.2f}%)")
+    print("Acertos Martingale com mais de 40%:", acertos_martingale_maisDeX, f"({porcentagem_acertos_martingale_maisDeX:.2f}%)")
+    print("*******************Acertos Martingale com 40% ou menos da cor oposta:", acertos_martingale_XouMenos_oposta, f"({porcentagem_acertos_martingale_XouMenos_oposta:.2f}%)")
+    print("Acertos Martingale com mais de 40% da cor oposta:", acertos_martingale_maisDeX_oposta, f"({porcentagem_acertos_martingale_maisDeX_oposta:.2f}%)")
+    print("Erros Martingale com 40% ou menos da cor oposta:", erros_martingale_XouMenos_oposta, f"({porcentagem_erros_martingale_XouMenos_oposta:.2f}%)")
+    print("Erros Martingale com mais de 40% da cor oposta:", erros_martingale_maisDeX_oposta, f"({porcentagem_erros_martingale_maisDeX_oposta:.2f}%)")
+    print("*******************Erros Martingale com 40% ou menos da mesma cor:", erros_martingale_XouMenos_mesmaCor, f"({porcentagem_erros_martingale_XouMenos_mesmaCor:.2f}%)")
+    print("Erros Martingale com mais de 40% da mesma cor:", erros_martingale_maisDeX_mesmaCor, f"({porcentagem_erros_martingale_maisDeX_mesmaCor:.2f}%)")
 
 if __name__ == "__main__":
     main()
+
+

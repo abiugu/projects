@@ -70,11 +70,10 @@ def extrair_cores_25(driver):
     select_element = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.XPATH, "//select[@tabindex='0']")))
     select = Select(select_element)
-
+    driver.implicitly_wait(3)
     select.select_by_value("50")
     driver.implicitly_wait(3)
     select.select_by_value("25")
-    # Aguarda até 3 segundos para elementos aparecerem
     driver.implicitly_wait(3)
 
     text_elements_present = WebDriverWait(driver, 10).until(
@@ -105,14 +104,8 @@ def verificar_padrao(sequencia, cor_atual_percentual):
             if count_cores_iguais == 4:
                 # Verifica se a próxima cor é a mesma
                 if cor_atual == sequencia[sequencia.index(cor_atual) + 1]:
-                    error_message = "Erro: Próxima cor igual."
-                    print(error_message)
-                    log_to_file(error_message)  # Adiciona o erro ao log
                     erros += 1
                 else:
-                    success_message = "Acerto: Quebra de sequência."
-                    print(success_message)
-                    log_to_file(success_message)  # Adiciona o sucesso ao log
                     acertos += 1
                 break
         else:
@@ -146,9 +139,7 @@ def main():
             percentuais = extrair_cores_25(driver)
 
             print("Ultimos 3 resultados:", sequencia)
-            # Adiciona os resultados ao log
             log_to_file("Ultimos 3 resultados: " + ', '.join(sequencia))
-            print("")
 
             if len(set(sequencia)) == 1:
                 # Sequência de 3 cores iguais
@@ -164,7 +155,7 @@ def main():
                         percentuais[['white', 'black', 'red'].index(cor_atual)])
 
                     if cor_atual_percentual is not None:
-                        if cor_atual_percentual <= 38:
+                        if cor_atual_percentual <= 36:
                             current_time = time.time()
                             if current_time - last_alarm_time >= 60:  # Verifica se passaram 60 segundos desde o último alarme
                                 alarm_sound.play()
@@ -180,7 +171,7 @@ def main():
             # Aguarda até 2 segundos para elementos aparecerem
             driver.implicitly_wait(3)
 
-            time.sleep(20)
+            time.sleep(27)
 
     except Exception as e:
         error_message = f"Erro: {e}"

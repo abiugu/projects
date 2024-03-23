@@ -153,11 +153,6 @@ def resultados_vistos_ultimas_25_rodadas():
 
         cores_numeros.sort(key=lambda x: x[0])
 
-        log_result = "Resultados detalhados das 25 rodadas:\n"
-        log_result += '\n'.join([f"({tupla[0]}) {tupla[1]
-                                                 }: {tupla[2]} vezes" for tupla in cores_numeros])
-        print(log_result)
-        return log_result
 
     except Exception as e:
         print(f"Erro ao extrair resultados das ultimas 25 rodadas: {e}")
