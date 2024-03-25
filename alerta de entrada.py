@@ -10,7 +10,7 @@ import pygame
 
 service = Service()
 options = webdriver.ChromeOptions()
-# options.add_argument("--headless")  # Executar em modo headless
+options.add_argument("--headless")  # Executar em modo headless
 # options.add_argument("--start-maximized")  # Maximizar a janela do navegador
 driver = webdriver.Chrome(service=service, options=options)
 
@@ -116,6 +116,7 @@ def main():
     global driver
     global count_alarm
     global last_alarm_time
+    sequencia_anterior = []  # Definindo a variável sequencia_anterior antes de ser utilizada
 
     last_alarm_time = time.time()  # Inicializa o tempo do último alarme
 
@@ -141,8 +142,6 @@ def main():
                 percentuais = extrair_cores_25(driver)
                 log_to_file("Ultimos 3 resultados: " +
                             ', '.join(ultimas_tres_cores))
-                log_to_file("Ultimas 25 porcentagens: " +
-                            ', '.join(percentuais))
 
                 # Verifica se há alguma sequência de 3 cores iguais
                 if len(set(sequencia)) == 1:
