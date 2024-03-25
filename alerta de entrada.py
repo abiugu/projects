@@ -70,11 +70,11 @@ def extrair_cores_25(driver):
     select_element = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.XPATH, "//select[@tabindex='0']")))
     select = Select(select_element)
-    time.sleep(1)
+    driver.implicitly_wait(3)
     select.select_by_value("50")
-    time.sleep(1)
+    driver.implicitly_wait(3)
     select.select_by_value("25")
-    time.sleep(1)
+    driver.implicitly_wait(3)
 
     text_elements_present = WebDriverWait(driver, 10).until(
         EC.presence_of_all_elements_located((By.TAG_NAME, "text")))
@@ -113,18 +113,11 @@ def verificar_padrao(sequencia, cor_atual_percentual):
 
 
 def main():
-    global erros_anterior
     global driver
     global count_alarm
-    global acertos
-    global erros
     global last_alarm_time
-    global sequencia_anterior
-    global percentuais_anterior
 
     last_alarm_time = time.time()  # Inicializa o tempo do último alarme
-    sequencia_anterior = None  # Inicializa a sequência anterior como None
-    percentuais_anterior = None  # Inicializa as porcentagens anteriores como None
 
     try:
         url = 'https://blaze-7.com/pt/games/double'
@@ -136,22 +129,23 @@ def main():
             box_elements = recent_results_element.find_elements(
                 By.CLASS_NAME, "sm-box")
 
+            # Analisa as 15 últimas cores disponíveis
             sequencia = [box_element.get_attribute(
-                "class").split()[-1] for box_element in box_elements[:3]]
-            percentuais = extrair_cores_25(driver)
+                "class").split()[-1] for box_element in box_elements[:15]]
 
-            # Verifica se houve mudança nas sequências de cores e porcentagens
-            if sequencia != sequencia_anterior or percentuais != percentuais_anterior:
-                if sequencia != sequencia_anterior:
-                    log_to_file("Ultimas 25 rodadas: " + ', '.join(sequencia))
-                if sequencia != sequencia_anterior or percentuais != percentuais_anterior:
-                    log_to_file("Ultimos 3 resultados: " +
-                                ', '.join(sequencia))
-                    log_to_file("Ultimas 25 porcentagens: " +
-                                ', '.join(percentuais))
+            # Obtém apenas as últimas 3 cores para imprimir
+            ultimas_tres_cores = sequencia[-3:]
 
+            # Verifica se houve uma mudança na sequência de cores
+            if sequencia != sequencia_anterior:
+                percentuais = extrair_cores_25(driver)
+                log_to_file("Ultimos 3 resultados: " +
+                            ', '.join(ultimas_tres_cores))
+                log_to_file("Ultimas 25 porcentagens: " +
+                            ', '.join(percentuais))
+
+                # Verifica se há alguma sequência de 3 cores iguais
                 if len(set(sequencia)) == 1:
-                    # Sequência de 3 cores iguais
                     cor_atual = sequencia[0]
                     cor_oposta = None
                     if cor_atual == 'red':
@@ -159,27 +153,22 @@ def main():
                     elif cor_atual == 'black':
                         cor_oposta = 'red'
                     if cor_oposta:
-                        # Obtém o percentual da cor oposta
                         cor_atual_percentual = int(
                             percentuais[['white', 'black', 'red'].index(cor_atual)])
 
                         if cor_atual_percentual is not None:
                             if cor_atual_percentual <= 36:
                                 current_time = time.time()
-                                if current_time - last_alarm_time >= 60:  # Verifica se passaram 60 segundos desde o último alarme
+                                if current_time - last_alarm_time >= 60:
                                     alarm_sound.play()
-                                    count_alarm += 1  # Incrementa o contador
+                                    count_alarm += 1
                                     print(f"Alarme acionado. Contagem: {
-                                        count_alarm}")  # Imprime a contagem
+                                          count_alarm}")
                                     log_to_file(
                                         f"Alarme acionado. Contagem: {count_alarm}")
-                                    last_alarm_time = current_time  # Atualiza o tempo do último alarme
-
-                if len(set(sequencia)) == 1:
-                    verificar_padrao(sequencia, cor_atual_percentual)
+                                    last_alarm_time = current_time
 
                 sequencia_anterior = sequencia  # Atualiza a sequência anterior
-                percentuais_anterior = percentuais  # Atualiza as porcentagens anteriores
 
             # Aguarda 1 segundo antes de verificar novamente
             time.sleep(1)
@@ -187,7 +176,7 @@ def main():
     except Exception as e:
         error_message = f"Erro: {e}"
         print(error_message)
-        log_to_file(error_message)  # Adiciona o erro ao log
+        log_to_file(error_message)
 
     finally:
         if driver:
