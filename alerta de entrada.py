@@ -120,9 +120,11 @@ def main():
     global erros
     global last_alarm_time
     global sequencia_anterior
+    global percentuais_anterior
 
     last_alarm_time = time.time()  # Inicializa o tempo do último alarme
     sequencia_anterior = []  # Inicializa a sequência anterior como vazia
+    percentuais_anterior = []  # Inicializa as porcentagens anteriores como vazias
 
     try:
         url = 'https://blaze-7.com/pt/games/double'
@@ -136,10 +138,11 @@ def main():
 
             sequencia = [box_element.get_attribute(
                 "class").split()[-1] for box_element in box_elements[:3]]
+            percentuais = extrair_cores_25(driver)
 
-            if sequencia != sequencia_anterior:  # Verifica se há uma nova sequência
-                percentuais = extrair_cores_25(driver)
+            if sequencia != sequencia_anterior or percentuais != percentuais_anterior:  # Verifica se houve mudança nas sequências ou nas porcentagens
                 log_to_file("Ultimos 3 resultados: " + ', '.join(sequencia))
+                log_to_file("Ultimas 25 porcentagens: " + ', '.join(percentuais))
 
                 if len(set(sequencia)) == 1:
                     # Sequência de 3 cores iguais
@@ -161,7 +164,7 @@ def main():
                                     alarm_sound.play()
                                     count_alarm += 1  # Incrementa o contador
                                     print(f"Alarme acionado. Contagem: {
-                                        count_alarm}")  # Imprime a contagem
+                                        count_alarm}") #Imprime a contagem
                                     log_to_file(
                                         f"Alarme acionado. Contagem: {count_alarm}")
                                     last_alarm_time = current_time  # Atualiza o tempo do último alarme
@@ -170,6 +173,7 @@ def main():
                     verificar_padrao(sequencia, cor_atual_percentual)
 
                 sequencia_anterior = sequencia  # Atualiza a sequência anterior
+                percentuais_anterior = percentuais  # Atualiza as porcentagens anteriores
 
             # Aguarda 1 segundo antes de verificar novamente
             time.sleep(1)
