@@ -140,14 +140,13 @@ def main():
                 "class").split()[-1] for box_element in box_elements[:3]]
             percentuais = extrair_cores_25(driver)
 
-            # Verifica se houve mudança nas sequências de cores e porcentagens
-            if sequencia != sequencia_anterior or percentuais != percentuais_anterior:
+            if sequencia != sequencia_anterior or percentuais != percentuais_anterior:  # Verifica se houve mudança nas sequências de cores e porcentagens
                 if sequencia != sequencia_anterior:
-                    log_to_file("Ultimos 3 resultados: " +
-                                ', '.join(sequencia))
+                    log_to_file("Ultimos 3 resultados: " + ', '.join(sequencia))
+                    sequencia_anterior = sequencia  # Atualiza a sequência anterior
                 if percentuais != percentuais_anterior:
-                    log_to_file("Ultimas 25 porcentagens: " +
-                                ', '.join(percentuais))
+                    log_to_file("Ultimas 25 porcentagens: " + ', '.join(percentuais))
+                    percentuais_anterior = percentuais  # Atualiza as porcentagens anteriores
 
                 if len(set(sequencia)) == 1:
                     # Sequência de 3 cores iguais
@@ -169,16 +168,13 @@ def main():
                                     alarm_sound.play()
                                     count_alarm += 1  # Incrementa o contador
                                     print(f"Alarme acionado. Contagem: {
-                                        count_alarm}")  # Imprime a contagem
+                                        count_alarm}") #Imprime a contagem
                                     log_to_file(
                                         f"Alarme acionado. Contagem: {count_alarm}")
                                     last_alarm_time = current_time  # Atualiza o tempo do último alarme
 
                 if len(set(sequencia)) == 1:
                     verificar_padrao(sequencia, cor_atual_percentual)
-
-                sequencia_anterior = sequencia  # Atualiza a sequência anterior
-                percentuais_anterior = percentuais  # Atualiza as porcentagens anteriores
 
             # Aguarda 1 segundo antes de verificar novamente
             time.sleep(1)
@@ -195,3 +191,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
