@@ -1,7 +1,7 @@
 import os
 
 desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
-file_path = os.path.join(desktop_path, "historico_do_dia.txt")
+file_path = os.path.join(desktop_path, "historico acertos e erros 26.02.txt")
 
 
 # Lista para armazenar as linhas não em branco

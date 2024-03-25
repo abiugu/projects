@@ -1,7 +1,7 @@
 import os
 
 desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
-log_file_path = os.path.join(desktop_path, "historico_do_dia.txt")
+log_file_path = os.path.join(desktop_path, "historico total.txt")
 
 def ler_arquivo():
     with open(log_file_path, "r") as file:
@@ -25,7 +25,7 @@ def calcular_acertos_erros(linhas):
                 except ValueError:
                     porcentagem_cor_atual = 0
                 
-                if porcentagem_cor_atual <= 40:
+                if porcentagem_cor_atual <= 42:
                     acertos_martingale_XouMenos += 1
                 else:
                     acertos_martingale_maisDeX += 1
@@ -37,7 +37,7 @@ def calcular_acertos_erros(linhas):
                     except ValueError:
                         porcentagem_cor_oposta = 0
 
-                    if porcentagem_cor_oposta <= 40:
+                    if porcentagem_cor_oposta <= 42:
                         acertos_martingale_XouMenos_oposta += 1
                     else:
                         acertos_martingale_maisDeX_oposta += 1
@@ -60,11 +60,11 @@ def calcular_acertos_erros(linhas):
                     except ValueError:
                         porcentagem_cor_oposta = 0
 
-                    if porcentagem_cor_oposta <= 40:
+                    if porcentagem_cor_oposta <= 42:
                         erros_martingale_XouMenos_oposta += 1
                     else:
                         erros_martingale_maisDeX_oposta += 1
-                    if porcentagem_cor_atual <= 40:
+                    if porcentagem_cor_atual <= 42:
                         erros_martingale_XouMenos_mesmaCor += 1
                     else:
                         erros_martingale_maisDeX_mesmaCor += 1

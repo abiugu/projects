@@ -87,7 +87,6 @@ def extrair_cores_25(driver):
     percentuais = [valor.split('%')[0] for valor in valores_25]
 
     log_result = "Ultimas 25 rodadas: " + ', '.join(percentuais)
-    print(log_result)
     log_to_file(log_result)  # Adiciona o resultado ao log
     return percentuais
 
@@ -138,7 +137,7 @@ def main():
                 "class").split()[-1] for box_element in box_elements[:3]]
             percentuais = extrair_cores_25(driver)
 
-            print("Ultimos 3 resultados:", sequencia)
+            
             log_to_file("Ultimos 3 resultados: " + ', '.join(sequencia))
 
             if len(set(sequencia)) == 1:
@@ -161,7 +160,7 @@ def main():
                                 alarm_sound.play()
                                 count_alarm += 1  # Incrementa o contador
                                 print(f"Alarme acionado. Contagem: {
-                                      count_alarm}")  # Imprime a contagem
+                                      count_alarm}") #Imprime a contagem
                                 log_to_file(
                                     f"Alarme acionado. Contagem: {count_alarm}")
                                 last_alarm_time = current_time  # Atualiza o tempo do último alarme
@@ -171,7 +170,7 @@ def main():
             # Aguarda até 2 segundos para elementos aparecerem
             driver.implicitly_wait(3)
 
-            time.sleep(27)
+            time.sleep(10)
 
     except Exception as e:
         error_message = f"Erro: {e}"
