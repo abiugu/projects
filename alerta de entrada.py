@@ -10,7 +10,7 @@ import pygame
 
 service = Service()
 options = webdriver.ChromeOptions()
-options.add_argument("--headless")  # Executar em modo headless
+# options.add_argument("--headless")  # Executar em modo headless
 # options.add_argument("--start-maximized")  # Maximizar a janela do navegador
 driver = webdriver.Chrome(service=service, options=options)
 
@@ -85,9 +85,7 @@ def extrair_cores_25(driver):
 
     # Extrair apenas os valores de porcentagem e remover o símbolo '%'
     percentuais = [valor.split('%')[0] for valor in valores_25]
-
-    log_result = "Ultimas 25 rodadas: " + ', '.join(percentuais)
-    log_to_file(log_result)  # Adiciona o resultado ao log
+    
     return percentuais
 
 
@@ -140,8 +138,8 @@ def main():
             # Verifica se houve uma mudança na sequência de cores
             if sequencia != sequencia_anterior:
                 percentuais = extrair_cores_25(driver)
-                log_to_file("Ultimos 3 resultados: " +
-                            ', '.join(ultimas_tres_cores))
+                log_to_file("Ultimos 3 resultados: " + ', '.join(ultimas_tres_cores))
+                log_to_file("Ultimas 25 porcentagens: " + ', '.join(percentuais))
 
                 # Verifica se há alguma sequência de 3 cores iguais
                 if len(set(sequencia)) == 1:
@@ -152,17 +150,16 @@ def main():
                     elif cor_atual == 'black':
                         cor_oposta = 'red'
                     if cor_oposta:
-                        cor_atual_percentual = int(
-                            percentuais[['white', 'black', 'red'].index(cor_atual)])
+                        cor_atual_percentual = int(percentuais[-1])
 
                         if cor_atual_percentual is not None:
-                            if cor_atual_percentual <= 36:
+                            print(f"Cor atual: {cor_atual}, Percentual: {cor_atual_percentual}")
+                            if cor_atual_percentual <= 44:
                                 current_time = time.time()
                                 if current_time - last_alarm_time >= 60:
                                     alarm_sound.play()
                                     count_alarm += 1
-                                    print(f"Alarme acionado. Contagem: {
-                                          count_alarm}")
+                                    print(f"Alarme acionado. Contagem: {count_alarm}")
                                     log_to_file(
                                         f"Alarme acionado. Contagem: {count_alarm}")
                                     last_alarm_time = current_time
@@ -180,7 +177,6 @@ def main():
     finally:
         if driver:
             driver.quit()
-
-
+    
 if __name__ == "__main__":
     main()
