@@ -10,8 +10,8 @@ import pygame
 
 service = Service()
 options = webdriver.ChromeOptions()
-options.add_argument("--headless")  # Executar em modo headless
-options.add_argument("--start-maximized")  # Maximizar a janela do navegador
+# options.add_argument("--headless")  # Executar em modo headless
+# options.add_argument("--start-maximized")  # Maximizar a janela do navegador
 driver = webdriver.Chrome(service=service, options=options)
 
 count_alarm = 0
@@ -119,6 +119,7 @@ def main():
     global acertos
     global erros
     global last_alarm_time
+    global sequencia_anterior
 
     last_alarm_time = time.time()  # Inicializa o tempo do último alarme
     sequencia_anterior = []  # Inicializa a sequência anterior como vazia
@@ -135,42 +136,43 @@ def main():
 
             sequencia = [box_element.get_attribute(
                 "class").split()[-1] for box_element in box_elements[:3]]
-            percentuais = extrair_cores_25(driver)
 
-            
-            log_to_file("Ultimos 3 resultados: " + ', '.join(sequencia))
+            if sequencia != sequencia_anterior:  # Verifica se há uma nova sequência
+                percentuais = extrair_cores_25(driver)
+                log_to_file("Ultimos 3 resultados: " + ', '.join(sequencia))
 
-            if len(set(sequencia)) == 1:
-                # Sequência de 3 cores iguais
-                cor_atual = sequencia[0]
-                cor_oposta = None
-                if cor_atual == 'red':
-                    cor_oposta = 'black'
-                elif cor_atual == 'black':
-                    cor_oposta = 'red'
-                if cor_oposta:
-                    # Obtém o percentual da cor oposta
-                    cor_atual_percentual = int(
-                        percentuais[['white', 'black', 'red'].index(cor_atual)])
+                if len(set(sequencia)) == 1:
+                    # Sequência de 3 cores iguais
+                    cor_atual = sequencia[0]
+                    cor_oposta = None
+                    if cor_atual == 'red':
+                        cor_oposta = 'black'
+                    elif cor_atual == 'black':
+                        cor_oposta = 'red'
+                    if cor_oposta:
+                        # Obtém o percentual da cor oposta
+                        cor_atual_percentual = int(
+                            percentuais[['white', 'black', 'red'].index(cor_atual)])
 
-                    if cor_atual_percentual is not None:
-                        if cor_atual_percentual <= 36:
-                            current_time = time.time()
-                            if current_time - last_alarm_time >= 60:  # Verifica se passaram 60 segundos desde o último alarme
-                                alarm_sound.play()
-                                count_alarm += 1  # Incrementa o contador
-                                print(f"Alarme acionado. Contagem: {
-                                      count_alarm}") #Imprime a contagem
-                                log_to_file(
-                                    f"Alarme acionado. Contagem: {count_alarm}")
-                                last_alarm_time = current_time  # Atualiza o tempo do último alarme
+                        if cor_atual_percentual is not None:
+                            if cor_atual_percentual <= 36:
+                                current_time = time.time()
+                                if current_time - last_alarm_time >= 60:  # Verifica se passaram 60 segundos desde o último alarme
+                                    alarm_sound.play()
+                                    count_alarm += 1  # Incrementa o contador
+                                    print(f"Alarme acionado. Contagem: {
+                                        count_alarm}")  # Imprime a contagem
+                                    log_to_file(
+                                        f"Alarme acionado. Contagem: {count_alarm}")
+                                    last_alarm_time = current_time  # Atualiza o tempo do último alarme
 
-            if len(set(sequencia)) == 1:
-                verificar_padrao(sequencia, cor_atual_percentual)
-            # Aguarda até 2 segundos para elementos aparecerem
-            driver.implicitly_wait(3)
+                if len(set(sequencia)) == 1:
+                    verificar_padrao(sequencia, cor_atual_percentual)
 
-            time.sleep(10)
+                sequencia_anterior = sequencia  # Atualiza a sequência anterior
+
+            # Aguarda 1 segundo antes de verificar novamente
+            time.sleep(1)
 
     except Exception as e:
         error_message = f"Erro: {e}"
