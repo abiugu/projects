@@ -70,11 +70,11 @@ def extrair_cores_25(driver):
     select_element = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.XPATH, "//select[@tabindex='0']")))
     select = Select(select_element)
-    driver.implicitly_wait(3)
+    time.sleep(1)
     select.select_by_value("50")
-    driver.implicitly_wait(3)
+    time.sleep(1)
     select.select_by_value("25")
-    driver.implicitly_wait(3)
+    time.sleep(1)
 
     text_elements_present = WebDriverWait(driver, 10).until(
         EC.presence_of_all_elements_located((By.TAG_NAME, "text")))
@@ -123,8 +123,8 @@ def main():
     global percentuais_anterior
 
     last_alarm_time = time.time()  # Inicializa o tempo do último alarme
-    sequencia_anterior = []  # Inicializa a sequência anterior como vazia
-    percentuais_anterior = []  # Inicializa as porcentagens anteriores como vazias
+    sequencia_anterior = None  # Inicializa a sequência anterior como None
+    percentuais_anterior = None  # Inicializa as porcentagens anteriores como None
 
     try:
         url = 'https://blaze-7.com/pt/games/double'
@@ -140,9 +140,14 @@ def main():
                 "class").split()[-1] for box_element in box_elements[:3]]
             percentuais = extrair_cores_25(driver)
 
-            if sequencia != sequencia_anterior or percentuais != percentuais_anterior:  # Verifica se houve mudança nas sequências ou nas porcentagens
-                log_to_file("Ultimos 3 resultados: " + ', '.join(sequencia))
-                log_to_file("Ultimas 25 porcentagens: " + ', '.join(percentuais))
+            # Verifica se houve mudança nas sequências de cores e porcentagens
+            if sequencia != sequencia_anterior or percentuais != percentuais_anterior:
+                if sequencia != sequencia_anterior:
+                    log_to_file("Ultimos 3 resultados: " +
+                                ', '.join(sequencia))
+                if percentuais != percentuais_anterior:
+                    log_to_file("Ultimas 25 porcentagens: " +
+                                ', '.join(percentuais))
 
                 if len(set(sequencia)) == 1:
                     # Sequência de 3 cores iguais
@@ -164,7 +169,7 @@ def main():
                                     alarm_sound.play()
                                     count_alarm += 1  # Incrementa o contador
                                     print(f"Alarme acionado. Contagem: {
-                                        count_alarm}") #Imprime a contagem
+                                        count_alarm}")  # Imprime a contagem
                                     log_to_file(
                                         f"Alarme acionado. Contagem: {count_alarm}")
                                     last_alarm_time = current_time  # Atualiza o tempo do último alarme
