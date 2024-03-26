@@ -133,7 +133,8 @@ def main():
                 "class").split()[-1] for box_element in box_elements[:15]]
 
             # Obtém apenas as últimas 3 cores para imprimir
-            ultimas_tres_cores = sequencia[-3:]
+            ultimas_tres_cores = sequencia[:3]
+
 
             # Verifica se houve uma mudança na sequência de cores
             if sequencia != sequencia_anterior:
