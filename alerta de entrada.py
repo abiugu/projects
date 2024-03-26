@@ -85,7 +85,7 @@ def extrair_cores_25(driver):
 
     # Extrair apenas os valores de porcentagem e remover o símbolo '%'
     percentuais = [valor.split('%')[0] for valor in valores_25]
-    
+
     return percentuais
 
 
@@ -111,8 +111,11 @@ def verificar_padrao(sequencia, cor_atual_percentual):
 
 
 def main():
+    global erros_anterior
     global driver
     global count_alarm
+    global acertos
+    global erros
     global last_alarm_time
     sequencia_anterior = []  # Definindo a variável sequencia_anterior antes de ser utilizada
 
@@ -135,16 +138,14 @@ def main():
             # Obtém apenas as últimas 3 cores para imprimir
             ultimas_tres_cores = sequencia[:3]
 
-
             # Verifica se houve uma mudança na sequência de cores
             if sequencia != sequencia_anterior:
                 percentuais = extrair_cores_25(driver)
                 log_to_file("Ultimas 25 porcentagens: " + ', '.join(percentuais))
                 log_to_file("Ultimos 3 resultados: " + ', '.join(ultimas_tres_cores))
-                
 
                 # Verifica se há alguma sequência de 3 cores iguais
-                if len(set(sequencia)) == 1:
+                if len(set(ultimas_tres_cores)) == 1:
                     cor_atual = sequencia[0]
                     cor_oposta = None
                     if cor_atual == 'red':
@@ -152,19 +153,22 @@ def main():
                     elif cor_atual == 'black':
                         cor_oposta = 'red'
                     if cor_oposta:
-                        cor_atual_percentual = int(percentuais[-1])
+                        cor_atual_percentual = int(
+                        percentuais[['white', 'black', 'red'].index(cor_atual)])
 
                         if cor_atual_percentual is not None:
                             print(f"Cor atual: {cor_atual}, Percentual: {cor_atual_percentual}")
                             if cor_atual_percentual <= 44:
-                                current_time = time.time()
-                                if current_time - last_alarm_time >= 60:
-                                    alarm_sound.play()
-                                    count_alarm += 1
-                                    print(f"Alarme acionado. Contagem: {count_alarm}")
-                                    log_to_file(
-                                        f"Alarme acionado. Contagem: {count_alarm}")
-                                    last_alarm_time = current_time
+                                if ultimas_tres_cores[0] == ultimas_tres_cores[1] == ultimas_tres_cores[2]:
+                                    print("Três cores iguais e porcentagem menor ou igual a 44. Solicitar alarme.")
+                                    current_time = time.time()
+                                    if current_time - last_alarm_time >= 60:
+                                        alarm_sound.play()
+                                        count_alarm += 1
+                                        print(f"Alarme acionado. Contagem: {count_alarm}")
+                                        log_to_file(
+                                            f"Alarme acionado. Contagem: {count_alarm}")
+                                        last_alarm_time = current_time
 
                 sequencia_anterior = sequencia  # Atualiza a sequência anterior
 
@@ -179,6 +183,6 @@ def main():
     finally:
         if driver:
             driver.quit()
-    
+
 if __name__ == "__main__":
     main()
