@@ -139,8 +139,9 @@ def main():
             # Verifica se houve uma mudança na sequência de cores
             if sequencia != sequencia_anterior:
                 percentuais = extrair_cores_25(driver)
-                log_to_file("Ultimos 3 resultados: " + ', '.join(ultimas_tres_cores))
                 log_to_file("Ultimas 25 porcentagens: " + ', '.join(percentuais))
+                log_to_file("Ultimos 3 resultados: " + ', '.join(ultimas_tres_cores))
+                
 
                 # Verifica se há alguma sequência de 3 cores iguais
                 if len(set(sequencia)) == 1:
