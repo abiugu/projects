@@ -109,12 +109,21 @@ def verificar_padrao(sequencia, cor_atual_percentual):
             count_cores_iguais = 1
         cor_anterior = cor_atual
 
+def atualizar_log_interativo(acertos_diretos, acertos_gale, erros):
+    log_path = os.path.join(desktop_path, "log_interativo.txt")
+    with open(log_path, "w") as log_file:
+        log_file.write("=== LOG INTERATIVO ===\n")
+        log_file.write(f"Acertos diretos: {acertos_diretos}\n")
+        log_file.write(f"Acertos gale: {acertos_gale}\n")
+        log_file.write(f"Erros: {erros}\n")
+
 
 def main():
     global erros_anterior
     global driver
     global count_alarm
-    global acertos
+    global acertos_direto
+    global acertos_gale
     global erros
     global last_alarm_time
     global alarme_acionado
@@ -200,18 +209,20 @@ def main():
                     
                     if ultimas_tres_cores_1 != sequencia[:3]: # Verifica se as duas sequências são iguais
                         print("Acerto direto !!.")
-                        acertos +=1
+                        acertos_direto +=1
                     else: 
                         if ultimas_tres_cores_1 != ultimas_tres_cores_2:
                             print("Acerto gale !!")
-                            acertos += 1
+                            acertos_gale += 1
                         else:
                             print("Erro gale !!")
                             erros += 3
-                    log_to_file(f"Acertos: {acertos}, Erros: {erros}")
-                    print(f"Acertos: {acertos}, Erros: {erros}")
-                time.sleep(1)
+                    log_to_file(f"Acertos direto: {acertos_direto}, Acertos gale: {acertos_gale}, Erros: {erros}")
+                    print(f"Acertos direto: {acertos_direto}, Acertos gale: {acertos_gale}, Erros: {erros}")
 
+                atualizar_log_interativo(acertos_direto, acertos_gale, erros)
+                time.sleep(1)
+                
     except Exception as e:
         error_message = f"Erro: {e}"
         print(error_message)
