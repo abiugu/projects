@@ -19,7 +19,7 @@ erros_anterior = 0
 acertos = 0
 erros = 0
 last_alarm_time = 0  # Inicializar last_alarm_time
-
+alarme_acionado = False  # Inicializa o estado do alarme como falso
 
 # Redefine o caminho da área de trabalho para o sistema operacional
 desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
@@ -70,11 +70,11 @@ def extrair_cores_25(driver):
     select_element = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.XPATH, "//select[@tabindex='0']")))
     select = Select(select_element)
-    driver.implicitly_wait(3)
+    time.sleep(2)
     select.select_by_value("50")
-    driver.implicitly_wait(3)
+    time.sleep(2)
     select.select_by_value("25")
-    driver.implicitly_wait(3)
+    time.sleep(2)
 
     text_elements_present = WebDriverWait(driver, 10).until(
         EC.presence_of_all_elements_located((By.TAG_NAME, "text")))
@@ -117,6 +117,7 @@ def main():
     global acertos
     global erros
     global last_alarm_time
+    global alarme_acionado
     sequencia_anterior = []  # Definindo a variável sequencia_anterior antes de ser utilizada
 
     last_alarm_time = time.time()  # Inicializa o tempo do último alarme
@@ -160,20 +161,56 @@ def main():
                             print(f"Cor atual: {cor_atual}, Percentual: {cor_atual_percentual}")
                             if cor_atual_percentual <= 44:
                                 if ultimas_tres_cores[0] == ultimas_tres_cores[1] == ultimas_tres_cores[2]:
-                                    print("Três cores iguais e porcentagem menor ou igual a 44. Solicitar alarme.")
+                                    print("Tres cores iguais e porcentagem menor ou igual a 44. Solicitar alarme.")
                                     current_time = time.time()
                                     if current_time - last_alarm_time >= 60:
                                         alarm_sound.play()
                                         count_alarm += 1
                                         print(f"Alarme acionado. Contagem: {count_alarm}")
-                                        log_to_file(
-                                            f"Alarme acionado. Contagem: {count_alarm}")
+                                        log_to_file(f"Alarme acionado. Contagem: {count_alarm}")
                                         last_alarm_time = current_time
+                                        alarme_acionado = True  # Define alarme_acionado como True
 
                 sequencia_anterior = sequencia  # Atualiza a sequência anterior
 
-            # Aguarda 1 segundo antes de verificar novamente
-            time.sleep(1)
+            # Lógica para verificar duas sequências após o alarme acionado
+                if alarme_acionado:
+
+                    time.sleep(30)
+
+                    recent_results_element = driver.find_element(By.ID, "roulette-recent")
+                    box_elements = recent_results_element.find_elements(By.CLASS_NAME, "sm-box")
+                    percentuais = extrair_cores_25(driver)
+                    sequencia_1 = [box_element.get_attribute("class").split()[-1] for box_element in box_elements[:15]]  # Primeira sequência após o alarme
+                    ultimas_tres_cores_1 = sequencia_1[:3]
+                    log_to_file("Ultimas 25 porcentagens: " + ', '.join(percentuais))
+                    log_to_file("Ultimos 3 resultados: " + ', '.join(ultimas_tres_cores_1))
+
+                    time.sleep(30)
+
+                    recent_results_element = driver.find_element(By.ID, "roulette-recent")
+                    box_elements = recent_results_element.find_elements(By.CLASS_NAME, "sm-box")
+                    percentuais = extrair_cores_25(driver)
+                    sequencia_2 = [box_element.get_attribute("class").split()[-1] for box_element in box_elements[:15]]  # Primeira sequência após o alarme
+                    ultimas_tres_cores_2 = sequencia_2[:3]
+                    log_to_file("Ultimas 25 porcentagens: " + ', '.join(percentuais))
+                    log_to_file("Ultimos 3 resultados: " + ', '.join(ultimas_tres_cores_2))
+
+                    alarme_acionado = False  # Define alarme_acionado como False após coletar a segunda sequênci
+                    
+                    if ultimas_tres_cores_1 != sequencia[:3]: # Verifica se as duas sequências são iguais
+                        print("Acerto direto !!.")
+                        acertos +=1
+                    else: 
+                        if ultimas_tres_cores_1 != ultimas_tres_cores_2:
+                            print("Acerto gale !!")
+                            acertos += 1
+                        else:
+                            print("Erro gale !!")
+                            erros += 3
+                    log_to_file(f"Acertos: {acertos}, Erros: {erros}")
+                    print(f"Acertos: {acertos}, Erros: {erros}")
+                time.sleep(1)
 
     except Exception as e:
         error_message = f"Erro: {e}"
