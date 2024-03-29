@@ -10,13 +10,13 @@ import pygame
 
 service = Service()
 options = webdriver.ChromeOptions()
-# options.add_argument("--headless")  # Executar em modo headless
-# options.add_argument("--start-maximized")  # Maximizar a janela do navegador
+options.add_argument("--headless")  # Executar em modo headless
+options.add_argument("--start-maximized")  # Maximizar a janela do navegador
 driver = webdriver.Chrome(service=service, options=options)
 
 count_alarm = 0
-erros_anterior = 0
-acertos = 0
+acertos_direto = 0
+acertos_gale = 0
 erros = 0
 last_alarm_time = 0  # Inicializar last_alarm_time
 alarme_acionado = False  # Inicializa o estado do alarme como falso
@@ -88,26 +88,6 @@ def extrair_cores_25(driver):
 
     return percentuais
 
-
-def verificar_padrao(sequencia, cor_atual_percentual):
-    global acertos
-    global erros
-
-    count_cores_iguais = 1
-    cor_anterior = sequencia[0]
-    for cor_atual in sequencia[1:]:
-        if cor_atual == cor_anterior:
-            count_cores_iguais += 1
-            if count_cores_iguais == 4:
-                # Verifica se a próxima cor é a mesma
-                if cor_atual == sequencia[sequencia.index(cor_atual) + 1]:
-                    erros += 1
-                else:
-                    acertos += 1
-                break
-        else:
-            count_cores_iguais = 1
-        cor_anterior = cor_atual
 
 def atualizar_log_interativo(acertos_diretos, acertos_gale, erros):
     log_path = os.path.join(desktop_path, "log_interativo.txt")
@@ -222,7 +202,7 @@ def main():
 
                 atualizar_log_interativo(acertos_direto, acertos_gale, erros)
                 time.sleep(1)
-                
+
     except Exception as e:
         error_message = f"Erro: {e}"
         print(error_message)
