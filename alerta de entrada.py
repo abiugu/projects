@@ -89,13 +89,20 @@ def extrair_cores_25(driver):
     return percentuais
 
 
-def atualizar_log_interativo(acertos_diretos, acertos_gale, erros):
+def atualizar_log_interativo(acertos_direto, acertos_gale, erros):
     log_path = os.path.join(desktop_path, "log_interativo.txt")
     with open(log_path, "w") as log_file:
         log_file.write("=== LOG INTERATIVO ===\n")
-        log_file.write(f"Acertos diretos: {acertos_diretos}\n")
+        log_file.write(f"Acertos diretos: {acertos_direto}\n")
         log_file.write(f"Acertos gale: {acertos_gale}\n")
         log_file.write(f"Erros: {erros}\n")
+        # Incluir cálculos adicionais aqui
+        entrada_direta = acertos_direto - (acertos_gale + erros / 3)
+        entrada_secundaria = acertos_gale - (erros / 3)
+        entrada_gale = acertos_direto + acertos_gale - erros
+        log_file.write(f"Entrada direta: {entrada_direta}\n")
+        log_file.write(f"Entrada secundária: {entrada_secundaria}\n")
+        log_file.write(f"Entrada gale: {entrada_gale}\n")
 
 
 def main():
