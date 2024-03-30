@@ -97,9 +97,9 @@ def atualizar_log_interativo(acertos_direto, acertos_gale, erros):
         log_file.write(f"Acertos gale: {acertos_gale}\n")
         log_file.write(f"Erros: {erros}\n")
         # Incluir cálculos adicionais aqui
-        entrada_direta = acertos_direto - (acertos_gale + erros / 3)
-        entrada_secundaria = acertos_gale - (erros / 3)
-        entrada_gale = acertos_direto + (acertos_gale - erros)
+        entrada_direta = int(float(acertos_direto - (acertos_gale + erros / 3)))
+        entrada_secundaria = int(float(acertos_gale - (erros / 3)))
+        entrada_gale = int(float(acertos_direto + acertos_gale - erros))
         log_file.write(f"Entrada direta: {entrada_direta}\n")
         log_file.write(f"Entrada secundária: {entrada_secundaria}\n")
         log_file.write(f"Entrada gale: {entrada_gale}\n")
