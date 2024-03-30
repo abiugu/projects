@@ -36,6 +36,19 @@ sound_file_path = "MONEY ALARM.mp3"
 # Carrega o som
 alarm_sound = pygame.mixer.Sound(sound_file_path)
 
+# Lê os valores anteriores do log interativo apenas uma vez no início do programa
+log_interativo_path = os.path.join(desktop_path, "log_interativo.txt")
+valores_anteriores = {"acertos_direto": 0, "acertos_gale": 0, "erros": 0}
+if os.path.exists(log_interativo_path):
+    with open(log_interativo_path, "r") as log_interativo_file:
+        for line in log_interativo_file:
+            if line.startswith("Acertos diretos:"):
+                valores_anteriores["acertos_direto"] = int(line.split(":")[1])
+            elif line.startswith("Acertos gale:"):
+                valores_anteriores["acertos_gale"] = int(line.split(":")[1])
+            elif line.startswith("Erros:"):
+                valores_anteriores["erros"] = int(line.split(":")[1])
+
 
 def log_to_file(message):
     with open(log_file_path, "a") as log_file:
@@ -88,26 +101,23 @@ def extrair_cores_25(driver):
 
     return percentuais
 
-
 def atualizar_log_interativo(acertos_direto, acertos_gale, erros):
-    log_path = os.path.join(desktop_path, "log_interativo.txt")
-    with open(log_path, "w") as log_file:
-        log_file.write("=== LOG INTERATIVO ===\n")
-        log_file.write(f"Acertos diretos: {acertos_direto}\n")
-        log_file.write(f"Acertos gale: {acertos_gale}\n")
-        log_file.write(f"Erros: {erros}\n")
-        # Incluir cálculos adicionais aqui
-        entrada_direta = int(float(acertos_direto - (acertos_gale + erros / 3)))
+    with open(log_interativo_path, "w") as log_interativo_file:
+        log_interativo_file.write("=== LOG INTERATIVO ===\n")
+        log_interativo_file.write(f"Acertos diretos: {acertos_direto}\n")
+        log_interativo_file.write(f"Acertos gale: {acertos_gale}\n")
+        log_interativo_file.write(f"Erros: {erros}\n")
+        entrada_direta = int(
+            float(acertos_direto - (acertos_gale + erros / 3)))
         entrada_secundaria = int(float(acertos_gale - (erros / 3)))
         entrada_gale = int(float(acertos_direto + acertos_gale - erros))
-        log_file.write(f"Entrada direta: {entrada_direta}\n")
-        log_file.write(f"Entrada secundária: {entrada_secundaria}\n")
-        log_file.write(f"Entrada gale: {entrada_gale}\n")
+        log_interativo_file.write(f"Entrada direta: {entrada_direta}\n")
+        log_interativo_file.write(f"Entrada secundária: {
+                                  entrada_secundaria}\n")
+        log_interativo_file.write(f"Entrada gale: {entrada_gale}\n")
 
 
 def main():
-    global erros_anterior
-    global driver
     global count_alarm
     global acertos_direto
     global acertos_gale
@@ -138,8 +148,10 @@ def main():
             # Verifica se houve uma mudança na sequência de cores
             if sequencia != sequencia_anterior:
                 percentuais = extrair_cores_25(driver)
-                log_to_file("Ultimas 25 porcentagens: " + ', '.join(percentuais))
-                log_to_file("Ultimos 3 resultados: " + ', '.join(ultimas_tres_cores))
+                log_to_file("Ultimas 25 porcentagens: " +
+                            ', '.join(percentuais))
+                log_to_file("Ultimos 3 resultados: " +
+                            ', '.join(ultimas_tres_cores))
 
                 # Verifica se há alguma sequência de 3 cores iguais
                 if len(set(ultimas_tres_cores)) == 1:
@@ -151,19 +163,23 @@ def main():
                         cor_oposta = 'red'
                     if cor_oposta:
                         cor_atual_percentual = int(
-                        percentuais[['white', 'black', 'red'].index(cor_atual)])
+                            percentuais[['white', 'black', 'red'].index(cor_atual)])
 
                         if cor_atual_percentual is not None:
-                            print(f"Cor atual: {cor_atual}, Percentual: {cor_atual_percentual}")
+                            print(f"Cor atual: {cor_atual}, Percentual: {
+                                  cor_atual_percentual}")
                             if cor_atual_percentual <= 44:
                                 if ultimas_tres_cores[0] == ultimas_tres_cores[1] == ultimas_tres_cores[2]:
-                                    print("Tres cores iguais e porcentagem menor ou igual a 44. Solicitar alarme.")
+                                    print(
+                                        "Tres cores iguais e porcentagem menor ou igual a 44. Solicitar alarme.")
                                     current_time = time.time()
                                     if current_time - last_alarm_time >= 60:
                                         alarm_sound.play()
                                         count_alarm += 1
-                                        print(f"Alarme acionado. Contagem: {count_alarm}")
-                                        log_to_file(f"Alarme acionado. Contagem: {count_alarm}")
+                                        print(f"Alarme acionado. Contagem: {
+                                              count_alarm}")
+                                        log_to_file(
+                                            f"Alarme acionado. Contagem: {count_alarm}")
                                         last_alarm_time = current_time
                                         alarme_acionado = True  # Define alarme_acionado como True
 
@@ -171,41 +187,56 @@ def main():
 
             # Lógica para verificar duas sequências após o alarme acionado
                 if alarme_acionado:
-
                     time.sleep(30)
 
-                    recent_results_element = driver.find_element(By.ID, "roulette-recent")
-                    box_elements = recent_results_element.find_elements(By.CLASS_NAME, "sm-box")
+                    recent_results_element = driver.find_element(
+                        By.ID, "roulette-recent")
+                    box_elements = recent_results_element.find_elements(
+                        By.CLASS_NAME, "sm-box")
                     percentuais = extrair_cores_25(driver)
-                    sequencia_1 = [box_element.get_attribute("class").split()[-1] for box_element in box_elements[:15]]  # Primeira sequência após o alarme
+                    sequencia_1 = [box_element.get_attribute("class").split(
+                        # Primeira sequência após o alarme
+                    )[-1] for box_element in box_elements[:15]]
                     ultimas_tres_cores_1 = sequencia_1[:3]
-                    log_to_file("Ultimas 25 porcentagens: " + ', '.join(percentuais))
-                    log_to_file("Ultimos 3 resultados: " + ', '.join(ultimas_tres_cores_1))
+                    log_to_file("Ultimas 25 porcentagens: " +
+                                ', '.join(percentuais))
+                    log_to_file("Ultimos 3 resultados: " +
+                                ', '.join(ultimas_tres_cores_1))
 
                     time.sleep(30)
 
-                    recent_results_element = driver.find_element(By.ID, "roulette-recent")
-                    box_elements = recent_results_element.find_elements(By.CLASS_NAME, "sm-box")
+                    recent_results_element = driver.find_element(
+                        By.ID, "roulette-recent")
+                    box_elements = recent_results_element.find_elements(
+                        By.CLASS_NAME, "sm-box")
                     percentuais = extrair_cores_25(driver)
-                    sequencia_2 = [box_element.get_attribute("class").split()[-1] for box_element in box_elements[:15]]  # Primeira sequência após o alarme
+                    sequencia_2 = [box_element.get_attribute("class").split(
+                        # Primeira sequência após o alarme
+                    )[-1] for box_element in box_elements[:15]]
                     ultimas_tres_cores_2 = sequencia_2[:3]
-                    log_to_file("Ultimas 25 porcentagens: " + ', '.join(percentuais))
-                    log_to_file("Ultimos 3 resultados: " + ', '.join(ultimas_tres_cores_2))
+                    log_to_file("Ultimas 25 porcentagens: " +
+                                ', '.join(percentuais))
+                    log_to_file("Ultimos 3 resultados: " +
+                                ', '.join(ultimas_tres_cores_2))
 
-                    alarme_acionado = False  # Define alarme_acionado como False após coletar a segunda sequênci
-                    
-                    if ultimas_tres_cores_1 != sequencia[:3]: # Verifica se as duas sequências são iguais
+                    # Define alarme_acionado como False após coletar a segunda sequênci
+                    alarme_acionado = False
+
+                    # Verifica se as duas sequências são iguais
+                    if ultimas_tres_cores_1 != sequencia[:3]:
                         print("Acerto direto !!.")
-                        acertos_direto +=1
-                    else: 
+                        acertos_direto += 1
+                    else:
                         if ultimas_tres_cores_1 != ultimas_tres_cores_2:
                             print("Acerto gale !!")
                             acertos_gale += 1
                         else:
                             print("Erro gale !!")
                             erros += 3
-                    log_to_file(f"Acertos direto: {acertos_direto}, Acertos gale: {acertos_gale}, Erros: {erros}")
-                    print(f"Acertos direto: {acertos_direto}, Acertos gale: {acertos_gale}, Erros: {erros}")
+                    log_to_file(f"Acertos direto: {acertos_direto}, Acertos gale: {
+                                acertos_gale}, Erros: {erros}")
+                    print(f"Acertos direto: {acertos_direto}, Acertos gale: {
+                          acertos_gale}, Erros: {erros}")
 
                 atualizar_log_interativo(acertos_direto, acertos_gale, erros)
                 time.sleep(1)
@@ -218,6 +249,7 @@ def main():
     finally:
         if driver:
             driver.quit()
+
 
 if __name__ == "__main__":
     main()
