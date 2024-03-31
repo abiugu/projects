@@ -101,6 +101,7 @@ def extrair_cores_25(driver):
 
     return percentuais
 
+
 def atualizar_log_interativo(acertos_direto, acertos_gale, erros):
     with open(log_interativo_path, "w") as log_interativo_file:
         log_interativo_file.write("=== LOG INTERATIVO ===\n")
@@ -224,7 +225,7 @@ def main():
 
                     # Verifica se as duas sequências são iguais
                     if ultimas_tres_cores_1 != sequencia[:3]:
-                        print("Acerto direto !!.")
+                        print("Acerto direto !!")
                         acertos_direto += 1
                     else:
                         if ultimas_tres_cores_1 != ultimas_tres_cores_2:
