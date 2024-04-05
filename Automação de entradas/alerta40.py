@@ -95,7 +95,7 @@ def extrair_cores(driver, valor):
     # Extrair apenas os valores de porcentagem e remover o símbolo '%'
     valores = [element.get_attribute("textContent") for element in text_elements_present
                if element.get_attribute("y") == "288" and "SofiaPro" in element.get_attribute("font-family")]
-    percentuais = [int(valor.split('%')[0]) for valor in valores]
+    percentuais = [float(valor.split('%')[0]) for valor in valores]
 
     return percentuais
 

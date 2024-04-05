@@ -91,11 +91,11 @@ def extrair_cores(driver, valor):
         EC.presence_of_all_elements_located((By.TAG_NAME, "text")))
     text_elements_visible = WebDriverWait(driver, 10).until(
         EC.visibility_of_all_elements_located((By.TAG_NAME, "text")))
-    
+
     # Extrair apenas os valores de porcentagem e remover o símbolo '%'
     valores = [element.get_attribute("textContent") for element in text_elements_present
-                  if element.get_attribute("y") == "288" and "SofiaPro" in element.get_attribute("font-family")]
-    percentuais = [int(valor.split('%')[0]) for valor in valores]
+               if element.get_attribute("y") == "288" and "SofiaPro" in element.get_attribute("font-family")]
+    percentuais = [float(valor.split('%')[0]) for valor in valores]
 
     return percentuais
 
@@ -191,7 +191,7 @@ def main():
                 sequencia_anterior = sequencia  # Atualiza a sequência anterior
 
             # Lógica para verificar duas sequências após o alarme acionado
-            
+
                 if alarme_acionado:
                     time.sleep(30)
 
@@ -199,14 +199,21 @@ def main():
                     percentuais100_1 = extrair_cores(driver, 100)
                     percentuais500_1 = extrair_cores(driver, 500)
 
-                    recent_results_element = driver.find_element(By.ID, "roulette-recent")
-                    box_elements = recent_results_element.find_elements(By.CLASS_NAME, "sm-box")
-                    sequencia_1 = [box_element.get_attribute("class").split()[-1] for box_element in box_elements[:15]]
+                    recent_results_element = driver.find_element(
+                        By.ID, "roulette-recent")
+                    box_elements = recent_results_element.find_elements(
+                        By.CLASS_NAME, "sm-box")
+                    sequencia_1 = [box_element.get_attribute(
+                        "class").split()[-1] for box_element in box_elements[:15]]
                     ultimas_tres_cores_1 = sequencia_1[:3]
-                    log_to_file("Ultimas 25 porcentagens: " + ', '.join(map(str, percentuais25_1)))
-                    log_to_file("Ultimas 100 porcentagens: " + ', '.join(map(str, percentuais100_1)))
-                    log_to_file("Ultimas 500 porcentagens: " + ', '.join(map(str, percentuais500_1)))
-                    log_to_file("Ultimos 3 resultados: " + ', '.join(ultimas_tres_cores_1))
+                    log_to_file("Ultimas 25 porcentagens: " +
+                                ', '.join(map(str, percentuais25_1)))
+                    log_to_file("Ultimas 100 porcentagens: " +
+                                ', '.join(map(str, percentuais100_1)))
+                    log_to_file("Ultimas 500 porcentagens: " +
+                                ', '.join(map(str, percentuais500_1)))
+                    log_to_file("Ultimos 3 resultados: " +
+                                ', '.join(ultimas_tres_cores_1))
 
                     time.sleep(30)
 
@@ -214,15 +221,21 @@ def main():
                     percentuais100_2 = extrair_cores(driver, 100)
                     percentuais500_2 = extrair_cores(driver, 500)
 
-                    recent_results_element = driver.find_element(By.ID, "roulette-recent")
-                    box_elements = recent_results_element.find_elements(By.CLASS_NAME, "sm-box")
-                    sequencia_2 = [box_element.get_attribute("class").split()[-1] for box_element in box_elements[:15]]
+                    recent_results_element = driver.find_element(
+                        By.ID, "roulette-recent")
+                    box_elements = recent_results_element.find_elements(
+                        By.CLASS_NAME, "sm-box")
+                    sequencia_2 = [box_element.get_attribute(
+                        "class").split()[-1] for box_element in box_elements[:15]]
                     ultimas_tres_cores_2 = sequencia_2[:3]
-                    log_to_file("Ultimas 25 porcentagens: " + ', '.join(map(str, percentuais25_2)))
-                    log_to_file("Ultimas 100 porcentagens: " + ', '.join(map(str, percentuais100_2)))
-                    log_to_file("Ultimas 500 porcentagens: " + ', '.join(map(str, percentuais500_2)))
-                    log_to_file("Ultimos 3 resultados: " + ', '.join(ultimas_tres_cores_2))
-
+                    log_to_file("Ultimas 25 porcentagens: " +
+                                ', '.join(map(str, percentuais25_2)))
+                    log_to_file("Ultimas 100 porcentagens: " +
+                                ', '.join(map(str, percentuais100_2)))
+                    log_to_file("Ultimas 500 porcentagens: " +
+                                ', '.join(map(str, percentuais500_2)))
+                    log_to_file("Ultimos 3 resultados: " +
+                                ', '.join(ultimas_tres_cores_2))
 
                     # Define alarme_acionado como False após coletar a segunda sequênci
                     alarme_acionado = False
