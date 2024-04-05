@@ -10,7 +10,7 @@ import pygame
 
 service = Service()
 options = webdriver.ChromeOptions()
-#options.add_argument("--headless")  # Executar em modo headless
+options.add_argument("--headless")  # Executar em modo headless
 options.add_argument("--start-maximized")  # Maximizar a janela do navegador
 driver = webdriver.Chrome(service=service, options=options)
 
@@ -59,17 +59,6 @@ def verificar_stop():
     stop_path = os.path.join(desktop_path, "stop.txt")
     return os.path.exists(stop_path)
 
-def verificar_alarme():
-    global alarme_acionado
-    global condicao_para_alarme
-
-    if condicao_para_alarme:
-        alarme_acionado = True
-    else:
-        alarme_acionado = False
-
-
-
 
 def extrair_cores_25(driver):
     # Abrir o site se ainda não estiver aberto
@@ -108,9 +97,35 @@ def extrair_cores_25(driver):
                   if element.get_attribute("y") == "288" and "SofiaPro" in element.get_attribute("font-family")]
 
     # Extrair apenas os valores de porcentagem e remover o símbolo '%'
-    percentuais = [valor.split('%')[0] for valor in valores_25]
+    percentuais25 = [valor.split('%')[0] for valor in valores_25]
 
-    return percentuais
+    time.sleep(2)
+    select.select_by_value("100")
+    time.sleep(2)
+
+    text_elements_present = WebDriverWait(driver, 10).until(
+        EC.presence_of_all_elements_located((By.TAG_NAME, "text")))
+    text_elements_visible = WebDriverWait(driver, 10).until(
+        EC.visibility_of_all_elements_located((By.TAG_NAME, "text")))
+    valores_100 = [element.get_attribute("textContent") for element in text_elements_present
+                   if element.get_attribute("y") == "288" and "SofiaPro" in element.get_attribute("font-family")]
+
+    percentuais100 = [valor.split('%')[0] for valor in valores_100]
+
+    time.sleep(2)
+    select.select_by_value("100")
+    time.sleep(2)
+
+    text_elements_present = WebDriverWait(driver, 10).until(
+        EC.presence_of_all_elements_located((By.TAG_NAME, "text")))
+    text_elements_visible = WebDriverWait(driver, 10).until(
+        EC.visibility_of_all_elements_located((By.TAG_NAME, "text")))
+    valores_500 = [element.get_attribute("textContent") for element in text_elements_present
+                   if element.get_attribute("y") == "288" and "SofiaPro" in element.get_attribute("font-family")]
+
+    percentuais500 = [valor.split('%')[0] for valor in valores_500]
+
+    return percentuais25, percentuais100, percentuais500
 
 
 def atualizar_log_interativo(acertos_direto, acertos_gale, erros):
@@ -128,109 +143,6 @@ def atualizar_log_interativo(acertos_direto, acertos_gale, erros):
                                   entrada_secundaria}\n")
         log_interativo_file.write(f"Entrada gale: {entrada_gale}\n")
 
-def auto_entradas():
-    while True:
-        # Verifica se o alarme está acionado
-        if alarme_acionado:
-            if cor_atual == 'red':
-                condicao_vermelho = True
-                print("sequencia vermelha")
-            elif cor_atual == 'black':
-                condicao_preto = True
-                print("sequencia preta")
-
-            # Encontra o campo de entrada de quantidade e define o valor como 0.50
-            campo_quantidade5 = driver.find_element(
-                By.CSS_SELECTOR, '.balance-input-field .input-field')
-            driver.execute_script(
-                "arguments[0].setAttribute('value', '0.50')", campo_quantidade5)
-            
-            campo_quantidade1 = driver.find_element(
-                By.CSS_SELECTOR, '.balance-input-field .input-field')
-            driver.execute_script(
-                "arguments[0].setAttribute('value', '0.10')", campo_quantidade1)
-
-            botao_comecar_jogo = WebDriverWait(driver, 10).until(EC.element_to_be_clickable(
-                (By.CSS_SELECTOR, 'button.shared-button-custom.css-1apb7jj')))
-
-            # Se a condição para preto for atendida, seleciona preto e branco
-            if condicao_vermelho:
-
-                # Seleciona a cor preta
-                driver.find_element(
-                    By.CSS_SELECTOR, '.input-wrapper.select .black').click()
-                campo_quantidade5
-                botao_comecar_jogo.click()
-
-                # Seleciona também a cor branca
-                driver.find_element(
-                    By.CSS_SELECTOR, '.input-wrapper.select .white').click()
-                campo_quantidade1
-                botao_comecar_jogo.click()
-
-            # Se a condição para vermelho for atendida, seleciona vermelho e branco
-            elif condicao_preto:
-                # Seleciona a cor vermelha
-                driver.find_element(
-                    By.CSS_SELECTOR, '.input-wrapper.select .red').click()
-                campo_quantidade5
-            
-                botao_comecar_jogo.click()
-
-                # Seleciona também a cor branca
-                driver.find_element(
-                    By.CSS_SELECTOR, '.input-wrapper.select .white').click()
-                campo_quantidade1
-                botao_comecar_jogo.click()
-
-            print("Entrada direta configurada com sucesso!")
-
-            cor_anterior = cor_atual
-
-            time.sleep(30)
-
-            # Utiliza a mesma cor da entrada direta na entrada da gale
-            if cor_anterior == cor_atual:
-                if cor_atual == 'red':
-                    condicao_vermelho = True
-                elif cor_atual == 'black':
-                    condicao_preto = True
-
-            # Se a condição para preto for atendida, seleciona preto e branco
-                if condicao_vermelho:
-
-                    # Seleciona a cor preta
-                    driver.find_element(
-                        By.CSS_SELECTOR, '.input-wrapper.select .black').click()
-                    campo_quantidade5
-                    botao_comecar_jogo.click()
-
-                # Seleciona também a cor branca
-                    driver.find_element(
-                        By.CSS_SELECTOR, '.input-wrapper.select .white').click()
-                    campo_quantidade1
-                    botao_comecar_jogo.click()
-
-            # Se a condição para vermelho for atendida, seleciona vermelho e branco
-                elif condicao_preto:
-                    # Seleciona a cor vermelha
-                    driver.find_element(
-                        By.CSS_SELECTOR, '.input-wrapper.select .red').click()
-                    campo_quantidade5
-                    botao_comecar_jogo.click()
-
-                # Seleciona também a cor branca
-                    driver.find_element(
-                        By.CSS_SELECTOR, '.input-wrapper.select .white').click()
-                    campo_quantidade1
-                    botao_comecar_jogo.click()
-
-                    cor_anterior = cor_atual
-                    print("Entrada gale configurada com sucesso!")
-
-        # Aguarda um segundo antes de verificar novamente
-        time.sleep(1)
-
 
 def main():
     global count_alarm
@@ -239,7 +151,6 @@ def main():
     global erros
     global last_alarm_time
     global alarme_acionado
-    global cor_atual
     sequencia_anterior = []  # Definindo a variável sequencia_anterior antes de ser utilizada
 
     last_alarm_time = time.time()  # Inicializa o tempo do último alarme
@@ -298,7 +209,7 @@ def main():
                                             f"Alarme acionado. Contagem: {count_alarm}")
                                         last_alarm_time = current_time
                                         alarme_acionado = True  # Define alarme_acionado como True
-                                        auto_entradas()
+
                 sequencia_anterior = sequencia  # Atualiza a sequência anterior
 
             # Lógica para verificar duas sequências após o alarme acionado

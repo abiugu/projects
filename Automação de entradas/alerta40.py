@@ -97,9 +97,35 @@ def extrair_cores_25(driver):
                   if element.get_attribute("y") == "288" and "SofiaPro" in element.get_attribute("font-family")]
 
     # Extrair apenas os valores de porcentagem e remover o símbolo '%'
-    percentuais = [valor.split('%')[0] for valor in valores_25]
+    percentuais25 = [valor.split('%')[0] for valor in valores_25]
 
-    return percentuais
+    time.sleep(2)
+    select.select_by_value("100")
+    time.sleep(2)
+
+    text_elements_present = WebDriverWait(driver, 10).until(
+        EC.presence_of_all_elements_located((By.TAG_NAME, "text")))
+    text_elements_visible = WebDriverWait(driver, 10).until(
+        EC.visibility_of_all_elements_located((By.TAG_NAME, "text")))
+    valores_100 = [element.get_attribute("textContent") for element in text_elements_present
+                  if element.get_attribute("y") == "288" and "SofiaPro" in element.get_attribute("font-family")]
+    
+    percentuais100 = [valor.split('%')[0] for valor in valores_100]
+    
+    time.sleep(2)
+    select.select_by_value("100")
+    time.sleep(2)
+
+    text_elements_present = WebDriverWait(driver, 10).until(
+        EC.presence_of_all_elements_located((By.TAG_NAME, "text")))
+    text_elements_visible = WebDriverWait(driver, 10).until(
+        EC.visibility_of_all_elements_located((By.TAG_NAME, "text")))
+    valores_500 = [element.get_attribute("textContent") for element in text_elements_present
+                  if element.get_attribute("y") == "288" and "SofiaPro" in element.get_attribute("font-family")]
+    
+    percentuais500 = [valor.split('%')[0] for valor in valores_500]
+    
+    return percentuais25, percentuais100, percentuais500
 
 
 def atualizar_log_interativo(acertos_direto, acertos_gale, erros):
