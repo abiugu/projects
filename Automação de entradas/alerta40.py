@@ -25,7 +25,7 @@ alarme_acionado = False  # Inicializa o estado do alarme como falso
 desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
 
 # Caminho completo para o arquivo de log
-log_file_path = os.path.join(desktop_path, "log 40.txt")
+log_file_path = os.path.join(desktop_path, "log 44.txt")
 
 # Inicializa o mixer de áudio do pygame
 pygame.mixer.init()
@@ -37,7 +37,7 @@ sound_file_path = "MONEY ALARM.mp3"
 alarm_sound = pygame.mixer.Sound(sound_file_path)
 
 # Lê os valores anteriores do log interativo apenas uma vez no início do programa
-log_interativo_path = os.path.join(desktop_path, "log_interativo 40.txt")
+log_interativo_path = os.path.join(desktop_path, "log_interativo 44.txt")
 valores_anteriores = {"acertos_direto": 0, "acertos_gale": 0, "erros": 0}
 if os.path.exists(log_interativo_path):
     with open(log_interativo_path, "r") as log_interativo_file:
@@ -60,7 +60,7 @@ def verificar_stop():
     return os.path.exists(stop_path)
 
 
-def extrair_cores_25(driver):
+def extrair_cores(driver, valor):
     # Abrir o site se ainda não estiver aberto
     if driver.current_url != "https://blaze1.space/pt/games/double?modal=double_history_index":
         driver.get(
@@ -84,48 +84,20 @@ def extrair_cores_25(driver):
         EC.presence_of_element_located((By.XPATH, "//select[@tabindex='0']")))
     select = Select(select_element)
     time.sleep(2)
-    select.select_by_value("50")
-    time.sleep(2)
-    select.select_by_value("25")
+    select.select_by_value(str(valor))
     time.sleep(2)
 
     text_elements_present = WebDriverWait(driver, 10).until(
         EC.presence_of_all_elements_located((By.TAG_NAME, "text")))
     text_elements_visible = WebDriverWait(driver, 10).until(
         EC.visibility_of_all_elements_located((By.TAG_NAME, "text")))
-    valores_25 = [element.get_attribute("textContent") for element in text_elements_present
-                  if element.get_attribute("y") == "288" and "SofiaPro" in element.get_attribute("font-family")]
 
     # Extrair apenas os valores de porcentagem e remover o símbolo '%'
-    percentuais25 = [valor.split('%')[0] for valor in valores_25]
+    valores = [element.get_attribute("textContent") for element in text_elements_present
+               if element.get_attribute("y") == "288" and "SofiaPro" in element.get_attribute("font-family")]
+    percentuais = [int(valor.split('%')[0]) for valor in valores]
 
-    time.sleep(2)
-    select.select_by_value("100")
-    time.sleep(2)
-
-    text_elements_present = WebDriverWait(driver, 10).until(
-        EC.presence_of_all_elements_located((By.TAG_NAME, "text")))
-    text_elements_visible = WebDriverWait(driver, 10).until(
-        EC.visibility_of_all_elements_located((By.TAG_NAME, "text")))
-    valores_100 = [element.get_attribute("textContent") for element in text_elements_present
-                  if element.get_attribute("y") == "288" and "SofiaPro" in element.get_attribute("font-family")]
-    
-    percentuais100 = [valor.split('%')[0] for valor in valores_100]
-    
-    time.sleep(2)
-    select.select_by_value("100")
-    time.sleep(2)
-
-    text_elements_present = WebDriverWait(driver, 10).until(
-        EC.presence_of_all_elements_located((By.TAG_NAME, "text")))
-    text_elements_visible = WebDriverWait(driver, 10).until(
-        EC.visibility_of_all_elements_located((By.TAG_NAME, "text")))
-    valores_500 = [element.get_attribute("textContent") for element in text_elements_present
-                  if element.get_attribute("y") == "288" and "SofiaPro" in element.get_attribute("font-family")]
-    
-    percentuais500 = [valor.split('%')[0] for valor in valores_500]
-    
-    return percentuais25, percentuais100, percentuais500
+    return percentuais
 
 
 def atualizar_log_interativo(acertos_direto, acertos_gale, erros):
@@ -174,9 +146,15 @@ def main():
 
             # Verifica se houve uma mudança na sequência de cores
             if sequencia != sequencia_anterior:
-                percentuais = extrair_cores_25(driver)
+                percentuais25 = extrair_cores(driver, 25)
+                percentuais100 = extrair_cores(driver, 100)
+                percentuais500 = extrair_cores(driver, 500)
                 log_to_file("Ultimas 25 porcentagens: " +
-                            ', '.join(percentuais))
+                            ', '.join(map(str, percentuais25)))
+                log_to_file("Ultimas 100 porcentagens: " +
+                            ', '.join(map(str, percentuais100)))
+                log_to_file("Ultimas 500 porcentagens: " +
+                            ', '.join(map(str, percentuais500)))
                 log_to_file("Ultimos 3 resultados: " +
                             ', '.join(ultimas_tres_cores))
 
@@ -190,7 +168,7 @@ def main():
                         cor_oposta = 'red'
                     if cor_oposta:
                         cor_atual_percentual = int(
-                            percentuais[['white', 'black', 'red'].index(cor_atual)])
+                            percentuais25[['white', 'black', 'red'].index(cor_atual)])
 
                         if cor_atual_percentual is not None:
                             print(f"Cor atual: {cor_atual}, Percentual: {
@@ -213,36 +191,49 @@ def main():
                 sequencia_anterior = sequencia  # Atualiza a sequência anterior
 
             # Lógica para verificar duas sequências após o alarme acionado
+
                 if alarme_acionado:
                     time.sleep(30)
+
+                    percentuais25_1 = extrair_cores(driver, 25)
+                    percentuais100_1 = extrair_cores(driver, 100)
+                    percentuais500_1 = extrair_cores(driver, 500)
 
                     recent_results_element = driver.find_element(
                         By.ID, "roulette-recent")
                     box_elements = recent_results_element.find_elements(
                         By.CLASS_NAME, "sm-box")
-                    percentuais = extrair_cores_25(driver)
-                    sequencia_1 = [box_element.get_attribute("class").split(
-                        # Primeira sequência após o alarme
-                    )[-1] for box_element in box_elements[:15]]
+                    sequencia_1 = [box_element.get_attribute(
+                        "class").split()[-1] for box_element in box_elements[:15]]
                     ultimas_tres_cores_1 = sequencia_1[:3]
                     log_to_file("Ultimas 25 porcentagens: " +
-                                ', '.join(percentuais))
+                                ', '.join(map(str, percentuais25_1)))
+                    log_to_file("Ultimas 100 porcentagens: " +
+                                ', '.join(map(str, percentuais100_1)))
+                    log_to_file("Ultimas 500 porcentagens: " +
+                                ', '.join(map(str, percentuais500_1)))
                     log_to_file("Ultimos 3 resultados: " +
                                 ', '.join(ultimas_tres_cores_1))
 
                     time.sleep(30)
 
+                    percentuais25_2 = extrair_cores(driver, 25)
+                    percentuais100_2 = extrair_cores(driver, 100)
+                    percentuais500_2 = extrair_cores(driver, 500)
+
                     recent_results_element = driver.find_element(
                         By.ID, "roulette-recent")
                     box_elements = recent_results_element.find_elements(
                         By.CLASS_NAME, "sm-box")
-                    percentuais = extrair_cores_25(driver)
-                    sequencia_2 = [box_element.get_attribute("class").split(
-                        # Primeira sequência após o alarme
-                    )[-1] for box_element in box_elements[:15]]
+                    sequencia_2 = [box_element.get_attribute(
+                        "class").split()[-1] for box_element in box_elements[:15]]
                     ultimas_tres_cores_2 = sequencia_2[:3]
                     log_to_file("Ultimas 25 porcentagens: " +
-                                ', '.join(percentuais))
+                                ', '.join(map(str, percentuais25_2)))
+                    log_to_file("Ultimas 100 porcentagens: " +
+                                ', '.join(map(str, percentuais100_2)))
+                    log_to_file("Ultimas 500 porcentagens: " +
+                                ', '.join(map(str, percentuais500_2)))
                     log_to_file("Ultimos 3 resultados: " +
                                 ', '.join(ultimas_tres_cores_2))
 
