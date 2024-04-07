@@ -48,7 +48,7 @@ if os.path.exists(log_interativo_path):
                 valores_anteriores["acertos_gale"] = int(line.split(":")[1])
             elif line.startswith("Erros:"):
                 valores_anteriores["erros"] = int(line.split(":")[1])
-                
+
 
 def log_to_file(message):
     with open(log_file_path, "a") as log_file:
@@ -149,14 +149,14 @@ def main():
                 percentuais25 = extrair_cores(driver, 25)
                 percentuais100 = extrair_cores(driver, 100)
                 percentuais500 = extrair_cores(driver, 500)
+                log_to_file("Ultimos 3 resultados: " +
+                            ', '.join(ultimas_tres_cores))
                 log_to_file("Ultimas 25 porcentagens: " +
                             ', '.join(map(str, percentuais25)))
                 log_to_file("Ultimas 100 porcentagens: " +
                             ', '.join(map(str, percentuais100)))
                 log_to_file("Ultimas 500 porcentagens: " +
                             ', '.join(map(str, percentuais500)))
-                log_to_file("Ultimos 3 resultados: " +
-                            ', '.join(ultimas_tres_cores))
 
                 # Verifica se há alguma sequência de 3 cores iguais
                 if len(set(ultimas_tres_cores)) == 1:
@@ -193,68 +193,68 @@ def main():
             # Lógica para verificar duas sequências após o alarme acionado
 
                 if alarme_acionado:
-                    time.sleep(30)
+                    if sequencia != sequencia_anterior:
 
-                    percentuais25_1 = extrair_cores(driver, 25)
-                    percentuais100_1 = extrair_cores(driver, 100)
-                    percentuais500_1 = extrair_cores(driver, 500)
+                        percentuais25_1 = extrair_cores(driver, 25)
+                        percentuais100_1 = extrair_cores(driver, 100)
+                        percentuais500_1 = extrair_cores(driver, 500)
 
-                    recent_results_element = driver.find_element(
-                        By.ID, "roulette-recent")
-                    box_elements = recent_results_element.find_elements(
-                        By.CLASS_NAME, "sm-box")
-                    sequencia_1 = [box_element.get_attribute(
-                        "class").split()[-1] for box_element in box_elements[:15]]
-                    ultimas_tres_cores_1 = sequencia_1[:3]
-                    log_to_file("Ultimas 25 porcentagens: " +
-                                ', '.join(map(str, percentuais25_1)))
-                    log_to_file("Ultimas 100 porcentagens: " +
-                                ', '.join(map(str, percentuais100_1)))
-                    log_to_file("Ultimas 500 porcentagens: " +
-                                ', '.join(map(str, percentuais500_1)))
-                    log_to_file("Ultimos 3 resultados: " +
-                                ', '.join(ultimas_tres_cores_1))
+                        recent_results_element = driver.find_element(
+                            By.ID, "roulette-recent")
+                        box_elements = recent_results_element.find_elements(
+                            By.CLASS_NAME, "sm-box")
+                        sequencia_1 = [box_element.get_attribute(
+                            "class").split()[-1] for box_element in box_elements[:15]]
+                        ultimas_tres_cores_1 = sequencia_1[:3]
+                        log_to_file("Ultimos 3 resultados: " +
+                                    ', '.join(ultimas_tres_cores_1))
+                        log_to_file("Ultimas 25 porcentagens: " +
+                                    ', '.join(map(str, percentuais25_1)))
+                        log_to_file("Ultimas 100 porcentagens: " +
+                                    ', '.join(map(str, percentuais100_1)))
+                        log_to_file("Ultimas 500 porcentagens: " +
+                                    ', '.join(map(str, percentuais500_1)))
 
-                    time.sleep(30)
+                        time.sleep(30)
 
-                    percentuais25_2 = extrair_cores(driver, 25)
-                    percentuais100_2 = extrair_cores(driver, 100)
-                    percentuais500_2 = extrair_cores(driver, 500)
+                        percentuais25_2 = extrair_cores(driver, 25)
+                        percentuais100_2 = extrair_cores(driver, 100)
+                        percentuais500_2 = extrair_cores(driver, 500)
 
-                    recent_results_element = driver.find_element(
-                        By.ID, "roulette-recent")
-                    box_elements = recent_results_element.find_elements(
-                        By.CLASS_NAME, "sm-box")
-                    sequencia_2 = [box_element.get_attribute(
-                        "class").split()[-1] for box_element in box_elements[:15]]
-                    ultimas_tres_cores_2 = sequencia_2[:3]
-                    log_to_file("Ultimas 25 porcentagens: " +
-                                ', '.join(map(str, percentuais25_2)))
-                    log_to_file("Ultimas 100 porcentagens: " +
-                                ', '.join(map(str, percentuais100_2)))
-                    log_to_file("Ultimas 500 porcentagens: " +
-                                ', '.join(map(str, percentuais500_2)))
-                    log_to_file("Ultimos 3 resultados: " +
-                                ', '.join(ultimas_tres_cores_2))
+                        recent_results_element = driver.find_element(
+                            By.ID, "roulette-recent")
+                        box_elements = recent_results_element.find_elements(
+                            By.CLASS_NAME, "sm-box")
+                        sequencia_2 = [box_element.get_attribute(
+                            "class").split()[-1] for box_element in box_elements[:15]]
+                        ultimas_tres_cores_2 = sequencia_2[:3]
+                        log_to_file("Ultimos 3 resultados: " +
+                                    ', '.join(ultimas_tres_cores_2))
+                        log_to_file("Ultimas 25 porcentagens: " +
+                                    ', '.join(map(str, percentuais25_2)))
+                        log_to_file("Ultimas 100 porcentagens: " +
+                                    ', '.join(map(str, percentuais100_2)))
+                        log_to_file("Ultimas 500 porcentagens: " +
+                                    ', '.join(map(str, percentuais500_2)))
 
-                    # Define alarme_acionado como False após coletar a segunda sequênci
-                    alarme_acionado = False
+                        # Define alarme_acionado como False após coletar a segunda sequênci
+                        alarme_acionado = False
 
-                    # Verifica se as duas sequências são iguais
-                    if ultimas_tres_cores_1 != sequencia[:3]:
-                        print("Acerto direto !!")
-                        acertos_direto += 1
-                    else:
-                        if ultimas_tres_cores_1 != ultimas_tres_cores_2:
-                            print("Acerto gale !!")
-                            acertos_gale += 1
+                        # Verifica se as duas sequências são iguais
+                        if ultimas_tres_cores_1 != sequencia[:3]:
+                            print("Acerto direto !!")
+                            acertos_direto += 1
                         else:
-                            print("Erro gale !!")
-                            erros += 3
-                    log_to_file(f"Acertos direto: {acertos_direto}, Acertos gale: {
-                                acertos_gale}, Erros: {erros}")
-                    print(f"Acertos direto: {acertos_direto}, Acertos gale: {
-                          acertos_gale}, Erros: {erros}")
+                            if ultimas_tres_cores_1 != ultimas_tres_cores_2:
+                                print("Acerto gale !!")
+                                acertos_gale += 1
+                            else:
+                                print("Erro gale !!")
+                                erros += 3
+                        log_to_file(f"Acertos direto: {acertos_direto}, Acertos gale: {
+                                    acertos_gale}, Erros: {erros}")
+                        print(f"Acertos direto: {acertos_direto}, Acertos gale: {
+                              acertos_gale}, Erros: {erros}")
 
                 atualizar_log_interativo(acertos_direto, acertos_gale, erros)
                 time.sleep(1)
