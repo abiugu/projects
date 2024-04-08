@@ -25,7 +25,7 @@ alarme_acionado = False  # Inicializa o estado do alarme como falso
 desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
 
 # Caminho completo para o arquivo de log
-log_file_path = os.path.join(desktop_path, "log 40.txt")
+log_file_path = os.path.join(desktop_path, "log 44.txt")
 
 # Inicializa o mixer de áudio do pygame
 pygame.mixer.init()
@@ -37,7 +37,7 @@ sound_file_path = "MONEY ALARM.mp3"
 alarm_sound = pygame.mixer.Sound(sound_file_path)
 
 # Lê os valores anteriores do log interativo apenas uma vez no início do programa
-log_interativo_path = os.path.join(desktop_path, "log_interativo 40.txt")
+log_interativo_path = os.path.join(desktop_path, "log_interativo 44.txt")
 valores_anteriores = {"acertos_direto": 0, "acertos_gale": 0, "erros": 0}
 if os.path.exists(log_interativo_path):
     with open(log_interativo_path, "r") as log_interativo_file:
@@ -173,7 +173,7 @@ def main():
                         if cor_atual_percentual is not None:
                             print(f"Cor atual: {cor_atual}, Percentual: {
                                   cor_atual_percentual}")
-                            if cor_atual_percentual <= 40:
+                            if cor_atual_percentual <= 44:
                                 if ultimas_tres_cores[0] == ultimas_tres_cores[1] == ultimas_tres_cores[2]:
                                     print(
                                         "Tres cores iguais e porcentagem menor ou igual a 44. Solicitar alarme.")
@@ -188,11 +188,13 @@ def main():
                                         last_alarm_time = current_time
                                         alarme_acionado = True  # Define alarme_acionado como True
 
+                sequencia_anterior = sequencia  # Atualiza a sequência anterior
+
             # Lógica para verificar duas sequências após o alarme acionado
 
                 if alarme_acionado:
                     if sequencia != sequencia_anterior:
-                    
+
                         percentuais25_1 = extrair_cores(driver, 25)
                         percentuais100_1 = extrair_cores(driver, 100)
                         percentuais500_1 = extrair_cores(driver, 500)
@@ -253,8 +255,7 @@ def main():
                                     acertos_gale}, Erros: {erros}")
                         print(f"Acertos direto: {acertos_direto}, Acertos gale: {
                               acertos_gale}, Erros: {erros}")
-                        
-                sequencia_anterior = sequencia  # Atualiza a sequência anterior
+
                 atualizar_log_interativo(acertos_direto, acertos_gale, erros)
                 time.sleep(1)
 
