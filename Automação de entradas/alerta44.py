@@ -167,26 +167,28 @@ def main():
                     elif cor_atual == 'black':
                         cor_oposta = 'red'
                     if cor_oposta:
-                        cor_atual_percentual = int(
-                            percentuais25[['white', 'black', 'red'].index(cor_atual)])
+                        cor_atual_percentual_25 = int(percentuais25[['white', 'black', 'red'].index(cor_atual)])
+                        cor_oposta_percentual_25 = int(percentuais25[['white', 'black', 'red'].index(cor_oposta)])
 
-                        if cor_atual_percentual is not None:
-                            print(f"Cor atual: {cor_atual}, Percentual: {
-                                  cor_atual_percentual}")
-                            if cor_atual_percentual <= 44:
+                        cor_atual_percentual_100 = int(percentuais100[['white', 'black', 'red'].index(cor_atual)])
+                        cor_oposta_percentual_100 = int(percentuais100[['white', 'black', 'red'].index(cor_oposta)])
+
+                        if cor_atual_percentual_25 is not None:
+                            print(f"Cor atual: {cor_atual}, Percentual: {cor_atual_percentual_25}")
+                            
+
+                            if cor_atual_percentual_25 <= 44 and cor_atual_percentual_100 > cor_oposta_percentual_100:
                                 if ultimas_tres_cores[0] == ultimas_tres_cores[1] == ultimas_tres_cores[2]:
-                                    print(
-                                        "Tres cores iguais e porcentagem menor ou igual a 44. Solicitar alarme.")
+                                    print("Três cores iguais e padrão encontrado. Solicitar alarme.")
                                     current_time = time.time()
                                     if current_time - last_alarm_time >= 60:
                                         alarm_sound.play()
                                         count_alarm += 1
-                                        print(f"Alarme acionado. Contagem: {
-                                              count_alarm}")
-                                        log_to_file(
-                                            f"Alarme acionado. Contagem: {count_alarm}")
+                                        print(f"Alarme acionado. Contagem: {count_alarm}")
+                                        log_to_file(f"Alarme acionado. Contagem: {count_alarm}")
                                         last_alarm_time = current_time
                                         alarme_acionado = True  # Define alarme_acionado como True
+
 
                 sequencia_anterior = sequencia  # Atualiza a sequência anterior
 
