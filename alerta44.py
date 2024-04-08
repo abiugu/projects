@@ -187,14 +187,21 @@ def main():
                                             f"Alarme acionado. Contagem: {count_alarm}")
                                         last_alarm_time = current_time
                                         alarme_acionado = True  # Define alarme_acionado como True
-
                 sequencia_anterior = sequencia  # Atualiza a sequência anterior
-
             # Lógica para verificar duas sequências após o alarme acionado
 
                 if alarme_acionado:
-                    if sequencia != sequencia_anterior:
+                    while sequencia == sequencia_anterior:
+                        recent_results_element = driver.find_element(
+                            By.ID, "roulette-recent")
+                        box_elements = recent_results_element.find_elements(
+                            By.CLASS_NAME, "sm-box")
+                        sequencia = [box_element.get_attribute(
+                            "class").split()[-1] for box_element in box_elements[:15]]
 
+                        time.sleep(1)
+
+                    if sequencia != sequencia_anterior:
                         percentuais25_1 = extrair_cores(driver, 25)
                         percentuais100_1 = extrair_cores(driver, 100)
                         percentuais500_1 = extrair_cores(driver, 500)
