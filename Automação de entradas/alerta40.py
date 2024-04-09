@@ -146,9 +146,11 @@ def main():
 
             # Verifica se houve uma mudança na sequência de cores
             if sequencia != sequencia_anterior:
-                percentuais25 = extrair_cores(driver, 25)
                 percentuais100 = extrair_cores(driver, 100)
+                percentuais25 = extrair_cores(driver, 25)
                 percentuais500 = extrair_cores(driver, 500)
+                
+
                 log_to_file("Ultimos 3 resultados: " +
                             ', '.join(ultimas_tres_cores))
                 log_to_file("Ultimas 25 porcentagens: " +
@@ -167,16 +169,25 @@ def main():
                     elif cor_atual == 'black':
                         cor_oposta = 'red'
                     if cor_oposta:
-                        cor_atual_percentual = int(
-                            percentuais25[['white', 'black', 'red'].index(cor_atual)])
 
-                        if cor_atual_percentual is not None:
-                            print(f"Cor atual: {cor_atual}, Percentual: {
-                                  cor_atual_percentual}")
-                            if cor_atual_percentual <= 40:
+                        cor_atual_percentual_100 = int(
+                            percentuais100[['white', 'black', 'red'].index(cor_atual)])
+                        cor_oposta_percentual_100 = int(
+                            percentuais100[['white', 'black', 'red'].index(cor_oposta)])
+                        
+                        cor_atual_percentual_25 = int(
+                            percentuais25[['white', 'black', 'red'].index(cor_atual)])
+                        cor_oposta_percentual_25 = int(
+                            percentuais25[['white', 'black', 'red'].index(cor_oposta)])
+
+                        if cor_atual_percentual_25 is not None:
+                            print(f"Cor atual 25: {cor_atual}, Percentual: {
+                                  cor_atual_percentual_25}")
+
+                            if cor_atual_percentual_25 <= 40 and cor_atual_percentual_100 <= cor_oposta_percentual_100:
                                 if ultimas_tres_cores[0] == ultimas_tres_cores[1] == ultimas_tres_cores[2]:
                                     print(
-                                        "Tres cores iguais e porcentagem menor ou igual a 40. Solicitar alarme.")
+                                        "Três cores iguais e padrão encontrado. Solicitar alarme.")
                                     current_time = time.time()
                                     if current_time - last_alarm_time >= 60:
                                         alarm_sound.play()
@@ -187,22 +198,27 @@ def main():
                                             f"Alarme acionado. Contagem: {count_alarm}")
                                         last_alarm_time = current_time
                                         alarme_acionado = True  # Define alarme_acionado como True
+
                 sequencia_anterior = sequencia  # Atualiza a sequência anterior
+
             # Lógica para verificar duas sequências após o alarme acionado
 
                 if alarme_acionado:
                     while sequencia == sequencia_anterior:
-                        recent_results_element = driver.find_element(By.ID, "roulette-recent")
-                        box_elements = recent_results_element.find_elements(By.CLASS_NAME, "sm-box")
-                        sequencia = [box_element.get_attribute("class").split()[-1] for box_element in box_elements[:15]]
+                        recent_results_element = driver.find_element(
+                            By.ID, "roulette-recent")
+                        box_elements = recent_results_element.find_elements(
+                            By.CLASS_NAME, "sm-box")
+                        sequencia = [box_element.get_attribute(
+                            "class").split()[-1] for box_element in box_elements[:15]]
 
                         time.sleep(1)
 
                     if sequencia != sequencia_anterior:
-                        percentuais25_1 = extrair_cores(driver, 25)
                         percentuais100_1 = extrair_cores(driver, 100)
+                        percentuais25_1 = extrair_cores(driver, 25)
                         percentuais500_1 = extrair_cores(driver, 500)
-
+                        
                         recent_results_element = driver.find_element(
                             By.ID, "roulette-recent")
                         box_elements = recent_results_element.find_elements(
@@ -220,15 +236,19 @@ def main():
                                     ', '.join(map(str, percentuais500_1)))
 
                         while ultimas_tres_cores_1 == sequencia_1:
-                            recent_results_element = driver.find_element(By.ID, "roulette-recent")
-                            box_elements = recent_results_element.find_elements(By.CLASS_NAME, "sm-box")
-                            sequencia = [box_element.get_attribute("class").split()[-1] for box_element in box_elements[:15]]
+                            recent_results_element = driver.find_element(
+                                By.ID, "roulette-recent")
+                            box_elements = recent_results_element.find_elements(
+                                By.CLASS_NAME, "sm-box")
+                            sequencia = [box_element.get_attribute(
+                                "class").split()[-1] for box_element in box_elements[:15]]
 
                             time.sleep(1)
-                        if ultimas_tres_cores_1 != sequencia:    
-                            percentuais25_2 = extrair_cores(driver, 25)
+                        if ultimas_tres_cores_1 != sequencia:
                             percentuais100_2 = extrair_cores(driver, 100)
+                            percentuais25_2 = extrair_cores(driver, 25)
                             percentuais500_2 = extrair_cores(driver, 500)
+                            
 
                             recent_results_element = driver.find_element(
                                 By.ID, "roulette-recent")
@@ -244,16 +264,13 @@ def main():
                             log_to_file("Ultimas 100 porcentagens: " +
                                         ', '.join(map(str, percentuais100_2)))
                             log_to_file("Ultimas 500 porcentagens: " +
-                                    ', '.join(map(str, percentuais500_2)))
-
-                        # Define alarme_acionado como False após coletar a segunda sequência
-                        alarme_acionado = False
+                                        ', '.join(map(str, percentuais500_2)))
 
                         # Verifica se as duas sequências são iguais
                         if ultimas_tres_cores_1 != sequencia_anterior[:3]:
                             print("Acerto direto !!")
                             acertos_direto += 1
-                        else:   
+                        else:
                             if ultimas_tres_cores_1 != ultimas_tres_cores_2:
                                 print("Acerto gale !!")
                                 acertos_gale += 1
@@ -264,8 +281,10 @@ def main():
                                     acertos_gale}, Erros: {erros}")
                         print(f"Acertos direto: {acertos_direto}, Acertos gale: {
                               acertos_gale}, Erros: {erros}")
-                        
+
                 atualizar_log_interativo(acertos_direto, acertos_gale, erros)
+                # Define alarme_acionado como False após coletar a segunda sequência
+                alarme_acionado = False
                 time.sleep(1)
 
     except Exception as e:
