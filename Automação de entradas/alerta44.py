@@ -167,36 +167,51 @@ def main():
                     elif cor_atual == 'black':
                         cor_oposta = 'red'
                     if cor_oposta:
-                        cor_atual_percentual_25 = int(percentuais25[['white', 'black', 'red'].index(cor_atual)])
-                        cor_oposta_percentual_25 = int(percentuais25[['white', 'black', 'red'].index(cor_oposta)])
+                        cor_atual_percentual_25 = int(
+                            percentuais25[['white', 'black', 'red'].index(cor_atual)])
+                        cor_oposta_percentual_25 = int(
+                            percentuais25[['white', 'black', 'red'].index(cor_oposta)])
 
-                        cor_atual_percentual_100 = int(percentuais100[['white', 'black', 'red'].index(cor_atual)])
-                        cor_oposta_percentual_100 = int(percentuais100[['white', 'black', 'red'].index(cor_oposta)])
+                        cor_atual_percentual_100 = int(
+                            percentuais100[['white', 'black', 'red'].index(cor_atual)])
+                        cor_oposta_percentual_100 = int(
+                            percentuais100[['white', 'black', 'red'].index(cor_oposta)])
 
                         if cor_atual_percentual_25 is not None:
-                            print(f"Cor atual: {cor_atual}, Percentual: {cor_atual_percentual_25}")
-                            
+                            print(f"Cor atual 25: {cor_atual}, Percentual: {
+                                  cor_atual_percentual_25}")
 
                             if cor_atual_percentual_25 <= 44 and cor_atual_percentual_100 > cor_oposta_percentual_100:
                                 if ultimas_tres_cores[0] == ultimas_tres_cores[1] == ultimas_tres_cores[2]:
-                                    print("Três cores iguais e padrão encontrado. Solicitar alarme.")
+                                    print(
+                                        "Três cores iguais e padrão encontrado. Solicitar alarme.")
                                     current_time = time.time()
                                     if current_time - last_alarm_time >= 60:
                                         alarm_sound.play()
                                         count_alarm += 1
-                                        print(f"Alarme acionado. Contagem: {count_alarm}")
-                                        log_to_file(f"Alarme acionado. Contagem: {count_alarm}")
+                                        print(f"Alarme acionado. Contagem: {
+                                              count_alarm}")
+                                        log_to_file(
+                                            f"Alarme acionado. Contagem: {count_alarm}")
                                         last_alarm_time = current_time
                                         alarme_acionado = True  # Define alarme_acionado como True
-
 
                 sequencia_anterior = sequencia  # Atualiza a sequência anterior
 
             # Lógica para verificar duas sequências após o alarme acionado
 
                 if alarme_acionado:
-                    if sequencia != sequencia_anterior:
+                    while sequencia == sequencia_anterior:
+                        recent_results_element = driver.find_element(
+                            By.ID, "roulette-recent")
+                        box_elements = recent_results_element.find_elements(
+                            By.CLASS_NAME, "sm-box")
+                        sequencia = [box_element.get_attribute(
+                            "class").split()[-1] for box_element in box_elements[:15]]
 
+                        time.sleep(1)
+
+                    if sequencia != sequencia_anterior:
                         percentuais25_1 = extrair_cores(driver, 25)
                         percentuais100_1 = extrair_cores(driver, 100)
                         percentuais500_1 = extrair_cores(driver, 500)
@@ -217,33 +232,38 @@ def main():
                         log_to_file("Ultimas 500 porcentagens: " +
                                     ', '.join(map(str, percentuais500_1)))
 
-                        time.sleep(30)
+                        while ultimas_tres_cores_1 == sequencia_1:
+                            recent_results_element = driver.find_element(
+                                By.ID, "roulette-recent")
+                            box_elements = recent_results_element.find_elements(
+                                By.CLASS_NAME, "sm-box")
+                            sequencia = [box_element.get_attribute(
+                                "class").split()[-1] for box_element in box_elements[:15]]
 
-                        percentuais25_2 = extrair_cores(driver, 25)
-                        percentuais100_2 = extrair_cores(driver, 100)
-                        percentuais500_2 = extrair_cores(driver, 500)
+                            time.sleep(1)
+                        if ultimas_tres_cores_1 != sequencia:
+                            percentuais25_2 = extrair_cores(driver, 25)
+                            percentuais100_2 = extrair_cores(driver, 100)
+                            percentuais500_2 = extrair_cores(driver, 500)
 
-                        recent_results_element = driver.find_element(
-                            By.ID, "roulette-recent")
-                        box_elements = recent_results_element.find_elements(
-                            By.CLASS_NAME, "sm-box")
-                        sequencia_2 = [box_element.get_attribute(
-                            "class").split()[-1] for box_element in box_elements[:15]]
-                        ultimas_tres_cores_2 = sequencia_2[:3]
-                        log_to_file("Ultimos 3 resultados: " +
-                                    ', '.join(ultimas_tres_cores_2))
-                        log_to_file("Ultimas 25 porcentagens: " +
-                                    ', '.join(map(str, percentuais25_2)))
-                        log_to_file("Ultimas 100 porcentagens: " +
-                                    ', '.join(map(str, percentuais100_2)))
-                        log_to_file("Ultimas 500 porcentagens: " +
-                                    ', '.join(map(str, percentuais500_2)))
-
-                        # Define alarme_acionado como False após coletar a segunda sequênci
-                        alarme_acionado = False
+                            recent_results_element = driver.find_element(
+                                By.ID, "roulette-recent")
+                            box_elements = recent_results_element.find_elements(
+                                By.CLASS_NAME, "sm-box")
+                            sequencia_2 = [box_element.get_attribute(
+                                "class").split()[-1] for box_element in box_elements[:15]]
+                            ultimas_tres_cores_2 = sequencia_2[:3]
+                            log_to_file("Ultimos 3 resultados: " +
+                                        ', '.join(ultimas_tres_cores_2))
+                            log_to_file("Ultimas 25 porcentagens: " +
+                                        ', '.join(map(str, percentuais25_2)))
+                            log_to_file("Ultimas 100 porcentagens: " +
+                                        ', '.join(map(str, percentuais100_2)))
+                            log_to_file("Ultimas 500 porcentagens: " +
+                                        ', '.join(map(str, percentuais500_2)))
 
                         # Verifica se as duas sequências são iguais
-                        if ultimas_tres_cores_1 != sequencia[:3]:
+                        if ultimas_tres_cores_1 != sequencia_anterior[:3]:
                             print("Acerto direto !!")
                             acertos_direto += 1
                         else:
@@ -259,6 +279,8 @@ def main():
                               acertos_gale}, Erros: {erros}")
 
                 atualizar_log_interativo(acertos_direto, acertos_gale, erros)
+                # Define alarme_acionado como False após coletar a segunda sequência
+                alarme_acionado = False
                 time.sleep(1)
 
     except Exception as e:
