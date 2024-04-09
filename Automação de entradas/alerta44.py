@@ -147,8 +147,10 @@ def main():
             # Verifica se houve uma mudança na sequência de cores
             if sequencia != sequencia_anterior:
                 percentuais100 = extrair_cores(driver, 100)
-                percentuais500 = extrair_cores(driver, 500)
                 percentuais25 = extrair_cores(driver, 25)
+                percentuais500 = extrair_cores(driver, 500)
+                
+
                 log_to_file("Ultimos 3 resultados: " +
                             ', '.join(ultimas_tres_cores))
                 log_to_file("Ultimas 25 porcentagens: " +
@@ -167,15 +169,16 @@ def main():
                     elif cor_atual == 'black':
                         cor_oposta = 'red'
                     if cor_oposta:
-                        cor_atual_percentual_25 = int(
-                            percentuais25[['white', 'black', 'red'].index(cor_atual)])
-                        cor_oposta_percentual_25 = int(
-                            percentuais25[['white', 'black', 'red'].index(cor_oposta)])
 
                         cor_atual_percentual_100 = int(
                             percentuais100[['white', 'black', 'red'].index(cor_atual)])
                         cor_oposta_percentual_100 = int(
                             percentuais100[['white', 'black', 'red'].index(cor_oposta)])
+                        
+                        cor_atual_percentual_25 = int(
+                            percentuais25[['white', 'black', 'red'].index(cor_atual)])
+                        cor_oposta_percentual_25 = int(
+                            percentuais25[['white', 'black', 'red'].index(cor_oposta)])
 
                         if cor_atual_percentual_25 is not None:
                             print(f"Cor atual 25: {cor_atual}, Percentual: {
@@ -213,9 +216,9 @@ def main():
 
                     if sequencia != sequencia_anterior:
                         percentuais100_1 = extrair_cores(driver, 100)
-                        percentuais500_1 = extrair_cores(driver, 500)
                         percentuais25_1 = extrair_cores(driver, 25)
-
+                        percentuais500_1 = extrair_cores(driver, 500)
+                        
                         recent_results_element = driver.find_element(
                             By.ID, "roulette-recent")
                         box_elements = recent_results_element.find_elements(
@@ -243,8 +246,9 @@ def main():
                             time.sleep(1)
                         if ultimas_tres_cores_1 != sequencia:
                             percentuais100_2 = extrair_cores(driver, 100)
-                            percentuais500_2 = extrair_cores(driver, 500)
                             percentuais25_2 = extrair_cores(driver, 25)
+                            percentuais500_2 = extrair_cores(driver, 500)
+                            
 
                             recent_results_element = driver.find_element(
                                 By.ID, "roulette-recent")
