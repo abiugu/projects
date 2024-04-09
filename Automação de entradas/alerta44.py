@@ -146,9 +146,9 @@ def main():
 
             # Verifica se houve uma mudança na sequência de cores
             if sequencia != sequencia_anterior:
-                percentuais25 = extrair_cores(driver, 25)
                 percentuais100 = extrair_cores(driver, 100)
                 percentuais500 = extrair_cores(driver, 500)
+                percentuais25 = extrair_cores(driver, 25)
                 log_to_file("Ultimos 3 resultados: " +
                             ', '.join(ultimas_tres_cores))
                 log_to_file("Ultimas 25 porcentagens: " +
@@ -212,9 +212,9 @@ def main():
                         time.sleep(1)
 
                     if sequencia != sequencia_anterior:
-                        percentuais25_1 = extrair_cores(driver, 25)
                         percentuais100_1 = extrair_cores(driver, 100)
                         percentuais500_1 = extrair_cores(driver, 500)
+                        percentuais25_1 = extrair_cores(driver, 25)
 
                         recent_results_element = driver.find_element(
                             By.ID, "roulette-recent")
@@ -242,9 +242,9 @@ def main():
 
                             time.sleep(1)
                         if ultimas_tres_cores_1 != sequencia:
-                            percentuais25_2 = extrair_cores(driver, 25)
                             percentuais100_2 = extrair_cores(driver, 100)
                             percentuais500_2 = extrair_cores(driver, 500)
+                            percentuais25_2 = extrair_cores(driver, 25)
 
                             recent_results_element = driver.find_element(
                                 By.ID, "roulette-recent")
