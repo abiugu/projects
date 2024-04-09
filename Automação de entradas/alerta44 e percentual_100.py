@@ -181,7 +181,7 @@ def main():
                             percentuais25[['white', 'black', 'red'].index(cor_oposta)])
 
                         if cor_atual_percentual_25 is not None:
-                            print(f"Cor atual 25: {cor_atual}, Percentual: {
+                            print(f"Cor atual: {cor_atual}, Percentual: {
                                   cor_atual_percentual_25}")
 
                             if cor_atual_percentual_25 <= 44 and cor_atual_percentual_100 >= cor_oposta_percentual_100:
