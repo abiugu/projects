@@ -184,7 +184,7 @@ def main():
                             print(f"Cor atual 25: {cor_atual}, Percentual: {
                                   cor_atual_percentual_25}")
 
-                            if cor_atual_percentual_25 <= 44 and cor_atual_percentual_100 <= cor_oposta_percentual_100:
+                            if cor_atual_percentual_25 <= 44 and cor_atual_percentual_100 >= cor_oposta_percentual_100:
                                 if ultimas_tres_cores[0] == ultimas_tres_cores[1] == ultimas_tres_cores[2]:
                                     print(
                                         "Três cores iguais e padrão encontrado. Solicitar alarme.")
