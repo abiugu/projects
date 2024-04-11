@@ -27,7 +27,7 @@ desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
 logs_path = os.path.join(desktop_path, "LOGS")
 
 # Caminho completo para o arquivo de log
-log_file_path = os.path.join(logs_path, "log 44 (>=100 e <=500).txt")
+log_file_path = os.path.join(logs_path, "log 44 (maior igual 100 e menor igual 500).txt")
 
 # Inicializa o mixer de áudio do pygame
 pygame.mixer.init()
@@ -39,7 +39,7 @@ sound_file_path = "MONEY ALARM.mp3"
 alarm_sound = pygame.mixer.Sound(sound_file_path)
 
 # Lê os valores anteriores do log interativo apenas uma vez no início do programa
-log_interativo_path = os.path.join(desktop_path, "resultados 44 (>=100 e <=500).txt")
+log_interativo_path = os.path.join(logs_path, "resultados 44 (maior igual 100 e menor igual 500).txt")
 valores_anteriores = {"acertos_direto": 0, "acertos_gale": 0, "erros": 0}
 if os.path.exists(log_interativo_path):
     with open(log_interativo_path, "r") as log_interativo_file:
