@@ -27,7 +27,7 @@ desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
 logs_path = os.path.join(desktop_path, "LOGS")
 
 # Caminho completo para o arquivo de log
-log_file_path = os.path.join(logs_path, "log 40 (>=100).txt")
+log_file_path = os.path.join(logs_path, "log 48 (>=100 e <=500).txt")
 
 # Inicializa o mixer de áudio do pygame
 pygame.mixer.init()
@@ -39,7 +39,7 @@ sound_file_path = "MONEY ALARM.mp3"
 alarm_sound = pygame.mixer.Sound(sound_file_path)
 
 # Lê os valores anteriores do log interativo apenas uma vez no início do programa
-log_interativo_path = os.path.join(desktop_path, "resultados 40 (>=100).txt")
+log_interativo_path = os.path.join(desktop_path, "resultados 48 (>=100 e <=500).txt")
 valores_anteriores = {"acertos_direto": 0, "acertos_gale": 0, "erros": 0}
 if os.path.exists(log_interativo_path):
     with open(log_interativo_path, "r") as log_interativo_file:
@@ -172,6 +172,11 @@ def main():
                         cor_oposta = 'red'
                     if cor_oposta:
 
+                        cor_atual_percentual_500 = int(
+                            percentuais500[['white', 'black', 'red'].index(cor_atual)])
+                        cor_oposta_percentual_500 = int(
+                            percentuais500[['white', 'black', 'red'].index(cor_oposta)])
+                        
                         cor_atual_percentual_100 = int(
                             percentuais100[['white', 'black', 'red'].index(cor_atual)])
                         cor_oposta_percentual_100 = int(
@@ -179,14 +184,12 @@ def main():
                         
                         cor_atual_percentual_25 = int(
                             percentuais25[['white', 'black', 'red'].index(cor_atual)])
-                        cor_oposta_percentual_25 = int(
-                            percentuais25[['white', 'black', 'red'].index(cor_oposta)])
 
                         if cor_atual_percentual_25 is not None:
                             print(f"Cor atual: {cor_atual}, Percentual: {
                                   cor_atual_percentual_25}")
 
-                            if cor_atual_percentual_25 <= 40 and cor_atual_percentual_100 >= cor_oposta_percentual_100:
+                            if cor_atual_percentual_25 <= 48 and cor_atual_percentual_100 >= cor_oposta_percentual_100 and cor_atual_percentual_500 <= cor_oposta_percentual_500:
                                 if ultimas_tres_cores[0] == ultimas_tres_cores[1] == ultimas_tres_cores[2]:
                                     print(
                                         "Três cores iguais e padrão encontrado. Solicitar alarme.")

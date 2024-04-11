@@ -24,8 +24,10 @@ alarme_acionado = False  # Inicializa o estado do alarme como falso
 # Redefine o caminho da área de trabalho para o sistema operacional
 desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
 
+logs_path = os.path.join(desktop_path, "LOGS")
+
 # Caminho completo para o arquivo de log
-log_file_path = os.path.join(desktop_path, "log 44 (>=100 e <=500).txt")
+log_file_path = os.path.join(logs_path, "log 44 (>=100 e <=500).txt")
 
 # Inicializa o mixer de áudio do pygame
 pygame.mixer.init()
