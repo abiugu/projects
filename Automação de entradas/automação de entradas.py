@@ -1,5 +1,5 @@
 import time
-from alerta44 import *
+import os
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
@@ -17,7 +17,6 @@ desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
 def verificar_stop():
     stop_path = os.path.join(desktop_path, "stop.txt")
     return os.path.exists(stop_path)
-
 
 try:
     # Inicializa o driver do Selenium
@@ -40,15 +39,24 @@ try:
 
     print("Email e senha preenchidos com sucesso!")
 
-    while True:
-        # Verifica se o alarme está acionado
-        if alarme_acionado:
-            if cor_atual == 'red':
-                condicao_vermelho = True
-                print("sequencia vermelha")
-            elif cor_atual == 'black':
-                condicao_preto = True
-                print("sequencia preta")
+def main(): 
+    
+    try:
+        url = 'https://blaze-7.com/pt/games/double'
+        driver.get(url)
+
+        while not verificar_stop():
+            recent_results_element = driver.find_element(
+                By.ID, "roulette-recent")
+            box_elements = recent_results_element.find_elements(
+                By.CLASS_NAME, "sm-box")
+
+            # Analisa as 15 últimas cores disponíveis
+            sequencia = [box_element.get_attribute(
+                "class").split()[-1] for box_element in box_elements[:15]]
+
+            # Obtém apenas as últimas 3 cores para imprimir
+            ultimas_tres_cores = sequencia[:3]
 
             # Encontra o campo de entrada de quantidade e define o valor como 0.10
             campo_quantidade = driver.find_element(
@@ -152,9 +160,9 @@ try:
         # Aguarda um segundo antes de verificar novamente
         time.sleep(1)
 
-except Exception as e:
-    print("Ocorreu um erro:", e)
+    except Exception as e:
+        print("Ocorreu um erro:", e)
 
-finally:
+    finally:
     # Fecha o navegador após a execução do código
-    driver.quit()
+        driver.quit()
