@@ -6,11 +6,12 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
-import pygame
+
+
 
 service = Service()
 options = webdriver.ChromeOptions()
-options.add_argument("--headless")  # Executar em modo headless
+#options.add_argument("--headless")  # Executar em modo headless
 options.add_argument("--start-maximized")  # Maximizar a janela do navegador
 driver = webdriver.Chrome(service=service, options=options)
 
@@ -23,16 +24,6 @@ alarme_acionado = False  # Inicializa o estado do alarme como falso
 
 # Redefine o caminho da área de trabalho para o sistema operacional
 desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
-
-
-# Inicializa o mixer de áudio do pygame
-pygame.mixer.init()
-
-# Carrega o arquivo de som
-sound_file_path = "MONEY ALARM.mp3"
-
-# Carrega o som
-alarm_sound = pygame.mixer.Sound(sound_file_path)
 
 
 
@@ -85,6 +76,29 @@ def extrair_cores(driver, valor):
 
     return percentuais
 
+def obter_cor_oposta(cor_atual):
+    return 'red' if cor_atual == 'black' else 'black'
+
+def apostar(driver, obter_cor_aposta, valor):
+    # Clicar no botão da cor para selecioná-la
+    # Assume que a cor passada é 'red', 'black' ou 'white'
+    cor_seletor = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable((By.CSS_SELECTOR, f'div.input-wrapper.select div.{obter_cor_aposta}'))
+    )
+    cor_seletor.click()
+    print(f"Cor {obter_cor_aposta} selecionada com sucesso!")
+
+    # Ajustar o valor da aposta no campo correspondente
+    campo_quantidade = driver.find_element(By.CSS_SELECTOR, '.balance-input-field .input-field')
+    campo_quantidade.clear()
+    campo_quantidade.send_keys(str(valor))
+    
+    # Clicar no botão para realizar a aposta
+    botao_aposta = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable((By.CSS_SELECTOR, f'button.shared-button-custom[data-bet="{obter_cor_aposta}"]'))
+    )
+    botao_aposta.click()
+    print(f"Aposta de {valor} na cor {obter_cor_aposta} realizada com sucesso!")
 
 def main():
     global count_alarm
@@ -117,12 +131,12 @@ def main():
 
             # Verifica se houve uma mudança na sequência de cores
             if sequencia != sequencia_anterior:
-                percentuais100 = extrair_cores(driver, 100)
-                percentuais25 = extrair_cores(driver, 25)
-                percentuais500 = extrair_cores(driver, 500)
 
                 # Verifica se há alguma sequência de 3 cores iguais
                 if len(set(ultimas_tres_cores)) == 1:
+                    percentuais100 = extrair_cores(driver, 100)
+                    percentuais25 = extrair_cores(driver, 25)
+                    percentuais500 = extrair_cores(driver, 500)
                     cor_atual = sequencia[0]
                     cor_oposta = None
                     if cor_atual == 'red':
@@ -154,7 +168,6 @@ def main():
                                         "Três cores iguais e padrão encontrado. Solicitar alarme.")
                                     current_time = time.time()
                                     if current_time - last_alarm_time >= 60:
-                                        alarm_sound.play()
                                         count_alarm += 1
                                         print(f"Alarme acionado. Contagem: {
                                               count_alarm}")
@@ -164,48 +177,52 @@ def main():
                 sequencia_anterior = sequencia  # Atualiza a sequência anterior
 
             # Lógica para verificar duas sequências após o alarme acionado
+                def obter_ultimas_tres_cores(driver):
+                    recent_results_element = driver.find_element(By.ID, "roulette-recent")
+                    box_elements = recent_results_element.find_elements(By.CLASS_NAME, "sm-box")
+                    sequencia = [box_element.get_attribute("class").split()[-1] for box_element in box_elements[:3]]
+                    return sequencia
 
                 if alarme_acionado:
-                    while sequencia == sequencia_anterior:
+                        while not os.path.exists(os.path.join(os.path.expanduser("~"), "Desktop", "stop.txt")):
+                            if sequencia_anterior[0] == obter_ultimas_tres_cores(driver)[0]:
+                                apostar(driver, obter_cor_oposta(sequencia_anterior[0]), 0.50)
+                                apostar(driver, 'white', 0.10)
+                                time.sleep(20)  # Espera o resultado da rodada
+                
+                                if obter_ultimas_tres_cores(driver)[0] == sequencia_anterior[0]:
+                                    apostar(driver, obter_cor_oposta(sequencia_anterior[0]), 1.00)
+                                    apostar(driver, 'white', 0.20)
+                                    time.sleep(10)  # Pequena pausa antes de verificar novamente
+
+                if sequencia != sequencia_anterior:
+                        
+                    recent_results_element = driver.find_element(
+                        By.ID, "roulette-recent")
+                    box_elements = recent_results_element.find_elements(
+                        By.CLASS_NAME, "sm-box")
+                    sequencia_1 = [box_element.get_attribute(
+                        "class").split()[-1] for box_element in box_elements[:15]]
+                    ultimas_tres_cores_1 = sequencia_1[:3]
+
+
+                    while ultimas_tres_cores_1 == sequencia_1:
                         recent_results_element = driver.find_element(
                             By.ID, "roulette-recent")
                         box_elements = recent_results_element.find_elements(
                             By.CLASS_NAME, "sm-box")
                         sequencia = [box_element.get_attribute(
                             "class").split()[-1] for box_element in box_elements[:15]]
-
                         time.sleep(1)
+                    if ultimas_tres_cores_1 != sequencia:
 
-                    if sequencia != sequencia_anterior:
-                        
                         recent_results_element = driver.find_element(
                             By.ID, "roulette-recent")
                         box_elements = recent_results_element.find_elements(
                             By.CLASS_NAME, "sm-box")
-                        sequencia_1 = [box_element.get_attribute(
+                        sequencia_2 = [box_element.get_attribute(
                             "class").split()[-1] for box_element in box_elements[:15]]
-                        ultimas_tres_cores_1 = sequencia_1[:3]
-
-
-
-                        while ultimas_tres_cores_1 == sequencia_1:
-                            recent_results_element = driver.find_element(
-                                By.ID, "roulette-recent")
-                            box_elements = recent_results_element.find_elements(
-                                By.CLASS_NAME, "sm-box")
-                            sequencia = [box_element.get_attribute(
-                                "class").split()[-1] for box_element in box_elements[:15]]
-
-                            time.sleep(1)
-                        if ultimas_tres_cores_1 != sequencia:
-
-                            recent_results_element = driver.find_element(
-                                By.ID, "roulette-recent")
-                            box_elements = recent_results_element.find_elements(
-                                By.CLASS_NAME, "sm-box")
-                            sequencia_2 = [box_element.get_attribute(
-                                "class").split()[-1] for box_element in box_elements[:15]]
-                            ultimas_tres_cores_2 = sequencia_2[:3]
+                        ultimas_tres_cores_2 = sequencia_2[:3]
 
 
                         # Verifica se as duas sequências são iguais
