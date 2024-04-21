@@ -125,6 +125,7 @@ def main():
     global erros
     global last_alarm_time
     global alarme_acionado
+    global sequencia
     sequencia_anterior = []  # Definindo a variável sequencia_anterior antes de ser utilizada
 
     last_alarm_time = time.time()  # Inicializa o tempo do último alarme
@@ -150,6 +151,7 @@ def main():
             if sequencia != sequencia_anterior:
                 percentuais100 = extrair_cores(driver, 100)
                 percentuais25 = extrair_cores(driver, 25)
+                percentuais50 = extrair_cores(driver, 50)
                 percentuais500 = extrair_cores(driver, 500)
                 
 
@@ -157,6 +159,8 @@ def main():
                             ', '.join(ultimas_tres_cores))
                 log_to_file("Ultimas 25 porcentagens: " +
                             ', '.join(map(str, percentuais25)))
+                log_to_file("Ultimas 50 porcentagens: " +
+                            ', '.join(map(str, percentuais50)))
                 log_to_file("Ultimas 100 porcentagens: " +
                             ', '.join(map(str, percentuais100)))
                 log_to_file("Ultimas 500 porcentagens: " +
@@ -222,6 +226,7 @@ def main():
                     if sequencia != sequencia_anterior:
                         percentuais100_1 = extrair_cores(driver, 100)
                         percentuais25_1 = extrair_cores(driver, 25)
+                        percentuais50_1 = extrair_cores(driver, 50)
                         percentuais500_1 = extrair_cores(driver, 500)
                         
                         recent_results_element = driver.find_element(
@@ -235,6 +240,8 @@ def main():
                                     ', '.join(ultimas_tres_cores_1))
                         log_to_file("Ultimas 25 porcentagens: " +
                                     ', '.join(map(str, percentuais25_1)))
+                        log_to_file("Ultimas 50 porcentagens: " +
+                                    ', '.join(map(str, percentuais50_1)))
                         log_to_file("Ultimas 100 porcentagens: " +
                                     ', '.join(map(str, percentuais100_1)))
                         log_to_file("Ultimas 500 porcentagens: " +
@@ -252,6 +259,7 @@ def main():
                         if ultimas_tres_cores_1 != sequencia:
                             percentuais100_2 = extrair_cores(driver, 100)
                             percentuais25_2 = extrair_cores(driver, 25)
+                            percentuais50_2 = extrair_cores(driver, 50)
                             percentuais500_2 = extrair_cores(driver, 500)
                             
 
@@ -266,6 +274,8 @@ def main():
                                         ', '.join(ultimas_tres_cores_2))
                             log_to_file("Ultimas 25 porcentagens: " +
                                         ', '.join(map(str, percentuais25_2)))
+                            log_to_file("Ultimas 50 porcentagens: " +
+                                        ', '.join(map(str, percentuais50_2)))
                             log_to_file("Ultimas 100 porcentagens: " +
                                         ', '.join(map(str, percentuais100_2)))
                             log_to_file("Ultimas 500 porcentagens: " +
