@@ -27,7 +27,7 @@ desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
 logs_path = os.path.join(desktop_path, "LOGS")
 
 # Caminho completo para o arquivo de log
-log_file_path = os.path.join(logs_path, "log 40 (maior igual 100).txt")
+log_file_path = os.path.join(logs_path, "log 48 (maior 100 e menor 500).txt")
 
 # Inicializa o mixer de áudio do pygame
 pygame.mixer.init()
@@ -39,7 +39,7 @@ sound_file_path = "MONEY ALARM.mp3"
 alarm_sound = pygame.mixer.Sound(sound_file_path)
 
 # Lê os valores anteriores do log interativo apenas uma vez no início do programa
-log_interativo_path = os.path.join(logs_path, "resultados 40 (maior igual 100).txt")
+log_interativo_path = os.path.join(logs_path, "resultados 48 (maior 100 e menor 500).txt")
 valores_anteriores = {"acertos_direto": 0, "acertos_gale": 0, "erros": 0}
 if os.path.exists(log_interativo_path):
     with open(log_interativo_path, "r") as log_interativo_file:
@@ -125,6 +125,7 @@ def main():
     global erros
     global last_alarm_time
     global alarme_acionado
+    global sequencia
     sequencia_anterior = []  # Definindo a variável sequencia_anterior antes de ser utilizada
 
     last_alarm_time = time.time()  # Inicializa o tempo do último alarme
@@ -150,6 +151,7 @@ def main():
             if sequencia != sequencia_anterior:
                 percentuais100 = extrair_cores(driver, 100)
                 percentuais25 = extrair_cores(driver, 25)
+                percentuais50 = extrair_cores(driver, 50)
                 percentuais500 = extrair_cores(driver, 500)
                 
 
@@ -157,6 +159,8 @@ def main():
                             ', '.join(ultimas_tres_cores))
                 log_to_file("Ultimas 25 porcentagens: " +
                             ', '.join(map(str, percentuais25)))
+                log_to_file("Ultimas 50 porcentagens: " +
+                            ', '.join(map(str, percentuais50)))
                 log_to_file("Ultimas 100 porcentagens: " +
                             ', '.join(map(str, percentuais100)))
                 log_to_file("Ultimas 500 porcentagens: " +
@@ -172,21 +176,29 @@ def main():
                         cor_oposta = 'red'
                     if cor_oposta:
 
+                        cor_atual_percentual_500 = int(
+                            percentuais500[['white', 'black', 'red'].index(cor_atual)])
+                        cor_oposta_percentual_500 = int(
+                            percentuais500[['white', 'black', 'red'].index(cor_oposta)])
+                        
                         cor_atual_percentual_100 = int(
                             percentuais100[['white', 'black', 'red'].index(cor_atual)])
                         cor_oposta_percentual_100 = int(
                             percentuais100[['white', 'black', 'red'].index(cor_oposta)])
                         
+                        cor_atual_percentual_50 = int(
+                            percentuais50[['white', 'black', 'red'].index(cor_atual)])
+                        cor_oposta_percentual_50 = int(
+                            percentuais50[['white', 'black', 'red'].index(cor_oposta)])
+                        
                         cor_atual_percentual_25 = int(
                             percentuais25[['white', 'black', 'red'].index(cor_atual)])
-                        cor_oposta_percentual_25 = int(
-                            percentuais25[['white', 'black', 'red'].index(cor_oposta)])
 
                         if cor_atual_percentual_25 is not None:
                             print(f"Cor atual: {cor_atual}, Percentual: {
                                   cor_atual_percentual_25}")
 
-                            if cor_atual_percentual_25 <= 40 and cor_atual_percentual_100 >= cor_oposta_percentual_100:
+                            if cor_atual_percentual_25 <= 48 and cor_atual_percentual_50 > cor_oposta_percentual_50 and cor_atual_percentual_100 > cor_oposta_percentual_100 and cor_atual_percentual_500 < cor_oposta_percentual_500:
                                 if ultimas_tres_cores[0] == ultimas_tres_cores[1] == ultimas_tres_cores[2]:
                                     print(
                                         "Três cores iguais e padrão encontrado. Solicitar alarme.")
@@ -219,6 +231,7 @@ def main():
                     if sequencia != sequencia_anterior:
                         percentuais100_1 = extrair_cores(driver, 100)
                         percentuais25_1 = extrair_cores(driver, 25)
+                        percentuais50_1 = extrair_cores(driver, 50)
                         percentuais500_1 = extrair_cores(driver, 500)
                         
                         recent_results_element = driver.find_element(
@@ -232,6 +245,8 @@ def main():
                                     ', '.join(ultimas_tres_cores_1))
                         log_to_file("Ultimas 25 porcentagens: " +
                                     ', '.join(map(str, percentuais25_1)))
+                        log_to_file("Ultimas 50 porcentagens: " +
+                                    ', '.join(map(str, percentuais50_1)))
                         log_to_file("Ultimas 100 porcentagens: " +
                                     ', '.join(map(str, percentuais100_1)))
                         log_to_file("Ultimas 500 porcentagens: " +
@@ -249,6 +264,7 @@ def main():
                         if ultimas_tres_cores_1 != sequencia:
                             percentuais100_2 = extrair_cores(driver, 100)
                             percentuais25_2 = extrair_cores(driver, 25)
+                            percentuais50_2 = extrair_cores(driver, 50)
                             percentuais500_2 = extrair_cores(driver, 500)
                             
 
@@ -263,6 +279,8 @@ def main():
                                         ', '.join(ultimas_tres_cores_2))
                             log_to_file("Ultimas 25 porcentagens: " +
                                         ', '.join(map(str, percentuais25_2)))
+                            log_to_file("Ultimas 50 porcentagens: " +
+                                        ', '.join(map(str, percentuais50_2)))
                             log_to_file("Ultimas 100 porcentagens: " +
                                         ', '.join(map(str, percentuais100_2)))
                             log_to_file("Ultimas 500 porcentagens: " +
