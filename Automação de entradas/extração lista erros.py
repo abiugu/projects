@@ -73,7 +73,11 @@ alarmes, black_count, red_count = identificar_alarmes(arquivo_entrada)
 
 # Função para imprimir os resultados e contar as ocorrências
 def imprimir_resultados(alarmes, black_count, red_count):
-    contagem = {}
+    contagem = {"25": {"<": 0, "=": 0, ">": 0},
+                "50": {"<": 0, "=": 0, ">": 0},
+                "100": {"<": 0, "=": 0, ">": 0},
+                "500": {"<": 0, "=": 0, ">": 0}}
+    possibilidades = {}
     with open(arquivo_saida, 'w') as file:
         for info in alarmes:
             cor_atual = info["cor"]
@@ -86,20 +90,29 @@ def imprimir_resultados(alarmes, black_count, red_count):
             file.write("Ultimas 500 porcentagens: {}\n".format(", ".join(map(str, info["comp_500"]))))
             for rodadas in ["25", "50", "100", "500"]:
                 comp = comparar_porcentagens(cor_atual, cor_oposta, info.get("comp_" + rodadas, [0, 0, 0]), info.get("comp_" + rodadas, [0, 0, 0]))
-                sequencia += comp
                 file.write("Percentual {} rodadas: {}\n".format(rodadas, comp))
-            if sequencia in contagem:
-                contagem[sequencia] += 1
+                contagem[rodadas][comp] += 1
+                # Construindo a sequência de contagem
+                sequencia += comp
+            if sequencia in possibilidades:
+                possibilidades[sequencia] += 1
             else:
-                contagem[sequencia] = 1
+                possibilidades[sequencia] = 1
         
         file.write("\nContagem:\n")
         file.write("Black: {}\n".format(black_count))
         file.write("Red: {}\n".format(red_count))
         
+        file.write("\nContagem dos sinais:\n")
+        for rodadas in ["25", "50", "100", "500"]:
+            file.write("Percentual {} rodadas\n".format(rodadas))
+            for sinal in ["<", "=", ">"]:
+                file.write("Sinal {}: {}\n".format(sinal, contagem[rodadas][sinal]))
+            file.write("\n")
+        
         file.write("\nPossibilidades:\n")
-        for seq, count in sorted(contagem.items(), key=lambda x: x[1], reverse=True):
-            file.write("Sequencia: {}\n".format(seq))
+        for seq, count in sorted(possibilidades.items(), key=lambda x: x[1], reverse=True):
+            file.write("Sequencia: {}\n".format(", ".join(seq)))  # Convertendo seq para uma lista de inteiros
             file.write("Quantidade: {}\n".format(count))
             file.write("\n")
 
