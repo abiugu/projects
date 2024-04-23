@@ -185,7 +185,7 @@ def main():
                             if cor_atual_percentual_25 <= 48:
                                 if ultimas_tres_cores[0] == ultimas_tres_cores[1] == ultimas_tres_cores[2]:
                                     print(
-                                        "Três cores iguais e padrão encontrado. Solicitar alarme.")
+                                        "Tres cores iguais e padrao encontrado. Solicitar alarme.")
                                     current_time = time.time()
                                     if current_time - last_alarm_time >= 60:
                                         alarm_sound.play()
