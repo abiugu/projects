@@ -118,3 +118,4 @@ def imprimir_resultados(alarmes, black_count, red_count):
 
 # Imprimir resultados
 imprimir_resultados(alarmes, black_count, red_count)
+print("Informaçoes extraidas com sucesso!")
