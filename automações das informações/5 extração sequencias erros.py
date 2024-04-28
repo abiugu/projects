@@ -4,7 +4,7 @@ def extrair_texto(arquivo_entrada, arquivo_saida):
     try:
         # Caminho completo para o arquivo de entrada e saída
         caminho_entrada = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", arquivo_entrada)
-        caminho_saida = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "jogadas.txt")
+        caminho_saida = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "erros.txt")
         
         with open(caminho_entrada, 'r') as entrada:
             linhas = entrada.readlines()
