@@ -12,7 +12,7 @@ def extrair_texto(arquivo_entrada, caminho_saida):
             index_inicio = None
             for i, linha in enumerate(linhas):
                 if "Possibilidades:" in linha:
-                    index_inicio = i
+                    index_inicio = i + 1  # Próxima linha
                     break
             
             # Se não encontrar a palavra-chave, sai da função
