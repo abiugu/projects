@@ -1,10 +1,9 @@
 import os
 
-def extrair_texto(arquivo_entrada, arquivo_saida):
+def extrair_texto(arquivo_entrada, caminho_saida):
     try:
-        # Caminho completo para o arquivo de entrada e saída
+        # Caminho completo para o arquivo de entrada
         caminho_entrada = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", arquivo_entrada)
-        caminho_saida = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "erros.txt")
         
         with open(caminho_entrada, 'r') as entrada:
             linhas = entrada.readlines()
@@ -18,7 +17,7 @@ def extrair_texto(arquivo_entrada, arquivo_saida):
             
             # Se não encontrar a palavra-chave, sai da função
             if index_inicio is None:
-                print("Palavra-chave 'Possibilidades:' não encontrada no arquivo.")
+                print(f"Palavra-chave 'Possibilidades:' não encontrada no arquivo {arquivo_entrada}.")
                 return
             
             # Extrair o texto a partir da linha encontrada
@@ -28,13 +27,19 @@ def extrair_texto(arquivo_entrada, arquivo_saida):
             with open(caminho_saida, 'w') as saida:
                 saida.write(texto)
             
-            print("Texto extraído com sucesso!")
+            print(f"Texto extraído do arquivo {arquivo_entrada} com sucesso e salvo em {caminho_saida}!")
     
     except FileNotFoundError:
-        print("Arquivo de entrada não encontrado.")
+        print(f"Arquivo de entrada {arquivo_entrada} não encontrado.")
 
-# Nome do arquivo de entrada
-arquivo_entrada = "resultados_erros_log_48.txt"
+# Nomes dos arquivos de entrada
+arquivo_entrada1 = "resultados_log_48.txt"
+arquivo_entrada2 = "resultados_erros_log_48.txt"
+
+# Caminhos dos arquivos de saída
+caminho_saida1 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "jogadas.txt")
+caminho_saida2 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "erros.txt")
 
 # Chamar a função para extrair o texto
-extrair_texto(arquivo_entrada, "erros.txt")
+extrair_texto(arquivo_entrada1, caminho_saida1)
+extrair_texto(arquivo_entrada2, caminho_saida2)
