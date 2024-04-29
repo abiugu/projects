@@ -196,17 +196,12 @@ def main():
                                     data_atual = current_time.strftime(
                                         "%d-%m-%Y")  # Ajuste para dia-mês-ano
 
-                                    log_to_file(
-                                        "Alarme tocado em " + hora_atual + ", " + data_atual)
-
                                     current_time = time.time()
                                     if current_time - last_alarm_time >= 60:
                                         alarm_sound.play()
                                         count_alarm += 1
-                                        print(f"Alarme acionado. Contagem: {
-                                              count_alarm}")
-                                        log_to_file(
-                                            f"Alarme acionado. Contagem: {count_alarm}")
+                                        print(f"Alarme acionado. Contagem: {count_alarm}")
+                                        log_to_file(f"Alarme acionado. {hora_atual}, {data_atual} Contagem: {count_alarm}")
 
                                         last_alarm_time = current_time
                                         alarme_acionado = True  # Define alarme_acionado como True
