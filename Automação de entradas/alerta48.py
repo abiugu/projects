@@ -54,9 +54,9 @@ if os.path.exists(log_interativo_path):
                 valores_anteriores["erros"] = int(line.split(":")[1])
 
 
-def log_to_file(date, time, message):
+def log_to_file(message):
     with open(log_file_path, "a") as log_file:
-        log_file.write(f"{date} {time} {message}\n")
+        log_file.write(message + "\n")
 
 
 def verificar_stop():
@@ -189,12 +189,15 @@ def main():
                                     print(
                                         "Tres cores iguais e padrao encontrado. Solicitar alarme.")
 
-                                    # Obtendo a data e hora atual ajustada para o fuso horário de Brasília (-3:00)
-                                    agora = datetime.datetime.now(
+                                    current_time = datetime.datetime.now(
                                         pytz.timezone('America/Sao_Paulo'))
-                                    hora_atual = agora.strftime("%H:%M:%S")
-                                    # Ajuste para dia-mês-ano
-                                    data_atual = agora.strftime("%d-%m-%Y")
+                                    hora_atual = current_time.strftime(
+                                        "%H:%M:%S")
+                                    data_atual = current_time.strftime(
+                                        "%d-%m-%Y")  # Ajuste para dia-mês-ano
+
+                                    log_to_file(
+                                        "Alarme tocado em " + hora_atual + ", " + data_atual)
 
                                     current_time = time.time()
                                     if current_time - last_alarm_time >= 60:
@@ -204,8 +207,6 @@ def main():
                                               count_alarm}")
                                         log_to_file(
                                             f"Alarme acionado. Contagem: {count_alarm}")
-                                        log_to_file(
-                                        data_atual, hora_atual, "Alarme acionado")
 
                                         last_alarm_time = current_time
                                         alarme_acionado = True  # Define alarme_acionado como True
