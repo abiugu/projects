@@ -1,5 +1,7 @@
 import os
 import time
+import datetime
+import pytz
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
@@ -186,6 +188,19 @@ def main():
                                 if ultimas_tres_cores[0] == ultimas_tres_cores[1] == ultimas_tres_cores[2]:
                                     print(
                                         "Tres cores iguais e padrao encontrado. Solicitar alarme.")
+
+                                    # Obtendo a data e hora atual ajustada para o fuso horário de Brasília (-3:00)
+                                    agora = datetime.datetime.now(pytz.timezone('America/Sao_Paulo'))
+                                    hora_atual = agora.strftime("%H:%M:%S")
+                                    data_atual = agora.strftime("%d-%m-%Y")  # Ajuste para dia-mês-ano
+
+                                    # Printar a data e hora atual do alarme
+                                    print("Alarme tocado em", data_atual, hora_atual)
+
+                                    # Salvar a data e hora do alarme em um arquivo de log
+                                    with open("log.txt", "a") as arquivo_log:
+                                        arquivo_log.write("Alarme tocado em " + data_atual + " " + hora_atual + "\n")
+
                                     current_time = time.time()
                                     if current_time - last_alarm_time >= 60:
                                         alarm_sound.play()
