@@ -54,9 +54,9 @@ if os.path.exists(log_interativo_path):
                 valores_anteriores["erros"] = int(line.split(":")[1])
 
 
-def log_to_file(message):
+def log_to_file(date, time, message):
     with open(log_file_path, "a") as log_file:
-        log_file.write(message + "\n")
+        log_file.write(f"{date} {time} {message}\n")
 
 
 def verificar_stop():
