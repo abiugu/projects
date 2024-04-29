@@ -193,6 +193,7 @@ def main():
                                     agora = datetime.datetime.now(pytz.timezone('America/Sao_Paulo'))
                                     hora_atual = agora.strftime("%H:%M:%S")
                                     data_atual = agora.strftime("%d-%m-%Y")  # Ajuste para dia-mês-ano
+                                    log_to_file("Alarme tocado em", data_atual, hora_atual)
 
                                     current_time = time.time()
                                     if current_time - last_alarm_time >= 60:
@@ -202,9 +203,10 @@ def main():
                                               count_alarm}")
                                         log_to_file(
                                             f"Alarme acionado. Contagem: {count_alarm}")
+                                        
                                         # Printar a data e hora atual do alarme
                                         print("Alarme tocado em", data_atual, hora_atual)
-                                        log_to_file("Alarme tocado em", data_atual, hora_atual)
+
                                         last_alarm_time = current_time
                                         alarme_acionado = True  # Define alarme_acionado como True
 
