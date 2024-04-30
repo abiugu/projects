@@ -58,7 +58,7 @@ def identificar_alarmes(arquivo):
             elif "Ultimas 500 porcentagens:" in linha:
                 info["comp_500"] = [float(p)
                                     for p in linha.split(":")[1].split(", ")]
-            elif "Alarme acionado. Contagem:" in linha:
+            elif "Alarme acionado" in linha:
                 if info["cor"] == "black":
                     black_count += 1
                 elif info["cor"] == "red":
