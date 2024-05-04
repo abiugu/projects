@@ -153,7 +153,6 @@ def main():
                 percentuais25 = extrair_cores(driver, 25)
                 percentuais50 = extrair_cores(driver, 50)
                 percentuais500 = extrair_cores(driver, 500)
-                
 
                 log_to_file("Ultimos 3 resultados: " +
                             ', '.join(ultimas_tres_cores))
@@ -180,12 +179,12 @@ def main():
                             percentuais500[['white', 'black', 'red'].index(cor_atual)])
                         cor_oposta_percentual_500 = int(
                             percentuais500[['white', 'black', 'red'].index(cor_oposta)])
-                        
+
                         cor_atual_percentual_100 = int(
                             percentuais100[['white', 'black', 'red'].index(cor_atual)])
                         cor_oposta_percentual_100 = int(
                             percentuais100[['white', 'black', 'red'].index(cor_oposta)])
-                        
+
                         cor_atual_percentual_50 = int(
                             percentuais50[['white', 'black', 'red'].index(cor_atual)])
                         cor_oposta_percentual_50 = int(
@@ -196,12 +195,21 @@ def main():
                         cor_oposta_percentual_25 = int(
                             percentuais25[['white', 'black', 'red'].index(cor_atual)])
 
-
                         if cor_atual_percentual_25 is not None:
                             print(f"Cor atual: {cor_atual}, Percentual: {
                                   cor_atual_percentual_25}")
 
-                            if cor_atual_percentual_25 <= 48 and (cor_atual_percentual_25 < cor_oposta_percentual_25 and cor_atual_percentual_50 < cor_oposta_percentual_50 and cor_atual_percentual_100 < cor_oposta_percentual_100 and cor_atual_percentual_500 > cor_oposta_percentual_500) or (cor_atual_percentual_25 < cor_oposta_percentual_25 and cor_atual_percentual_50 > cor_oposta_percentual_50 and cor_atual_percentual_100 > cor_oposta_percentual_100 and cor_atual_percentual_500 > cor_oposta_percentual_500) or (cor_atual_percentual_25 > cor_oposta_percentual_25 and cor_atual_percentual_50 > cor_oposta_percentual_50 and cor_atual_percentual_100 > cor_oposta_percentual_100 and cor_atual_percentual_500 < cor_oposta_percentual_500) or (cor_atual_percentual_25 > cor_oposta_percentual_25 and cor_atual_percentual_50 < cor_oposta_percentual_50 and cor_atual_percentual_100 < cor_oposta_percentual_100 and cor_atual_percentual_500 < cor_oposta_percentual_500):
+                            if cor_atual_percentual_25 <= 48 and (
+                                (cor_atual_percentual_25 < cor_oposta_percentual_25 and cor_atual_percentual_50 < cor_oposta_percentual_50 and cor_atual_percentual_100 < cor_oposta_percentual_100 and cor_atual_percentual_500 > cor_oposta_percentual_500) or
+                                (cor_atual_percentual_25 < cor_oposta_percentual_25 and cor_atual_percentual_50 > cor_oposta_percentual_50 and cor_atual_percentual_100 > cor_oposta_percentual_100 and cor_atual_percentual_500 > cor_oposta_percentual_500) or
+                                (cor_atual_percentual_25 > cor_oposta_percentual_25 and cor_atual_percentual_50 < cor_oposta_percentual_50 and cor_atual_percentual_100 < cor_oposta_percentual_100 and cor_atual_percentual_500 < cor_oposta_percentual_500) or
+                                (cor_atual_percentual_25 > cor_oposta_percentual_25 and cor_atual_percentual_50 > cor_oposta_percentual_50 and cor_atual_percentual_100 > cor_oposta_percentual_100 and cor_atual_percentual_500 < cor_oposta_percentual_500) or
+                                (cor_atual_percentual_25 < cor_oposta_percentual_25 and cor_atual_percentual_50 < cor_oposta_percentual_50 and cor_atual_percentual_100 > cor_oposta_percentual_100 and cor_atual_percentual_500 > cor_oposta_percentual_500) or
+                                (cor_atual_percentual_25 < cor_oposta_percentual_25 and cor_atual_percentual_50 > cor_oposta_percentual_50 and cor_atual_percentual_100 > cor_oposta_percentual_100 and cor_atual_percentual_500 < cor_oposta_percentual_500) or
+                                (cor_atual_percentual_25 < cor_oposta_percentual_25 and cor_atual_percentual_50 < cor_oposta_percentual_50 and cor_atual_percentual_100 > cor_oposta_percentual_100 and cor_atual_percentual_500 < cor_oposta_percentual_500) or
+                                (cor_atual_percentual_25 < cor_oposta_percentual_25 and cor_atual_percentual_50 > cor_oposta_percentual_50 and cor_atual_percentual_100 <cor_oposta_percentual_100 and cor_atual_percentual_500 < cor_oposta_percentual_500)
+                                ):
+
                                 if ultimas_tres_cores[0] == ultimas_tres_cores[1] == ultimas_tres_cores[2]:
                                     print(
                                         "Três cores iguais e padrão encontrado. Solicitar alarme.")
@@ -236,7 +244,7 @@ def main():
                         percentuais25_1 = extrair_cores(driver, 25)
                         percentuais50_1 = extrair_cores(driver, 50)
                         percentuais500_1 = extrair_cores(driver, 500)
-                        
+
                         recent_results_element = driver.find_element(
                             By.ID, "roulette-recent")
                         box_elements = recent_results_element.find_elements(
@@ -269,7 +277,6 @@ def main():
                             percentuais25_2 = extrair_cores(driver, 25)
                             percentuais50_2 = extrair_cores(driver, 50)
                             percentuais500_2 = extrair_cores(driver, 500)
-                            
 
                             recent_results_element = driver.find_element(
                                 By.ID, "roulette-recent")
