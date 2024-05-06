@@ -203,6 +203,10 @@ def main():
                             percentuais25[['white', 'black', 'red'].index(cor_oposta)])
                         cor_atual_percentual_25 = int(
                             percentuais25[['white', 'black', 'red'].index(cor_atual)])
+                        
+                        if cor_atual_percentual_25 is not None:
+                            print(f"Cor atual: {cor_atual}, Percentual: {
+                                  cor_atual_percentual_25}")
 
                         if cor_atual_percentual_25 <= 48:
                             # Verifica se a cor atual atende a alguma das condições específicas
