@@ -208,9 +208,7 @@ def main():
                             print(f"Cor atual: {cor_atual}, Percentual: {
                                   cor_atual_percentual_25}")
 
-                        if cor_atual_percentual_25 <= 48:
-                            # Verifica se a cor atual atende a alguma das condições específicas
-                            if ((cor_atual_percentual_25 < cor_oposta_percentual_25 and
+                        if cor_atual_percentual_25 <= 48 and ((cor_atual_percentual_25 < cor_oposta_percentual_25 and
                                 cor_atual_percentual_50 < cor_oposta_percentual_50 and
                                 cor_atual_percentual_100 < cor_oposta_percentual_100 and
                                 cor_atual_percentual_500 > cor_oposta_percentual_500) or
