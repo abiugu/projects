@@ -202,68 +202,58 @@ def main():
                             if cor_atual_percentual_25 is not None:
                                 print(f"Cor atual: {cor_atual}, Percentual: {cor_atual_percentual_25}")
 
-                            if (cor_atual_percentual_25 <= 48 and
-                                    cor_atual_percentual_25 < cor_oposta_percentual_25 and
+                            if cor_atual_percentual_25 <= 48 and ultimas_tres_cores[0] == ultimas_tres_cores[1] == ultimas_tres_cores[2]:
+                                if (cor_atual_percentual_25 < cor_oposta_percentual_25 and
                                     cor_atual_percentual_50 < cor_oposta_percentual_50 and
                                     cor_atual_percentual_100 < cor_oposta_percentual_100 and
                                     cor_atual_percentual_500 > cor_oposta_percentual_500):
-                                # Faça algo se esta condição for verdadeira
-                                pass
-                            elif (cor_atual_percentual_25 <= 48 and
-                                  cor_atual_percentual_25 < cor_oposta_percentual_25 and
-                                  cor_atual_percentual_50 > cor_oposta_percentual_50 and
-                                  cor_atual_percentual_100 > cor_oposta_percentual_100 and
-                                  cor_atual_percentual_500 > cor_oposta_percentual_500):
-                                # Faça algo se esta condição for verdadeira
-                                pass
-                            elif (cor_atual_percentual_25 <= 48 and
-                                  cor_atual_percentual_25 > cor_oposta_percentual_25 and
-                                  cor_atual_percentual_50 < cor_oposta_percentual_50 and
-                                  cor_atual_percentual_100 < cor_oposta_percentual_100 and
-                                  cor_atual_percentual_500 < cor_oposta_percentual_500):
-                                # Faça algo se esta condição for verdadeira
-                                pass
-                            elif (cor_atual_percentual_25 <= 48 and
-                                  cor_atual_percentual_25 > cor_oposta_percentual_25 and
-                                  cor_atual_percentual_50 > cor_oposta_percentual_50 and
-                                  cor_atual_percentual_100 > cor_oposta_percentual_100 and
-                                  cor_atual_percentual_500 < cor_oposta_percentual_500):
-                                # Faça algo se esta condição for verdadeira
-                                pass
-                            elif (cor_atual_percentual_25 <= 48 and
-                                  cor_atual_percentual_25 < cor_oposta_percentual_25 and
-                                  cor_atual_percentual_50 < cor_oposta_percentual_50 and
-                                  cor_atual_percentual_100 > cor_oposta_percentual_100 and
-                                  cor_atual_percentual_500 > cor_oposta_percentual_500):
-                                # Faça algo se esta condição for verdadeira
-                                pass
-                            elif (cor_atual_percentual_25 <= 48 and
-                                  cor_atual_percentual_25 < cor_oposta_percentual_25 and
-                                  cor_atual_percentual_50 > cor_oposta_percentual_50 and
-                                  cor_atual_percentual_100 > cor_oposta_percentual_100 and
-                                  cor_atual_percentual_500 < cor_oposta_percentual_500):
-                                # Faça algo se esta condição for verdadeira
-                                pass
-                            elif (cor_atual_percentual_25 <= 48 and
-                                  cor_atual_percentual_25 < cor_oposta_percentual_25 and
-                                  cor_atual_percentual_50 < cor_oposta_percentual_50 and
-                                  cor_atual_percentual_100 > cor_oposta_percentual_100 and
-                                  cor_atual_percentual_500 < cor_oposta_percentual_500):
-                                # Faça algo se esta condição for verdadeira
-                                pass
-                            elif (cor_atual_percentual_25 <= 48 and
-                                  cor_atual_percentual_25 < cor_oposta_percentual_25 and
-                                  cor_atual_percentual_50 > cor_oposta_percentual_50 and
-                                  cor_atual_percentual_100 < cor_oposta_percentual_100 and
-                                  cor_atual_percentual_500 < cor_oposta_percentual_500):
-                                # Faça algo se esta condição for verdadeira
-                                pass
-                            
+                                    # Faça algo se esta condição for verdadeira
+                                    pass
+                                elif (cor_atual_percentual_25 < cor_oposta_percentual_25 and
+                                      cor_atual_percentual_50 > cor_oposta_percentual_50 and
+                                      cor_atual_percentual_100 > cor_oposta_percentual_100 and
+                                      cor_atual_percentual_500 > cor_oposta_percentual_500):
+                                    # Faça algo se esta condição for verdadeira
+                                    pass
+                                elif (cor_atual_percentual_25 > cor_oposta_percentual_25 and
+                                      cor_atual_percentual_50 < cor_oposta_percentual_50 and
+                                      cor_atual_percentual_100 < cor_oposta_percentual_100 and
+                                      cor_atual_percentual_500 < cor_oposta_percentual_500):
+                                    # Faça algo se esta condição for verdadeira
+                                    pass
+                                elif (cor_atual_percentual_25 > cor_oposta_percentual_25 and
+                                      cor_atual_percentual_50 > cor_oposta_percentual_50 and
+                                      cor_atual_percentual_100 > cor_oposta_percentual_100 and
+                                      cor_atual_percentual_500 < cor_oposta_percentual_500):
+                                    # Faça algo se esta condição for verdadeira
+                                    pass
+                                elif (cor_atual_percentual_25 < cor_oposta_percentual_25 and
+                                      cor_atual_percentual_50 < cor_oposta_percentual_50 and
+                                      cor_atual_percentual_100 > cor_oposta_percentual_100 and
+                                      cor_atual_percentual_500 > cor_oposta_percentual_500):
+                                    # Faça algo se esta condição for verdadeira
+                                    pass
+                                elif (cor_atual_percentual_25 < cor_oposta_percentual_25 and
+                                      cor_atual_percentual_50 > cor_oposta_percentual_50 and
+                                      cor_atual_percentual_100 > cor_oposta_percentual_100 and
+                                      cor_atual_percentual_500 < cor_oposta_percentual_500):
+                                    # Faça algo se esta condição for verdadeira
+                                    pass
+                                elif (cor_atual_percentual_25 < cor_oposta_percentual_25 and
+                                      cor_atual_percentual_50 < cor_oposta_percentual_50 and
+                                      cor_atual_percentual_100 > cor_oposta_percentual_100 and
+                                      cor_atual_percentual_500 < cor_oposta_percentual_500):
+                                    # Faça algo se esta condição for verdadeira
+                                    pass
+                                elif (cor_atual_percentual_25 < cor_oposta_percentual_25 and
+                                      cor_atual_percentual_50 > cor_oposta_percentual_50 and
+                                      cor_atual_percentual_100 < cor_oposta_percentual_100 and
+                                      cor_atual_percentual_500 < cor_oposta_percentual_500):
+                                    # Faça algo se esta condição for verdadeira
+                                    pass
 
+                                    print("Tres cores iguais e padrao encontrado. Solicitar alarme.")
 
-                                if ultimas_tres_cores[0] == ultimas_tres_cores[1] == ultimas_tres_cores[2]:
-                                    print(
-                                        "Três cores iguais e padrão encontrado. Solicitar alarme.")
                                     current_time = time.time()
                                     if current_time - last_alarm_time >= 60:
                                         alarm_sound.play()
