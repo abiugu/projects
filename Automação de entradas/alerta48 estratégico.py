@@ -199,54 +199,52 @@ def main():
                             print(f"Cor atual: {cor_atual}, Percentual: {
                                   cor_atual_percentual_25}")
 
-                            if cor_atual_percentual_25 is not None:
-                                print(f"Cor atual: {cor_atual}, Percentual: {cor_atual_percentual_25}")
+                            if cor_atual_percentual_25 <= 48 and ((cor_atual_percentual_25 < cor_oposta_percentual_25 and
+                                                                   cor_atual_percentual_50 < cor_oposta_percentual_50 and
+                                                                   cor_atual_percentual_100 < cor_oposta_percentual_100 and
+                                                                   cor_atual_percentual_500 > cor_oposta_percentual_500) or
+                                                                  (cor_atual_percentual_25 < cor_oposta_percentual_25 and
+                                                                   cor_atual_percentual_50 > cor_oposta_percentual_50 and
+                                                                   cor_atual_percentual_100 > cor_oposta_percentual_100 and
+                                                                   cor_atual_percentual_500 > cor_oposta_percentual_500) or
+                                                                  (cor_atual_percentual_25 > cor_oposta_percentual_25 and
+                                                                   cor_atual_percentual_50 < cor_oposta_percentual_50 and
+                                                                   cor_atual_percentual_100 < cor_oposta_percentual_100 and
+                                                                   cor_atual_percentual_500 < cor_oposta_percentual_500) or
+                                                                  (cor_atual_percentual_25 > cor_oposta_percentual_25 and
+                                                                   cor_atual_percentual_50 > cor_oposta_percentual_50 and
+                                                                   cor_atual_percentual_100 > cor_oposta_percentual_100 and
+                                                                   cor_atual_percentual_500 < cor_oposta_percentual_500) or
+                                                                  (cor_atual_percentual_25 < cor_oposta_percentual_25 and
+                                                                   cor_atual_percentual_50 < cor_oposta_percentual_50 and
+                                                                   cor_atual_percentual_100 > cor_oposta_percentual_100 and
+                                                                   cor_atual_percentual_500 > cor_oposta_percentual_500) or
+                                                                  (cor_atual_percentual_25 < cor_oposta_percentual_25 and
+                                                                   cor_atual_percentual_50 > cor_oposta_percentual_50 and
+                                                                   cor_atual_percentual_100 > cor_oposta_percentual_100 and
+                                                                   cor_atual_percentual_500 < cor_oposta_percentual_500) or
+                                                                  (cor_atual_percentual_25 < cor_oposta_percentual_25 and
+                                                                   cor_atual_percentual_50 < cor_oposta_percentual_50 and
+                                                                   cor_atual_percentual_100 > cor_oposta_percentual_100 and
+                                                                   cor_atual_percentual_500 < cor_oposta_percentual_500) or
+                                                                  (cor_atual_percentual_25 < cor_oposta_percentual_25 and
+                                                                   cor_atual_percentual_50 > cor_oposta_percentual_50 and
+                                                                   cor_atual_percentual_100 < cor_oposta_percentual_100 and
+                                                                   cor_atual_percentual_500 < cor_oposta_percentual_500)):
+                                if ultimas_tres_cores[0] == ultimas_tres_cores[1] == ultimas_tres_cores[2]:
+                                    print(
+                                        "Tres cores iguais e padrao encontrado. Solicitar alarme.")
 
-                            if cor_atual_percentual_25 <= 48 and ultimas_tres_cores[0] == ultimas_tres_cores[1] == ultimas_tres_cores[2] and \
-                                ((cor_atual_percentual_25 < cor_oposta_percentual_25 and
-                                  cor_atual_percentual_50 < cor_oposta_percentual_50 and
-                                  cor_atual_percentual_100 < cor_oposta_percentual_100 and
-                                  cor_atual_percentual_500 > cor_oposta_percentual_500) or
-                                 (cor_atual_percentual_25 < cor_oposta_percentual_25 and
-                                  cor_atual_percentual_50 > cor_oposta_percentual_50 and
-                                  cor_atual_percentual_100 > cor_oposta_percentual_100 and
-                                  cor_atual_percentual_500 > cor_oposta_percentual_500) or
-                                 (cor_atual_percentual_25 > cor_oposta_percentual_25 and
-                                  cor_atual_percentual_50 < cor_oposta_percentual_50 and
-                                  cor_atual_percentual_100 < cor_oposta_percentual_100 and
-                                  cor_atual_percentual_500 < cor_oposta_percentual_500) or
-                                 (cor_atual_percentual_25 > cor_oposta_percentual_25 and
-                                  cor_atual_percentual_50 > cor_oposta_percentual_50 and
-                                  cor_atual_percentual_100 > cor_oposta_percentual_100 and
-                                  cor_atual_percentual_500 < cor_oposta_percentual_500) or
-                                 (cor_atual_percentual_25 < cor_oposta_percentual_25 and
-                                  cor_atual_percentual_50 < cor_oposta_percentual_50 and
-                                  cor_atual_percentual_100 > cor_oposta_percentual_100 and
-                                  cor_atual_percentual_500 > cor_oposta_percentual_500) or
-                                 (cor_atual_percentual_25 < cor_oposta_percentual_25 and
-                                  cor_atual_percentual_50 > cor_oposta_percentual_50 and
-                                  cor_atual_percentual_100 > cor_oposta_percentual_100 and
-                                  cor_atual_percentual_500 < cor_oposta_percentual_500) or
-                                 (cor_atual_percentual_25 < cor_oposta_percentual_25 and
-                                  cor_atual_percentual_50 < cor_oposta_percentual_50 and
-                                  cor_atual_percentual_100 > cor_oposta_percentual_100 and
-                                  cor_atual_percentual_500 < cor_oposta_percentual_500) or
-                                 (cor_atual_percentual_25 < cor_oposta_percentual_25 and
-                                  cor_atual_percentual_50 > cor_oposta_percentual_50 and
-                                  cor_atual_percentual_100 < cor_oposta_percentual_100 and
-                                  cor_atual_percentual_500 < cor_oposta_percentual_500)):
-
-                                    print("Tres cores iguais e padrao encontrado. Solicitar alarme.")
-
-                                    current_time = time.time()
-                                    if current_time - last_alarm_time >= 60:
-                                        alarm_sound.play()
-                                        count_alarm += 1
-                                        print(f"Alarme acionado. Contagem: {count_alarm}")
-                                        log_to_file(f"Alarme acionado. Contagem: {count_alarm}")
-                                        last_alarm_time = current_time
-                                        alarme_acionado = True  # Define alarme_acionado como True
-                                
+                                current_time = time.time()
+                                if current_time - last_alarm_time >= 60:
+                                    alarm_sound.play()
+                                    count_alarm += 1
+                                    print(f"Alarme acionado. Contagem: {
+                                          count_alarm}")
+                                    log_to_file(
+                                        f"Alarme acionado. Contagem: {count_alarm}")
+                                    last_alarm_time = current_time
+                                    alarme_acionado = True  # Define alarme_acionado como True
 
                 sequencia_anterior = sequencia  # Atualiza a sequência anterior
 
