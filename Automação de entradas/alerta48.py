@@ -185,7 +185,6 @@ def main():
                                   cor_atual_percentual_25}")
 
                             if cor_atual_percentual_25 <= 48:
-                                if ultimas_tres_cores[0] == ultimas_tres_cores[1] == ultimas_tres_cores[2]:
                                     print(
                                         "Tres cores iguais e padrao encontrado. Solicitar alarme.")
 
