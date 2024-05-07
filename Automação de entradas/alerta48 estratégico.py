@@ -244,7 +244,7 @@ def main():
                                     # Atualiza a sequência anterior
                                     sequencia_anterior = sequencia
 
-                                    print((f"PADRÃO ENCONTRADO. {hora_atual}, {data_atual} Contagem: {count_alarm}"))
+                                    print((f"PADRAO ENCONTRADO. {hora_atual}, {data_atual} Contagem: {count_alarm}"))
 
             if alarme_acionado:
                 while sequencia == sequencia_anterior:
