@@ -1,7 +1,5 @@
 import os
 import time
-import datetime
-import pytz
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
@@ -185,23 +183,17 @@ def main():
                                   cor_atual_percentual_25}")
 
                             if cor_atual_percentual_25 <= 48:
+                                if ultimas_tres_cores[0] == ultimas_tres_cores[1] == ultimas_tres_cores[2]:
                                     print(
-                                        "Tres cores iguais e padrao encontrado. Solicitar alarme.")
-
-                                    current_time = datetime.datetime.now(
-                                        pytz.timezone('America/Sao_Paulo'))
-                                    hora_atual = current_time.strftime(
-                                        "%H:%M:%S")
-                                    data_atual = current_time.strftime(
-                                        "%d-%m-%Y")  # Ajuste para dia-mês-ano
-
+                                        "Três cores iguais e padrão encontrado. Solicitar alarme.")
                                     current_time = time.time()
                                     if current_time - last_alarm_time >= 60:
                                         alarm_sound.play()
                                         count_alarm += 1
-                                        print(f"Alarme acionado. Contagem: {count_alarm}")
-                                        log_to_file(f"Alarme acionado. {hora_atual}, {data_atual} Contagem: {count_alarm}")
-
+                                        print(f"Alarme acionado. Contagem: {
+                                              count_alarm}")
+                                        log_to_file(
+                                            f"Alarme acionado. Contagem: {count_alarm}")
                                         last_alarm_time = current_time
                                         alarme_acionado = True  # Define alarme_acionado como True
 
