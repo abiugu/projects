@@ -221,8 +221,7 @@ def main():
                             if current_time - last_alarm_time >= 60:
                                 alarm_sound.play()
                                 count_alarm += 1
-                                print(f"Alarme acionado. Contagem: {
-                                      count_alarm}")
+                                print(f"Alarme acionado.")
                                 log_to_file(f"Alarme acionado. {hora_atual}, {
                                             data_atual} Contagem: {count_alarm}")
 
@@ -266,8 +265,8 @@ def main():
                                                                cor_atual_percentual_100 < cor_oposta_percentual_100 and
                                                                cor_atual_percentual_500 < cor_oposta_percentual_500)):
 
-                                print(
-                                "Três cores iguais e padrão encontrado. Faça a entrada !!.")
+                                print((f"Alarme acionado. {hora_atual}, {
+                                            data_atual} Contagem: {count_alarm}"))
 
             if alarme_acionado:
                 while sequencia == sequencia_anterior:
