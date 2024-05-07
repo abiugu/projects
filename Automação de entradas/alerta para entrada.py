@@ -1,5 +1,7 @@
 import os
 import time
+import datetime
+import pytz
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
@@ -167,11 +169,14 @@ def main():
                     current_time = time.time()
                     # Verifica se já passou 1 minuto desde o último alarme para a mesma sequência
                     if current_time - last_alarm_time >= 60:
+                        current_time = datetime.datetime.now(pytz.timezone('America/Sao_Paulo'))
+                        hora_atual = current_time.strftime("%H:%M:%S")
+                        data_atual = current_time.strftime("%d-%m-%Y")  # Ajuste para dia-mês-ano
                         alarm_sound.play()
                         count_alarm += 1
                         print(f"Alarme acionado. Contagem: {count_alarm}")
-                        print(
-                            f"PADRAO ENCONTRADO: Três cores iguais ({cor_atual})")
+                        print((f"PADRAO ENCONTRADO. {hora_atual}, {data_atual}"))
+
                         last_alarm_time = current_time  # Atualiza o tempo do último alarme
 
             time.sleep(1)
