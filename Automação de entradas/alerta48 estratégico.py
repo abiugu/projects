@@ -156,6 +156,7 @@ def main():
 
             # Obtém apenas as últimas 3 cores para imprimir
             ultimas_tres_cores = sequencia[:3]
+            ultimas_duas_cores = sequencia[:2]
 
             # Verifica se houve uma mudança na sequência de cores
             if 'sequencia_anterior' not in locals() or sequencia != sequencia_anterior:
@@ -176,7 +177,7 @@ def main():
                             ', '.join(map(str, percentuais500)))
 
                 # Verifica se há alguma sequência de 3 cores iguais
-                if len(set(ultimas_tres_cores)) == 1:
+                if len(set(ultimas_duas_cores)) == 1:
                     cor_atual = sequencia[0]
                     cor_oposta = None
                     if cor_atual == 'red':
@@ -208,7 +209,7 @@ def main():
                             print(f"Cor atual: {cor_atual}, Percentual: {
                                   cor_atual_percentual_25}")
 
-                        if cor_atual_percentual_25 <= 48 and ((cor_atual_percentual_25 < cor_oposta_percentual_25 and
+                        if cor_atual_percentual_25 <= 48 and len(set(ultimas_tres_cores)) == 1 and ((cor_atual_percentual_25 < cor_oposta_percentual_25 and
                                                                cor_atual_percentual_50 < cor_oposta_percentual_50 and
                                                                cor_atual_percentual_100 < cor_oposta_percentual_100 and
                                                                cor_atual_percentual_500 > cor_oposta_percentual_500) or
