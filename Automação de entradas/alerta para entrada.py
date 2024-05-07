@@ -8,9 +8,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 import pygame
 
-def verificar_stop():
-    stop_path = os.path.join(desktop_path, "stop.txt")
-    return os.path.exists(stop_path)
 
 # Inicializando o serviço do Chrome
 service = Service()
@@ -37,6 +34,9 @@ count_alarm = 0
 # Caminho da área de trabalho
 desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
 
+def verificar_stop():
+    stop_path = os.path.join(desktop_path, "stop.txt")
+    return os.path.exists(stop_path)
 
 # Função para extrair as porcentagens das cores
 def extrair_cores(driver, valor):
@@ -80,7 +80,7 @@ def extrair_cores(driver, valor):
 # Função principal
 def main():
     global count_alarm
-
+    last_alarm_time = 0
     try:
         url = 'https://blaze-7.com/pt/games/double'
         driver.get(url)
@@ -91,21 +91,23 @@ def main():
 
             # Analisa as 15 últimas cores disponíveis
             sequencia = [box_element.get_attribute("class").split()[-1] for box_element in box_elements[:15]]
-            
-            percentuais50 = extrair_cores(driver, 50)
-            percentuais25 = extrair_cores(driver, 25)    
 
             # Verifica se há uma sequência de 3 cores iguais
             if len(set(sequencia[:3])) == 1:
                 cor_atual = sequencia[0]
-                cor_oposta = 'black' if cor_atual == 'red' else 'red'
+                percentuais50 = extrair_cores(driver, 50)
+                percentuais25 = extrair_cores(driver, 25)
                 cor_atual_percentual_25 = int(percentuais25[['white', 'black', 'red'].index(cor_atual)])
 
                 if cor_atual_percentual_25 is not None and cor_atual_percentual_25 <= 48:
-                    alarm_sound.play()
-                    count_alarm += 1
-                    print(f"Alarme acionado. Contagem: {count_alarm}")
-                    print(f"PADRAO ENCONTRADO: Três cores iguais ({cor_atual})")
+                    current_time = time.time()
+                    # Verifica se já passou 1 minuto desde o último alarme para a mesma sequência
+                    if current_time - last_alarm_time >= 60:
+                        alarm_sound.play()
+                        count_alarm += 1
+                        print(f"Alarme acionado. Contagem: {count_alarm}")
+                        print(f"PADRAO ENCONTRADO: Três cores iguais ({cor_atual})")
+                        last_alarm_time = current_time  # Atualiza o tempo do último alarme
 
             time.sleep(1)
 
