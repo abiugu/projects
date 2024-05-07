@@ -101,9 +101,9 @@ def extrair_cores(driver, valor):
     select_element = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.XPATH, "//select[@tabindex='0']")))
     select = Select(select_element)
-    time.sleep(2)
+    time.sleep(1)
     select.select_by_value(str(valor))
-    time.sleep(2)
+    time.sleep(1)
 
     text_elements_present = WebDriverWait(driver, 10).until(
         EC.presence_of_all_elements_located((By.TAG_NAME, "text")))
@@ -177,7 +177,7 @@ def main():
                             ', '.join(map(str, percentuais500)))
 
                 # Verifica se há alguma sequência de 3 cores iguais
-                if len(set(ultimas_duas_cores)) == 1:
+                if len(set(ultimas_tres_cores)) == 1:
                     cor_atual = sequencia[0]
                     cor_oposta = None
                     if cor_atual == 'red':
@@ -209,7 +209,31 @@ def main():
                             print(f"Cor atual: {cor_atual}, Percentual: {
                                   cor_atual_percentual_25}")
 
-                        if cor_atual_percentual_25 <= 48 and len(set(ultimas_tres_cores)) == 1 and ((cor_atual_percentual_25 < cor_oposta_percentual_25 and
+                        if cor_atual_percentual_25 <= 48:
+                            
+                            current_time = datetime.datetime.now(
+                                pytz.timezone('America/Sao_Paulo'))
+                            hora_atual = current_time.strftime("%H:%M:%S")
+                            data_atual = current_time.strftime(
+                                "%d-%m-%Y")  # Ajuste para dia-mês-ano
+
+                            current_time = time.time()
+                            if current_time - last_alarm_time >= 60:
+                                alarm_sound.play()
+                                count_alarm += 1
+                                print(f"Alarme acionado. Contagem: {
+                                      count_alarm}")
+                                log_to_file(f"Alarme acionado. {hora_atual}, {
+                                            data_atual} Contagem: {count_alarm}")
+
+                                last_alarm_time = current_time
+                                alarme_acionado = True  # Define alarme_acionado como True
+
+                                # Atualiza a sequência anterior
+                                sequencia_anterior = sequencia
+                            
+                            
+                            if ((cor_atual_percentual_25 < cor_oposta_percentual_25 and
                                                                cor_atual_percentual_50 < cor_oposta_percentual_50 and
                                                                cor_atual_percentual_100 < cor_oposta_percentual_100 and
                                                                cor_atual_percentual_500 > cor_oposta_percentual_500) or
@@ -242,31 +266,9 @@ def main():
                                                                cor_atual_percentual_100 < cor_oposta_percentual_100 and
                                                                cor_atual_percentual_500 < cor_oposta_percentual_500)):
 
-                            print(
+                                print(
                                 "Três cores iguais e padrão encontrado. Solicitar alarme.")
 
-                            current_time = datetime.datetime.now(
-                                pytz.timezone('America/Sao_Paulo'))
-                            hora_atual = current_time.strftime("%H:%M:%S")
-                            data_atual = current_time.strftime(
-                                "%d-%m-%Y")  # Ajuste para dia-mês-ano
-
-                            current_time = time.time()
-                            if current_time - last_alarm_time >= 60:
-                                alarm_sound.play()
-                                count_alarm += 1
-                                print(f"Alarme acionado. Contagem: {
-                                      count_alarm}")
-                                log_to_file(f"Alarme acionado. {hora_atual}, {
-                                            data_atual} Contagem: {count_alarm}")
-
-                                last_alarm_time = current_time
-                                alarme_acionado = True  # Define alarme_acionado como True
-
-                                # Atualiza a sequência anterior
-                                sequencia_anterior = sequencia
-
-            # Lógica para verificar duas sequências após o alarme acionado
             if alarme_acionado:
                 while sequencia == sequencia_anterior:
                     recent_results_element = driver.find_element(
