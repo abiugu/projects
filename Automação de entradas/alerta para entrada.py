@@ -14,7 +14,7 @@ service = Service()
 
 # Configurando as opções do Chrome
 options = webdriver.ChromeOptions()
-#options.add_argument("--headless")  # Executar em modo headless
+# options.add_argument("--headless")  # Executar em modo headless
 options.add_argument("--start-maximized")  # Maximizar a janela do navegador
 
 # Inicializando o driver do Chrome
@@ -34,11 +34,14 @@ count_alarm = 0
 # Caminho da área de trabalho
 desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
 
+
 def verificar_stop():
     stop_path = os.path.join(desktop_path, "stop.txt")
     return os.path.exists(stop_path)
 
 # Função para extrair as porcentagens das cores
+
+
 def extrair_cores(driver, valor):
     # Abrir o site se ainda não estiver aberto
     if driver.current_url != "https://blaze1.space/pt/games/double?modal=double_history_index":
@@ -78,6 +81,8 @@ def extrair_cores(driver, valor):
 
     return percentuais
 # Função principal
+
+
 def main():
     global count_alarm
     last_alarm_time = 0
@@ -86,27 +91,87 @@ def main():
         driver.get(url)
 
         while not verificar_stop():
-            recent_results_element = driver.find_element(By.ID, "roulette-recent")
-            box_elements = recent_results_element.find_elements(By.CLASS_NAME, "sm-box")
+            recent_results_element = driver.find_element(
+                By.ID, "roulette-recent")
+            box_elements = recent_results_element.find_elements(
+                By.CLASS_NAME, "sm-box")
 
             # Analisa as 15 últimas cores disponíveis
-            sequencia = [box_element.get_attribute("class").split()[-1] for box_element in box_elements[:15]]
+            sequencia = [box_element.get_attribute(
+                "class").split()[-1] for box_element in box_elements[:15]]
 
             # Verifica se há uma sequência de 3 cores iguais
             if len(set(sequencia[:3])) == 1:
                 cor_atual = sequencia[0]
-                percentuais50 = extrair_cores(driver, 50)
+                cor_oposta = None
+                if cor_atual == 'red':
+                    cor_oposta = 'black'
+                elif cor_atual == 'black':
+                    cor_oposta = 'red'
+                percentuais100 = extrair_cores(driver, 100)
                 percentuais25 = extrair_cores(driver, 25)
-                cor_atual_percentual_25 = int(percentuais25[['white', 'black', 'red'].index(cor_atual)])
+                percentuais50 = extrair_cores(driver, 50)
+                percentuais500 = extrair_cores(driver, 500)
+                cor_atual_percentual_500 = int(
+                    percentuais500[['white', 'black', 'red'].index(cor_atual)])
+                cor_oposta_percentual_500 = int(
+                    percentuais500[['white', 'black', 'red'].index(cor_oposta)])
 
-                if cor_atual_percentual_25 is not None and cor_atual_percentual_25 <= 48:
+                cor_atual_percentual_100 = int(
+                    percentuais100[['white', 'black', 'red'].index(cor_atual)])
+                cor_oposta_percentual_100 = int(
+                    percentuais100[['white', 'black', 'red'].index(cor_oposta)])
+
+                cor_atual_percentual_50 = int(
+                    percentuais50[['white', 'black', 'red'].index(cor_atual)])
+                cor_oposta_percentual_50 = int(
+                    percentuais50[['white', 'black', 'red'].index(cor_oposta)])
+
+                cor_oposta_percentual_25 = int(
+                    percentuais25[['white', 'black', 'red'].index(cor_oposta)])
+                cor_atual_percentual_25 = int(
+                    percentuais25[['white', 'black', 'red'].index(cor_atual)])
+
+                if cor_atual_percentual_25 is not None and cor_atual_percentual_25 <= 48 and ((cor_atual_percentual_25 < cor_oposta_percentual_25 and
+                                                                                               cor_atual_percentual_50 < cor_oposta_percentual_50 and
+                                                                                               cor_atual_percentual_100 < cor_oposta_percentual_100 and
+                                                                                               cor_atual_percentual_500 > cor_oposta_percentual_500) or
+                                                                                              (cor_atual_percentual_25 < cor_oposta_percentual_25 and
+                                                                                               cor_atual_percentual_50 > cor_oposta_percentual_50 and
+                                                                                               cor_atual_percentual_100 > cor_oposta_percentual_100 and
+                                                                                               cor_atual_percentual_500 > cor_oposta_percentual_500) or
+                                                                                              (cor_atual_percentual_25 > cor_oposta_percentual_25 and
+                                                                                               cor_atual_percentual_50 < cor_oposta_percentual_50 and
+                                                                                               cor_atual_percentual_100 < cor_oposta_percentual_100 and
+                                                                                               cor_atual_percentual_500 < cor_oposta_percentual_500) or
+                                                                                              (cor_atual_percentual_25 > cor_oposta_percentual_25 and
+                                                                                               cor_atual_percentual_50 > cor_oposta_percentual_50 and
+                                                                                               cor_atual_percentual_100 > cor_oposta_percentual_100 and
+                                                                                               cor_atual_percentual_500 < cor_oposta_percentual_500) or
+                                                                                              (cor_atual_percentual_25 < cor_oposta_percentual_25 and
+                                                                                               cor_atual_percentual_50 < cor_oposta_percentual_50 and
+                                                                                               cor_atual_percentual_100 > cor_oposta_percentual_100 and
+                                                                                               cor_atual_percentual_500 > cor_oposta_percentual_500) or
+                                                                                              (cor_atual_percentual_25 < cor_oposta_percentual_25 and
+                                                                                               cor_atual_percentual_50 > cor_oposta_percentual_50 and
+                                                                                               cor_atual_percentual_100 > cor_oposta_percentual_100 and
+                                                                                               cor_atual_percentual_500 < cor_oposta_percentual_500) or
+                                                                                              (cor_atual_percentual_25 < cor_oposta_percentual_25 and
+                                                                                               cor_atual_percentual_50 < cor_oposta_percentual_50 and
+                                                                                               cor_atual_percentual_100 > cor_oposta_percentual_100 and
+                                                                                               cor_atual_percentual_500 < cor_oposta_percentual_500) or
+                                                                                              (cor_atual_percentual_25 < cor_oposta_percentual_25 and
+                                                                                               cor_atual_percentual_50 > cor_oposta_percentual_50 and
+                                                                                               cor_atual_percentual_100 < cor_oposta_percentual_100 and
+                                                                                               cor_atual_percentual_500 < cor_oposta_percentual_500)):
                     current_time = time.time()
                     # Verifica se já passou 1 minuto desde o último alarme para a mesma sequência
                     if current_time - last_alarm_time >= 60:
                         alarm_sound.play()
                         count_alarm += 1
                         print(f"Alarme acionado. Contagem: {count_alarm}")
-                        print(f"PADRAO ENCONTRADO: Três cores iguais ({cor_atual})")
+                        print(
+                            f"PADRAO ENCONTRADO: Três cores iguais ({cor_atual})")
                         last_alarm_time = current_time  # Atualiza o tempo do último alarme
 
             time.sleep(1)
@@ -118,6 +183,7 @@ def main():
         # Finalizando o driver
         if driver:
             driver.quit()
+
 
 # Chamando a função principal
 if __name__ == "__main__":
