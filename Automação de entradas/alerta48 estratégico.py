@@ -176,7 +176,40 @@ def main():
                 log_to_file("Ultimas 500 porcentagens: " +
                             ', '.join(map(str, percentuais500)))
 
-                if len(set(ultimas_duas_cores)) == 1 and cor_atual_percentual_25 <= 44 and ((cor_atual_percentual_25 < cor_oposta_percentual_25 and
+                # Verifica se há alguma sequência de 3 cores iguais
+                if len(set(ultimas_tres_cores)) == 1:
+                        cor_atual = sequencia[0]
+                        cor_oposta = None
+                        if cor_atual == 'red':
+                            cor_oposta = 'black'
+                        elif cor_atual == 'black':
+                            cor_oposta = 'red'
+                        if cor_oposta:
+                            cor_atual_percentual_500 = int(
+                                percentuais500[['white', 'black', 'red'].index(cor_atual)])
+                            cor_oposta_percentual_500 = int(
+                                percentuais500[['white', 'black', 'red'].index(cor_oposta)])
+
+                            cor_atual_percentual_100 = int(
+                                percentuais100[['white', 'black', 'red'].index(cor_atual)])
+                            cor_oposta_percentual_100 = int(
+                                percentuais100[['white', 'black', 'red'].index(cor_oposta)])
+
+                            cor_atual_percentual_50 = int(
+                                percentuais50[['white', 'black', 'red'].index(cor_atual)])
+                            cor_oposta_percentual_50 = int(
+                                percentuais50[['white', 'black', 'red'].index(cor_oposta)])
+
+                            cor_oposta_percentual_25 = int(
+                                percentuais25[['white', 'black', 'red'].index(cor_oposta)])
+                            cor_atual_percentual_25 = int(
+                                percentuais25[['white', 'black', 'red'].index(cor_atual)])
+
+                            if cor_atual_percentual_25 is not None:
+                                print(f"Cor atual: {cor_atual}, Percentual: {
+                                      cor_atual_percentual_25}")
+                                
+                            if cor_atual_percentual_25 <= 48 and ((cor_atual_percentual_25 < cor_oposta_percentual_25 and
                                                                    cor_atual_percentual_50 < cor_oposta_percentual_50 and
                                                                    cor_atual_percentual_100 < cor_oposta_percentual_100 and
                                                                    cor_atual_percentual_500 > cor_oposta_percentual_500) or
@@ -208,40 +241,6 @@ def main():
                                                                    cor_atual_percentual_50 > cor_oposta_percentual_50 and
                                                                    cor_atual_percentual_100 < cor_oposta_percentual_100 and
                                                                    cor_atual_percentual_500 < cor_oposta_percentual_500)):
-                    alarm_sound.play()
-
-                # Verifica se há alguma sequência de 3 cores iguais
-                    if len(set(ultimas_tres_cores)) == 1:
-                        cor_atual = sequencia[0]
-                        cor_oposta = None
-                        if cor_atual == 'red':
-                            cor_oposta = 'black'
-                        elif cor_atual == 'black':
-                            cor_oposta = 'red'
-                        if cor_oposta:
-                            cor_atual_percentual_500 = int(
-                                percentuais500[['white', 'black', 'red'].index(cor_atual)])
-                            cor_oposta_percentual_500 = int(
-                                percentuais500[['white', 'black', 'red'].index(cor_oposta)])
-
-                            cor_atual_percentual_100 = int(
-                                percentuais100[['white', 'black', 'red'].index(cor_atual)])
-                            cor_oposta_percentual_100 = int(
-                                percentuais100[['white', 'black', 'red'].index(cor_oposta)])
-
-                            cor_atual_percentual_50 = int(
-                                percentuais50[['white', 'black', 'red'].index(cor_atual)])
-                            cor_oposta_percentual_50 = int(
-                                percentuais50[['white', 'black', 'red'].index(cor_oposta)])
-
-                            cor_oposta_percentual_25 = int(
-                                percentuais25[['white', 'black', 'red'].index(cor_oposta)])
-                            cor_atual_percentual_25 = int(
-                                percentuais25[['white', 'black', 'red'].index(cor_atual)])
-
-                            if cor_atual_percentual_25 is not None:
-                                print(f"Cor atual: {cor_atual}, Percentual: {
-                                      cor_atual_percentual_25}")
 
                                 current_time = datetime.datetime.now(
                                     pytz.timezone('America/Sao_Paulo'))
