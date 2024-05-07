@@ -267,7 +267,7 @@ def main():
                                                                cor_atual_percentual_500 < cor_oposta_percentual_500)):
 
                                 print(
-                                "Três cores iguais e padrão encontrado. Solicitar alarme.")
+                                "Três cores iguais e padrão encontrado. Faça a entrada !!.")
 
             if alarme_acionado:
                 while sequencia == sequencia_anterior:
