@@ -91,7 +91,8 @@ def main():
 
             # Analisa as 15 últimas cores disponíveis
             sequencia = [box_element.get_attribute("class").split()[-1] for box_element in box_elements[:15]]
-
+            
+            percentuais50 = extrair_cores(driver, 50)
             percentuais25 = extrair_cores(driver, 25)    
 
             # Verifica se há uma sequência de 3 cores iguais
