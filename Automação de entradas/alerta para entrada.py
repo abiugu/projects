@@ -16,7 +16,7 @@ service = Service()
 
 # Configurando as opções do Chrome
 options = webdriver.ChromeOptions()
-# options.add_argument("--headless")  # Executar em modo headless
+options.add_argument("--headless")  # Executar em modo headless
 options.add_argument("--start-maximized")  # Maximizar a janela do navegador
 
 # Inicializando o driver do Chrome
