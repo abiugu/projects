@@ -12,34 +12,34 @@ import pygame
 
 
 # Inicializando o serviço do Chrome
-service = Service()
+servico = Service()
 
 # Configurando as opções do Chrome
-options = webdriver.ChromeOptions()
-options.add_argument("--headless")  # Executar em modo headless
-options.add_argument("--start-maximized")  # Maximizar a janela do navegador
+opcoes = webdriver.ChromeOptions()
+opcoes.add_argument("--headless")  # Executar em modo headless
+opcoes.add_argument("--start-maximized")  # Maximizar a janela do navegador
 
 # Inicializando o driver do Chrome
-driver = webdriver.Chrome(service=service, options=options)
+driver = webdriver.Chrome(service=servico, options=opcoes)
 
 pygame.mixer.init()
 
 # Carrega o arquivo de som
-sound_file_path = "MONEY ALARM.mp3"
+caminho_arquivo_som = "MONEY ALARM.mp3"
 
 # Carrega o som
-alarm_sound = pygame.mixer.Sound(sound_file_path)
+som_alarme = pygame.mixer.Sound(caminho_arquivo_som)
 
 # Variável global para contar os alarmes
-count_alarm = 0
+contagem_alarmes = 0
 
 # Caminho da área de trabalho
-desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
+caminho_area_trabalho = os.path.join(os.path.expanduser("~"), "Desktop")
 
 
-def verificar_stop():
-    stop_path = os.path.join(desktop_path, "stop.txt")
-    return os.path.exists(stop_path)
+def verificar_parada():
+    caminho_parada = os.path.join(caminho_area_trabalho, "stop.txt")
+    return os.path.exists(caminho_parada)
 
 # Função para extrair as porcentagens das cores
 
@@ -64,43 +64,45 @@ def extrair_cores(driver, valor):
         WebDriverWait(driver, 10).until(EC.presence_of_element_located(
             (By.XPATH, "//button[@class='tab active']")))
 
-    select_element = WebDriverWait(driver, 10).until(
+    select_elemento = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.XPATH, "//select[@tabindex='0']")))
-    select = Select(select_element)
+    select = Select(select_elemento)
     time.sleep(1)
     select.select_by_value(str(valor))
     time.sleep(1)
 
-    text_elements_present = WebDriverWait(driver, 10).until(
+    elementos_texto_presentes = WebDriverWait(driver, 10).until(
         EC.presence_of_all_elements_located((By.TAG_NAME, "text")))
-    text_elements_visible = WebDriverWait(driver, 10).until(
+    elementos_texto_visiveis = WebDriverWait(driver, 10).until(
         EC.visibility_of_all_elements_located((By.TAG_NAME, "text")))
 
     # Extrair apenas os valores de porcentagem e remover o símbolo '%'
-    valores = [element.get_attribute("textContent") for element in text_elements_present
-               if element.get_attribute("y") == "288" and "SofiaPro" in element.get_attribute("font-family")]
+    valores = [elemento.get_attribute("textContent") for elemento in elementos_texto_presentes
+               if elemento.get_attribute("y") == "288" and "SofiaPro" in elemento.get_attribute("font-family")]
     percentuais = [float(valor.split('%')[0]) for valor in valores]
 
     return percentuais
+
 # Função principal
 
 
-def main():
-    global count_alarm
-    last_alarm_time = 0
+def principal():
+    global contagem_alarmes
+    ultimo_tempo_alarme = datetime.datetime.now(
+        pytz.timezone('America/Sao_Paulo'))
     try:
         url = 'https://blaze-7.com/pt/games/double'
         driver.get(url)
 
-        while not verificar_stop():
-            recent_results_element = driver.find_element(
+        while not verificar_parada():
+            elemento_resultados_recentes = driver.find_element(
                 By.ID, "roulette-recent")
-            box_elements = recent_results_element.find_elements(
+            elementos_caixa = elemento_resultados_recentes.find_elements(
                 By.CLASS_NAME, "sm-box")
 
             # Analisa as 15 últimas cores disponíveis
-            sequencia = [box_element.get_attribute(
-                "class").split()[-1] for box_element in box_elements[:15]]
+            sequencia = [caixa.get_attribute(
+                "class").split()[-1] for caixa in elementos_caixa[:15]]
 
             # Verifica se há uma sequência de 3 cores iguais
             if len(set(sequencia[:3])) == 1:
@@ -166,18 +168,18 @@ def main():
                                                                                                cor_atual_percentual_50 > cor_oposta_percentual_50 and
                                                                                                cor_atual_percentual_100 < cor_oposta_percentual_100 and
                                                                                                cor_atual_percentual_500 < cor_oposta_percentual_500)):
-                    current_time = time.time()
+                    tempo_atual = datetime.datetime.now(
+                        pytz.timezone('America/Sao_Paulo'))
                     # Verifica se já passou 1 minuto desde o último alarme para a mesma sequência
-                    if current_time - last_alarm_time >= 60:
-                        current_time = datetime.datetime.now(pytz.timezone('America/Sao_Paulo'))
-                        hora_atual = current_time.strftime("%H:%M:%S")
-                        data_atual = current_time.strftime("%d-%m-%Y")  # Ajuste para dia-mês-ano
-                        alarm_sound.play()
-                        count_alarm += 1
-                        print(f"Alarme acionado. Contagem: {count_alarm}")
+                    if (tempo_atual - ultimo_tempo_alarme).total_seconds() >= 60:
+                        hora_atual = tempo_atual.strftime("%H:%M:%S")
+                        data_atual = tempo_atual.strftime("%d-%m-%Y")  
+                        som_alarme.play()
+                        contagem_alarmes += 1
+                        print(f"Alarme acionado. Contagem: {contagem_alarmes}")
                         print((f"PADRAO ENCONTRADO. {hora_atual}, {data_atual}"))
 
-                        last_alarm_time = current_time  # Atualiza o tempo do último alarme
+                        ultimo_tempo_alarme = tempo_atual  # Atualiza o tempo do último alarme
 
             time.sleep(1)
 
@@ -192,4 +194,4 @@ def main():
 
 # Chamando a função principal
 if __name__ == "__main__":
-    main()
+    principal()
