@@ -37,7 +37,9 @@ def identificar_alarmes(arquivo):
     red_count = 0   # Contador para alarmes "red"
     with open(arquivo, 'r') as file:
         info = {}
+        line_number = 0  # Variável para armazenar o número da linha
         for linha in file:
+            line_number += 1
             if "Ultimos 3 resultados:" in linha:
                 cores = linha.split(":")[1].strip().split(", ")
                 cor_atual = cores[0]
@@ -56,6 +58,7 @@ def identificar_alarmes(arquivo):
                 elif info["cor"] == "red":
                     red_count += 1
                 info["alarme"] = int(linha.split(":")[1])
+                info["linha"] = line_number  # Armazenando o número da linha
                 alarmes.append(info.copy())
                 info.clear()
     return alarmes, black_count, red_count
@@ -79,6 +82,7 @@ def imprimir_resultados(alarmes, black_count, red_count):
                 "500": {"<": 0, "=": 0, ">": 0}}
     possibilidades = {}
     with open(arquivo_saida, 'w') as file:
+        sequencia_erros = []
         for info in alarmes:
             cor_atual = info["cor"]
             cor_oposta = "red" if cor_atual == "black" else "black"
@@ -98,6 +102,25 @@ def imprimir_resultados(alarmes, black_count, red_count):
                 possibilidades[sequencia] += 1
             else:
                 possibilidades[sequencia] = 1
+            
+            # Adicionando os números de erro à sequência de erros
+            sequencia_erros.append(info["alarme"])
+            
+        # Buscando sequências de erros contínuos
+        max_sequencia_erros = 0
+        sequencia_atual = 1
+        linha_sequencia_erros = None  # Linha onde ocorre a maior sequência de erros
+        for i in range(1, len(sequencia_erros)):
+            if sequencia_erros[i] == sequencia_erros[i-1] + 1:
+                sequencia_atual += 1
+            else:
+                if sequencia_atual > max_sequencia_erros:
+                    max_sequencia_erros = sequencia_atual
+                    linha_sequencia_erros = alarmes[i-sequencia_atual]["linha"]  # Atualizando a linha
+                sequencia_atual = 1
+        if sequencia_atual > max_sequencia_erros:
+            max_sequencia_erros = sequencia_atual
+            linha_sequencia_erros = alarmes[-sequencia_atual]["linha"]  # Atualizando a linha
         
         file.write("\nContagem:\n")
         file.write("Black: {}\n".format(black_count))
@@ -115,7 +138,10 @@ def imprimir_resultados(alarmes, black_count, red_count):
             file.write("Sequencia: {}\n".format(", ".join(seq)))  # Convertendo seq para uma lista de inteiros
             file.write("Quantidade: {}\n".format(count))
             file.write("\n")
+        
+        # Escrevendo a contagem da sequência de erros contínuos
+        file.write("Maior sequencia de erros contínuos: {} (linha {})\n".format(max_sequencia_erros, linha_sequencia_erros))
 
 # Imprimir resultados
 imprimir_resultados(alarmes, black_count, red_count)
-print("Informaçoes extraidas com sucesso!")
+print("Informações extraídas com sucesso!")
