@@ -105,7 +105,7 @@ def principal():
                 "class").split()[-1] for caixa in elementos_caixa[:15]]
 
             # Verifica se há uma sequência de 3 cores iguais
-            if len(set(sequencia[:3])) == 1:
+            if len(set(sequencia[:2])) == 1:
                 cor_atual = sequencia[0]
                 cor_oposta = None
                 if cor_atual == 'red':
