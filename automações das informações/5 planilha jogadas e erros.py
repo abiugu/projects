@@ -2,8 +2,6 @@ import pandas as pd
 import os
 
 # Função para ler o conteúdo de um arquivo de texto e retornar como lista de dicionários
-
-
 def ler_arquivo(arquivo):
     with open(arquivo, 'r') as f:
         linhas = f.readlines()
@@ -20,9 +18,8 @@ def ler_arquivo(arquivo):
                              "Quantidade": quantidade})
                 i += 1
             else:
-                print(f"Erro: Formato inválido na linha {
-                      i + 1} do arquivo {arquivo}.")
-                return None
+                print(f"Erro: Formato inválido na linha {i + 1} do arquivo {arquivo}.")
+                i += 1  # Avança para a próxima linha
         elif linhas[i].startswith("Quantidade:"):
             # Se a linha for uma quantidade sem uma sequência correspondente, pule
             i += 1
@@ -30,12 +27,11 @@ def ler_arquivo(arquivo):
             # Pular linhas em branco
             i += 1
         else:
-            print(f"Erro: Formato inválido na linha {
-                  i + 1} do arquivo {arquivo}.")
-            return None
+            # Ignorar linhas que não seguem o formato esperado
+            print(f"Ignorando linha {i + 1} do arquivo {arquivo}.")
+            i += 1  # Avança para a próxima linha
 
     return lista
-
 
 # Diretório onde os arquivos serão lidos e o arquivo de saída será salvo
 desktop_path = os.path.join(os.path.expanduser('~'), 'Desktop')
@@ -83,11 +79,8 @@ df_jogadas["Percentual de Erro"] = (
 media_percentual_erro = df_jogadas["Percentual de Erro"].mean()
 
 # Função para aplicar a formatação condicional
-
-
 def formata_cor(val):
     return 'font-weight: bold;'
-
 
 # Aplicar a formatação condicional em toda a planilha
 df_jogadas_styled = df_jogadas.style
