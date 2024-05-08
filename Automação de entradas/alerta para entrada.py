@@ -170,7 +170,7 @@ def principal():
                                                                                                cor_atual_percentual_500 < cor_oposta_percentual_500)):
                     tempo_atual = datetime.datetime.now(
                         pytz.timezone('America/Sao_Paulo'))
-                    # Verifica se já passou 1 minuto desde o último alarme para a mesma sequência
+                    # Verifica se já passou 2 minutos desde o último alarme para a mesma sequência
                     if (tempo_atual - ultimo_tempo_alarme).total_seconds() >= 120:
                         hora_atual = tempo_atual.strftime("%H:%M:%S")
                         data_atual = tempo_atual.strftime("%d-%m-%Y")  
