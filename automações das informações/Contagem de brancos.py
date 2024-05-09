@@ -8,6 +8,7 @@ def identificar_alarmes(arquivo):
     white_count = 0  # Contador para alarmes "white"
     with open(arquivo, 'r') as file:
         lines = file.readlines()  # Lê todas as linhas do arquivo
+        white_marked = False  # Marcador para controlar se "white" já foi contado para o alarme atual
         for i, linha in enumerate(lines):
             if "Ultimos 3 resultados:" in linha:
                 info = {}
@@ -27,14 +28,16 @@ def identificar_alarmes(arquivo):
                 info["comp_500"] = [float(p)
                                     for p in linha.split(":")[1].split(", ")]
             elif "Alarme acionado" in linha:
-                if any("white" in line.lower() for line in lines[i+1:i+6]):  # Verifica se "white" aparece nas próximas 6 linhas
+                if not white_marked and any("white" in line.lower() for line in lines[i+1:i+7]):  # Verifica se "white" aparece nas próximas 6 linhas
                     white_count += 1
+                    white_marked = True  # Marca "white" como contado para este alarme
                 if info["cor"] == "black":
                     black_count += 1
                 elif info["cor"] == "red":
                     red_count += 1
                 info["alarme"] = int(linha.split(":")[1])
                 alarmes.append(info.copy())
+                white_marked = False  # Reinicia o marcador para o próximo alarme
 
     return alarmes, black_count, red_count, white_count
 
