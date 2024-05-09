@@ -261,7 +261,7 @@ def main():
                             acertos_gale += 1
                         else:
                             print("Erro gale !!")
-                            erros += 3
+                            erros += 4
                     log_to_file(f"Acertos direto: {acertos_direto}, Acertos gale: {acertos_gale}, Erros: {erros}")
                     print(f"Acertos direto: {acertos_direto}, Acertos gale: {acertos_gale}, Erros: {erros}")
 
