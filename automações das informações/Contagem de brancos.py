@@ -27,7 +27,7 @@ def identificar_alarmes(arquivo):
                 info["comp_500"] = [float(p)
                                     for p in linha.split(":")[1].split(", ")]
             elif "Alarme acionado" in linha:
-                if any("white" in line.lower() for line in lines[i+1:i+11]):  # Verifica se "white" aparece nas próximas 10 linhas
+                if any("white" in line.lower() for line in lines[i+1:i+6]):  # Verifica se "white" aparece nas próximas 10 linhas
                     white_count += 1
                 if info["cor"] == "black":
                     black_count += 1
