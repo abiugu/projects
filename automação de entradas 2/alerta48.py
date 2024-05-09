@@ -42,7 +42,7 @@ log_file_path = os.path.join(logs_path, "log 48 estrategico.txt")
 pygame.mixer.init()
 
 # Carrega o arquivo de som
-sound_file_path = "MONEY ALARM.mp3"
+sound_file_path = "ENTRADA CONFIRMADA.mp3"
 
 # Carrega o som
 alarm_sound = pygame.mixer.Sound(sound_file_path)
@@ -129,7 +129,8 @@ def atualizar_log_interativo(acertos_direto, acertos_gale, erros):
         entrada_secundaria = int(acertos_gale - (erros / 3))
         entrada_gale = int(acertos_direto + acertos_gale - erros)
         log_interativo_file.write(f"Entrada direta: {entrada_direta}\n")
-        log_interativo_file.write(f"Entrada secundária: {entrada_secundaria}\n")
+        log_interativo_file.write(f"Entrada secundária: {
+                                  entrada_secundaria}\n")
         log_interativo_file.write(f"Entrada gale: {entrada_gale}\n")
 
 
@@ -147,11 +148,14 @@ def main():
         driver.get(url)
 
         while not verificar_stop():
-            recent_results_element = driver.find_element(By.ID, "roulette-recent")
-            box_elements = recent_results_element.find_elements(By.CLASS_NAME, "sm-box")
+            recent_results_element = driver.find_element(
+                By.ID, "roulette-recent")
+            box_elements = recent_results_element.find_elements(
+                By.CLASS_NAME, "sm-box")
 
             # Analisa as 15 últimas cores disponíveis
-            sequencia = [box_element.get_attribute("class").split()[-1] for box_element in box_elements[:15]]
+            sequencia = [box_element.get_attribute(
+                "class").split()[-1] for box_element in box_elements[:15]]
 
             # Verifica se houve uma mudança na sequência de cores
             if 'sequencia_anterior' not in locals() or sequencia != sequencia_anterior:
@@ -164,11 +168,16 @@ def main():
                     percentuais50 = extrair_cores(driver, 50)
                     percentuais500 = extrair_cores(driver, 500)
 
-                    log_to_file("Ultimos 3 resultados: " + ', '.join(sequencia[:3]))
-                    log_to_file("Ultimas 25 porcentagens: " + ', '.join(map(str, percentuais25)))
-                    log_to_file("Ultimas 50 porcentagens: " + ', '.join(map(str, percentuais50)))
-                    log_to_file("Ultimas 100 porcentagens: " + ', '.join(map(str, percentuais100)))
-                    log_to_file("Ultimas 500 porcentagens: " + ', '.join(map(str, percentuais500)))
+                    log_to_file("Ultimos 3 resultados: " +
+                                ', '.join(sequencia[:3]))
+                    log_to_file("Ultimas 25 porcentagens: " +
+                                ', '.join(map(str, percentuais25)))
+                    log_to_file("Ultimas 50 porcentagens: " +
+                                ', '.join(map(str, percentuais50)))
+                    log_to_file("Ultimas 100 porcentagens: " +
+                                ', '.join(map(str, percentuais100)))
+                    log_to_file("Ultimas 500 porcentagens: " +
+                                ', '.join(map(str, percentuais500)))
 
                     # Verifica se há alguma sequência de 3 cores iguais
                     if len(set(sequencia[:3])) == 1:
@@ -179,19 +188,61 @@ def main():
                         elif cor_atual == 'black':
                             cor_oposta = 'red'
                         if cor_oposta:
-                            cor_atual_percentual_25 = int(percentuais25[['white', 'black', 'red'].index(cor_atual)])
+                            cor_atual_percentual_500 = int(
+                                percentuais500[['white', 'black', 'red'].index(cor_atual)])
+                            cor_oposta_percentual_500 = int(
+                                percentuais500[['white', 'black', 'red'].index(cor_oposta)])
+
+                            cor_atual_percentual_100 = int(
+                                percentuais100[['white', 'black', 'red'].index(cor_atual)])
+                            cor_oposta_percentual_100 = int(
+                                percentuais100[['white', 'black', 'red'].index(cor_oposta)])
+
+                            cor_atual_percentual_50 = int(
+                                percentuais50[['white', 'black', 'red'].index(cor_atual)])
+                            cor_oposta_percentual_50 = int(
+                                percentuais50[['white', 'black', 'red'].index(cor_oposta)])
+
+                            cor_atual_percentual_25 = int(
+                                percentuais25[['white', 'black', 'red'].index(cor_atual)])
+                            cor_oposta_percentual_25 = int(
+                                percentuais25[['white', 'black', 'red'].index(cor_oposta)])
+                            cor_atual_percentual_25 = int(
+                                percentuais25[['white', 'black', 'red'].index(cor_atual)])
 
                             if cor_atual_percentual_25 is not None:
-                                print(f"Cor atual: {cor_atual}, Percentual: {cor_atual_percentual_25}")
+                                print(f"Cor atual: {cor_atual}, Percentual: {
+                                      cor_atual_percentual_25}")
 
-                            if cor_atual_percentual_25 <= 48:
+                            if cor_atual_percentual_25 <= 48 and ((cor_atual_percentual_25 < cor_oposta_percentual_25 and
+                                                                   cor_atual_percentual_50 > cor_oposta_percentual_50 and
+                                                                   cor_atual_percentual_100 > cor_oposta_percentual_100 and
+                                                                   cor_atual_percentual_500 > cor_oposta_percentual_500) or
+                                                                  (cor_atual_percentual_25 > cor_oposta_percentual_25 and
+                                                                   cor_atual_percentual_50 < cor_oposta_percentual_50 and
+                                                                   cor_atual_percentual_100 < cor_oposta_percentual_100 and
+                                                                   cor_atual_percentual_500 < cor_oposta_percentual_500) or
+                                                                  (cor_atual_percentual_25 < cor_oposta_percentual_25 and
+                                                                   cor_atual_percentual_50 > cor_oposta_percentual_50 and
+                                                                   cor_atual_percentual_100 > cor_oposta_percentual_100 and
+                                                                   cor_atual_percentual_500 < cor_oposta_percentual_500) or
+                                                                  (cor_atual_percentual_25 < cor_oposta_percentual_25 and
+                                                                   cor_atual_percentual_50 < cor_oposta_percentual_50 and
+                                                                   cor_atual_percentual_100 > cor_oposta_percentual_100 and
+                                                                   cor_atual_percentual_500 < cor_oposta_percentual_500) or
+                                                                  (cor_atual_percentual_25 < cor_oposta_percentual_25 and
+                                                                   cor_atual_percentual_50 > cor_oposta_percentual_50 and
+                                                                   cor_atual_percentual_100 < cor_oposta_percentual_100 and
+                                                                   cor_atual_percentual_500 < cor_oposta_percentual_500)):
 
-                                current_time = datetime.datetime.now(pytz.timezone('America/Sao_Paulo'))
+                                current_time = datetime.datetime.now(
+                                    pytz.timezone('America/Sao_Paulo'))
                                 hora_atual = current_time.strftime("%H:%M:%S")
-                                data_atual = current_time.strftime("%d-%m-%Y")  # Ajuste para dia-mês-ano
+                                data_atual = current_time.strftime(
+                                    "%d-%m-%Y")  # Ajuste para dia-mês-ano
 
                                 current_time = time.time()
-                                if current_time - last_alarm_time >= 60:
+                                if current_time - last_alarm_time >= 120:
                                     alarm_sound.play()
                                     count_alarm += 1
                                     print(f"Alarme acionado.")
@@ -203,13 +254,17 @@ def main():
                                     # Atualiza a sequência anterior
                                     sequencia_anterior = sequencia
 
-                                    print((f"PADRAO ENCONTRADO. {hora_atual}, {data_atual} Contagem: {count_alarm}"))
+                                    print((f"PADRAO ENCONTRADO. {hora_atual}, {
+                                          data_atual} Contagem: {count_alarm}"))
 
             if alarme_acionado:
                 while sequencia == sequencia_anterior:
-                    recent_results_element = driver.find_element(By.ID, "roulette-recent")
-                    box_elements = recent_results_element.find_elements(By.CLASS_NAME, "sm-box")
-                    sequencia = [box_element.get_attribute("class").split()[-1] for box_element in box_elements[:15]]
+                    recent_results_element = driver.find_element(
+                        By.ID, "roulette-recent")
+                    box_elements = recent_results_element.find_elements(
+                        By.CLASS_NAME, "sm-box")
+                    sequencia = [box_element.get_attribute(
+                        "class").split()[-1] for box_element in box_elements[:15]]
 
                     time.sleep(1)
 
@@ -219,20 +274,31 @@ def main():
                     percentuais50_1 = extrair_cores(driver, 50)
                     percentuais500_1 = extrair_cores(driver, 500)
 
-                    recent_results_element = driver.find_element(By.ID, "roulette-recent")
-                    box_elements = recent_results_element.find_elements(By.CLASS_NAME, "sm-box")
-                    sequencia_1 = [box_element.get_attribute("class").split()[-1] for box_element in box_elements[:15]]
+                    recent_results_element = driver.find_element(
+                        By.ID, "roulette-recent")
+                    box_elements = recent_results_element.find_elements(
+                        By.CLASS_NAME, "sm-box")
+                    sequencia_1 = [box_element.get_attribute(
+                        "class").split()[-1] for box_element in box_elements[:15]]
                     ultimas_tres_cores_1 = sequencia_1[:3]
-                    log_to_file("Ultimos 3 resultados: " + ', '.join(ultimas_tres_cores_1))
-                    log_to_file("Ultimas 25 porcentagens: " + ', '.join(map(str, percentuais25_1)))
-                    log_to_file("Ultimas 50 porcentagens: " + ', '.join(map(str, percentuais50_1)))
-                    log_to_file("Ultimas 100 porcentagens: " + ', '.join(map(str, percentuais100_1)))
-                    log_to_file("Ultimas 500 porcentagens: " + ', '.join(map(str, percentuais500_1)))
+                    log_to_file("Ultimos 3 resultados: " +
+                                ', '.join(ultimas_tres_cores_1))
+                    log_to_file("Ultimas 25 porcentagens: " +
+                                ', '.join(map(str, percentuais25_1)))
+                    log_to_file("Ultimas 50 porcentagens: " +
+                                ', '.join(map(str, percentuais50_1)))
+                    log_to_file("Ultimas 100 porcentagens: " +
+                                ', '.join(map(str, percentuais100_1)))
+                    log_to_file("Ultimas 500 porcentagens: " +
+                                ', '.join(map(str, percentuais500_1)))
 
                     while ultimas_tres_cores_1 == sequencia_1:
-                        recent_results_element = driver.find_element(By.ID, "roulette-recent")
-                        box_elements = recent_results_element.find_elements(By.CLASS_NAME, "sm-box")
-                        sequencia = [box_element.get_attribute("class").split()[-1] for box_element in box_elements[:15]]
+                        recent_results_element = driver.find_element(
+                            By.ID, "roulette-recent")
+                        box_elements = recent_results_element.find_elements(
+                            By.CLASS_NAME, "sm-box")
+                        sequencia = [box_element.get_attribute(
+                            "class").split()[-1] for box_element in box_elements[:15]]
 
                         time.sleep(1)
                     if ultimas_tres_cores_1 != sequencia:
@@ -241,15 +307,23 @@ def main():
                         percentuais50_2 = extrair_cores(driver, 50)
                         percentuais500_2 = extrair_cores(driver, 500)
 
-                        recent_results_element = driver.find_element(By.ID, "roulette-recent")
-                        box_elements = recent_results_element.find_elements(By.CLASS_NAME, "sm-box")
-                        sequencia_2 = [box_element.get_attribute("class").split()[-1] for box_element in box_elements[:15]]
+                        recent_results_element = driver.find_element(
+                            By.ID, "roulette-recent")
+                        box_elements = recent_results_element.find_elements(
+                            By.CLASS_NAME, "sm-box")
+                        sequencia_2 = [box_element.get_attribute(
+                            "class").split()[-1] for box_element in box_elements[:15]]
                         ultimas_tres_cores_2 = sequencia_2[:3]
-                        log_to_file("Ultimos 3 resultados: " + ', '.join(ultimas_tres_cores_2))
-                        log_to_file("Ultimas 25 porcentagens: " + ', '.join(map(str, percentuais25_2)))
-                        log_to_file("Ultimas 50 porcentagens: " + ', '.join(map(str, percentuais50_2)))
-                        log_to_file("Ultimas 100 porcentagens: " + ', '.join(map(str, percentuais100_2)))
-                        log_to_file("Ultimas 500 porcentagens: " + ', '.join(map(str, percentuais500_2)))
+                        log_to_file("Ultimos 3 resultados: " +
+                                    ', '.join(ultimas_tres_cores_2))
+                        log_to_file("Ultimas 25 porcentagens: " +
+                                    ', '.join(map(str, percentuais25_2)))
+                        log_to_file("Ultimas 50 porcentagens: " +
+                                    ', '.join(map(str, percentuais50_2)))
+                        log_to_file("Ultimas 100 porcentagens: " +
+                                    ', '.join(map(str, percentuais100_2)))
+                        log_to_file("Ultimas 500 porcentagens: " +
+                                    ', '.join(map(str, percentuais500_2)))
 
                     # Verifica se as duas sequências são iguais
                     if ultimas_tres_cores_1 != sequencia_anterior[:3]:
@@ -262,8 +336,10 @@ def main():
                         else:
                             print("Erro gale !!")
                             erros += 4
-                    log_to_file(f"Acertos direto: {acertos_direto}, Acertos gale: {acertos_gale}, Erros: {erros}")
-                    print(f"Acertos direto: {acertos_direto}, Acertos gale: {acertos_gale}, Erros: {erros}")
+                    log_to_file(f"Acertos direto: {acertos_direto}, Acertos gale: {
+                                acertos_gale}, Erros: {erros}")
+                    print(f"Acertos direto: {acertos_direto}, Acertos gale: {
+                          acertos_gale}, Erros: {erros}")
 
                     # Define alarme_acionado como False após coletar a segunda sequência
                     alarme_acionado = False
