@@ -10,7 +10,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 import pygame
 
-
 # Inicializando o serviço do Chrome
 servico = Service()
 
@@ -107,34 +106,46 @@ def principal():
             # Verifica se há uma sequência de 3 cores iguais
             if len(set(sequencia[:2])) == 1:
                 cor_atual = sequencia[0]
-                cor_oposta = None
-                if cor_atual == 'red':
-                    cor_oposta = 'black'
-                elif cor_atual == 'black':
-                    cor_oposta = 'red'
+                cor_oposta = 'black' if cor_atual == 'red' else 'red'
+                
                 percentuais100 = extrair_cores(driver, 100)
                 percentuais25 = extrair_cores(driver, 25)
                 percentuais50 = extrair_cores(driver, 50)
                 percentuais500 = extrair_cores(driver, 500)
-                cor_atual_percentual_500 = int(
-                    percentuais500[['white', 'black', 'red'].index(cor_atual)])
-                cor_oposta_percentual_500 = int(
-                    percentuais500[['white', 'black', 'red'].index(cor_oposta)])
+                
+                cor_atual_percentual_500 = None
+                cor_oposta_percentual_500 = None
+                cor_atual_percentual_100 = None
+                cor_oposta_percentual_100 = None
+                cor_atual_percentual_50 = None
+                cor_oposta_percentual_50 = None
+                cor_atual_percentual_25 = None
+                cor_oposta_percentual_25 = None
 
-                cor_atual_percentual_100 = int(
-                    percentuais100[['white', 'black', 'red'].index(cor_atual)])
-                cor_oposta_percentual_100 = int(
-                    percentuais100[['white', 'black', 'red'].index(cor_oposta)])
+                # Extrair percentuais apenas se a lista não estiver vazia
+                if percentuais500:
+                    cor_atual_percentual_500 = int(
+                        percentuais500[['white', 'black', 'red'].index(cor_atual)])
+                    cor_oposta_percentual_500 = int(
+                        percentuais500[['white', 'black', 'red'].index(cor_oposta)])
+                
+                if percentuais100:
+                    cor_atual_percentual_100 = int(
+                        percentuais100[['white', 'black', 'red'].index(cor_atual)])
+                    cor_oposta_percentual_100 = int(
+                        percentuais100[['white', 'black', 'red'].index(cor_oposta)])
 
-                cor_atual_percentual_50 = int(
-                    percentuais50[['white', 'black', 'red'].index(cor_atual)])
-                cor_oposta_percentual_50 = int(
-                    percentuais50[['white', 'black', 'red'].index(cor_oposta)])
+                if percentuais50:
+                    cor_atual_percentual_50 = int(
+                        percentuais50[['white', 'black', 'red'].index(cor_atual)])
+                    cor_oposta_percentual_50 = int(
+                        percentuais50[['white', 'black', 'red'].index(cor_oposta)])
 
-                cor_oposta_percentual_25 = int(
-                    percentuais25[['white', 'black', 'red'].index(cor_oposta)])
-                cor_atual_percentual_25 = int(
-                    percentuais25[['white', 'black', 'red'].index(cor_atual)])
+                if percentuais25:
+                    cor_atual_percentual_25 = int(
+                        percentuais25[['white', 'black', 'red'].index(cor_atual)])
+                    cor_oposta_percentual_25 = int(
+                        percentuais25[['white', 'black', 'red'].index(cor_oposta)])
 
                 if cor_atual_percentual_25 is not None and cor_atual_percentual_25 <= 44 and ((cor_atual_percentual_25 < cor_oposta_percentual_25 and
                                                                                                cor_atual_percentual_50 < cor_oposta_percentual_50 and
