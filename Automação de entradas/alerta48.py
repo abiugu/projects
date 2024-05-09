@@ -42,7 +42,7 @@ log_file_path = os.path.join(logs_path, "log 48 estrategico.txt")
 pygame.mixer.init()
 
 # Carrega o arquivo de som
-sound_file_path = "MONEY ALARM.mp3"
+sound_file_path = "ENTRADA CONFIRMADA.mp3"
 
 # Carrega o som
 alarm_sound = pygame.mixer.Sound(sound_file_path)
