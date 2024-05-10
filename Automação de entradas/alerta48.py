@@ -137,7 +137,7 @@ def atualizar_log_interativo(acertos_direto, acertos_gale, erros):
 
 # Função principal
 def main():
-    global count_alarm, acertos_direto, acertos_gale, erros, last_alarm_time, alarme_acionado
+    global count_alarm, acertos_direto, acertos_gale, erros, last_alarm_time, alarme_acionado, acertos_gale, acertos_gale_branco
 
     last_alarm_time = time.time()  # Inicializa o tempo do último alarme
 
