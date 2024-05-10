@@ -271,9 +271,10 @@ def main():
                                 if current_time - last_alarm_time >= 120:
                                     alarm_sound.play()
                                     count_alarm += 1
-                                    print(f"Alarme acionado. {hora_atual}, {data_atual}, Contagem: {count_alarm}")
-                                    log_to_file(f"Alarme acionado. {hora_atual}, {data_atual}, Contagem: {count_alarm}")
-
+                                    print(f"Alarme acionado. {hora_atual}, {
+                                          data_atual}, Contagem: {count_alarm}")
+                                    log_to_file(f"Alarme acionado. {hora_atual}, {
+                                                data_atual}, Contagem: {count_alarm}")
 
                                     last_alarm_time = current_time
                                     alarme_acionado = True  # Define alarme_acionado como True
