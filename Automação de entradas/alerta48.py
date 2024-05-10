@@ -251,11 +251,15 @@ def main():
                         log_to_file("Ultimas 100 porcentagens: " + ', '.join(map(str, percentuais100_2)))
                         log_to_file("Ultimas 500 porcentagens: " + ', '.join(map(str, percentuais500_2)))
 
-                    # Verifica se as duas sequências são iguais
-                    if ultimas_tres_cores_1[:1] or ultimas_tres_cores_1[-1] == 'white':
+                    if ultimas_tres_cores_1[-1] == 'white':
                         print("Acerto branco !!")
                         acertos_branco += 1
                     
+                    if ultimas_tres_cores_2[-1] == 'white':
+                        print("Acerto gale branco !!")
+                        acertos_gale_branco += 1
+
+
                     if ultimas_tres_cores_1 != sequencia_anterior[:3]:
                         print("Acerto direto !!")
                         acertos_direto += 1
@@ -266,8 +270,8 @@ def main():
                         else:
                             print("Erro gale !!")
                             erros += 3
-                    log_to_file(f"Acertos Branco: {acertos_branco}, Acertos direto: {acertos_direto}, Acertos gale: {acertos_gale}, Erros: {erros}")
-                    print(f"Acertos Branco: {acertos_branco}, Acertos direto: {acertos_direto}, Acertos gale: {acertos_gale}, Erros: {erros}")
+                    log_to_file(f"Acertos branco / gale: {acertos_branco} / {acertos_gale_branco}, Acertos direto: {acertos_direto}, Acertos gale: {acertos_gale}, Erros: {erros}")
+                    print(f"Acertos branco / gale: {acertos_branco} / {acertos_gale_branco}, Acertos direto: {acertos_direto}, Acertos gale: {acertos_gale}, Erros: {erros}")
 
                     # Define alarme_acionado como False após coletar a segunda sequência
                     alarme_acionado = False
