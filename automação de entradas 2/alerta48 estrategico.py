@@ -28,6 +28,8 @@ acertos_gale = 0
 erros = 0
 last_alarm_time = 0  # Inicializar last_alarm_time
 alarme_acionado = False  # Inicializa o estado do alarme como falso
+acertos_branco = 0
+acertos_gale_branco = 0
 
 # Caminho da área de trabalho
 desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
