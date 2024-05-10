@@ -233,7 +233,31 @@ def main():
                                                                   (cor_atual_percentual_25 < cor_oposta_percentual_25 and
                                                                    cor_atual_percentual_50 > cor_oposta_percentual_50 and
                                                                    cor_atual_percentual_100 < cor_oposta_percentual_100 and
-                                                                   cor_atual_percentual_500 < cor_oposta_percentual_500)):
+                                                                   cor_atual_percentual_500 < cor_oposta_percentual_500) or
+                                                                  (cor_atual_percentual_25 < cor_oposta_percentual_25 and
+                                                                   cor_atual_percentual_50 < cor_oposta_percentual_50 and
+                                                                   cor_atual_percentual_100 < cor_oposta_percentual_100 and
+                                                                   cor_atual_percentual_500 < cor_oposta_percentual_500) or
+                                                                  (cor_atual_percentual_25 > cor_oposta_percentual_25 and
+                                                                   cor_atual_percentual_50 > cor_oposta_percentual_50 and
+                                                                   cor_atual_percentual_100 > cor_oposta_percentual_100 and
+                                                                   cor_atual_percentual_500 > cor_oposta_percentual_500) or
+                                                                  (cor_atual_percentual_25 < cor_oposta_percentual_25 and
+                                                                   cor_atual_percentual_50 < cor_oposta_percentual_50 and
+                                                                   cor_atual_percentual_100 < cor_oposta_percentual_100 and
+                                                                   cor_atual_percentual_500 > cor_oposta_percentual_500) or
+                                                                  (cor_atual_percentual_25 > cor_oposta_percentual_25 and
+                                                                   cor_atual_percentual_50 > cor_oposta_percentual_50 and
+                                                                   cor_atual_percentual_100 > cor_oposta_percentual_100 and
+                                                                   cor_atual_percentual_500 < cor_oposta_percentual_500) or
+                                                                  (cor_atual_percentual_25 < cor_oposta_percentual_25 and
+                                                                   cor_atual_percentual_50 < cor_oposta_percentual_50 and
+                                                                   cor_atual_percentual_100 > cor_oposta_percentual_100 and
+                                                                   cor_atual_percentual_500 > cor_oposta_percentual_500) or
+                                                                  (cor_atual_percentual_25 < cor_oposta_percentual_25 and
+                                                                   cor_atual_percentual_50 > cor_oposta_percentual_50 and
+                                                                   cor_atual_percentual_100 < cor_oposta_percentual_100 and
+                                                                   cor_atual_percentual_500 > cor_oposta_percentual_500)):
 
                                 current_time = datetime.datetime.now(
                                     pytz.timezone('America/Sao_Paulo'))
@@ -328,11 +352,10 @@ def main():
                     if ultimas_tres_cores_1[-1] == 'white':
                         print("Acerto branco !!")
                         acertos_branco += 1
-                    
+
                     if ultimas_tres_cores_2[-1] == 'white':
                         print("Acerto gale branco !!")
                         acertos_gale_branco += 1
-
 
                     if ultimas_tres_cores_1 != sequencia_anterior[:3]:
                         print("Acerto direto !!")
@@ -344,8 +367,10 @@ def main():
                         else:
                             print("Erro gale !!")
                             erros += 3
-                    log_to_file(f"Acertos branco / gale: {acertos_branco} / {acertos_gale_branco}, Acertos direto: {acertos_direto}, Acertos gale: {acertos_gale}, Erros: {erros}")
-                    print(f"Acertos branco / gale: {acertos_branco} / {acertos_gale_branco}, Acertos direto: {acertos_direto}, Acertos gale: {acertos_gale}, Erros: {erros}")
+                    log_to_file(f"Acertos branco / gale: {acertos_branco} / {acertos_gale_branco}, Acertos direto: {
+                                acertos_direto}, Acertos gale: {acertos_gale}, Erros: {erros}")
+                    print(f"Acertos branco / gale: {acertos_branco} / {acertos_gale_branco}, Acertos direto: {
+                          acertos_direto}, Acertos gale: {acertos_gale}, Erros: {erros}")
 
                     # Define alarme_acionado como False após coletar a segunda sequência
                     alarme_acionado = False
