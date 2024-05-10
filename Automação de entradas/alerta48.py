@@ -138,7 +138,6 @@ def atualizar_log_interativo(acertos_direto, acertos_gale, erros):
 # Função principal
 def main():
     global count_alarm, acertos_direto, acertos_gale, erros, last_alarm_time, alarme_acionado, acertos_gale, acertos_gale_branco
-
     last_alarm_time = time.time()  # Inicializa o tempo do último alarme
 
     # Variável para armazenar a última sequência de cores registrada no log
@@ -193,11 +192,11 @@ def main():
                                 data_atual = current_time.strftime("%d-%m-%Y")  # Ajuste para dia-mês-ano
 
                                 current_time = time.time()
-                                if current_time - last_alarm_time >= 60:
+                                if current_time - last_alarm_time >= 120:
                                     alarm_sound.play()
                                     count_alarm += 1
-                                    print(f"Alarme acionado.")
-                                    log_to_file(f"Alarme acionado.")
+                                    print(f"Alarme acionado. {hora_atual}, {data_atual}, Contagem: {count_alarm}")
+                                    log_to_file(f"Alarme acionado. {hora_atual}, {data_atual}, Contagem: {count_alarm}")
 
                                     last_alarm_time = current_time
                                     alarme_acionado = True  # Define alarme_acionado como True
@@ -205,7 +204,6 @@ def main():
                                     # Atualiza a sequência anterior
                                     sequencia_anterior = sequencia
 
-                                    print((f"PADRÃO ENCONTRADO. {hora_atual}, {data_atual} Contagem: {count_alarm}"))
 
             if alarme_acionado:
                 while sequencia == sequencia_anterior:
