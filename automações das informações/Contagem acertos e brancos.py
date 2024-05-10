@@ -37,16 +37,16 @@ def extrair_maiores_acertos_e_contar_white(arquivo_log):
                             max(acertos_gale_sequencia))
                         acertos_gale_sequencia = []
             elif 'Alarme acionado' in linha:
-             # Verifica a presença de "white" dentro das próximas sete linhas
-             limite_superior = min(i + 7, len(linhas))
-             white_encontrado = False  # Flag para indicar se "white" foi encontrado
-             for j in range(i + 1, limite_superior):
-                 if 'white' in linhas[j]:
-                     white_encontrado = True
-                     break  # Se encontrar, para a busca
-             # Incrementa o contador apenas se "white" foi encontrado
-             if white_encontrado:
-                 contador_white_apos_alarme += 1
+                # Verifica a presença de "white" dentro das próximas sete linhas
+                limite_superior = min(i + 7, len(linhas))
+                white_encontrado = False  # Flag para indicar se "white" foi encontrado
+                for j in range(i + 1, limite_superior):
+                    if 'white' in linhas[j]:
+                        white_encontrado = True
+                        break  # Se encontrar, para a busca
+                # Incrementa o contador apenas se "white" foi encontrado
+                if white_encontrado:
+                    contador_white_apos_alarme += 1
 
         # Adiciona o último valor antes de ser zerado
         if acertos_direto_sequencia:
