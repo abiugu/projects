@@ -2,7 +2,7 @@ import os
 
 # Define o caminho para o arquivo de log
 caminho_arquivo = os.path.join(os.path.expanduser(
-    '~'), 'Desktop', 'LOGS', 'log 48.txt')
+    '~'), 'Desktop', 'LOGS', 'log 48 estrategico.txt')
 
 # Função para extrair os maiores valores de acertos diretos e acertos de gale de cada sequência de buscas
 
