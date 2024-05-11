@@ -353,7 +353,7 @@ def main():
 
                     # Define alarme_acionado como False após coletar a segunda sequência
                     alarme_acionado = False
-                    time.sleep(25)
+                    time.sleep(1)
 
     except Exception as e:
         error_message = f"Erro: {e}"
