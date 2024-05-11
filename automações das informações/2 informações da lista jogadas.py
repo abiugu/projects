@@ -59,14 +59,19 @@ def identificar_alarmes(arquivo):
                 info["comp_500"] = [float(p)
                                     for p in linha.split(":")[1].split(", ")]
             elif "Alarme acionado" in linha:
-                if info["cor"] == "black":
-                    black_count += 1
-                elif info["cor"] == "red":
-                    red_count += 1
-                info["alarme"] = int(linha.split(":")[1])
-                alarmes.append(info.copy())
-                info.clear()
+                try:
+                    info["alarme"] = int(linha.split(":")[1])
+                    if info["cor"] == "black":
+                        black_count += 1
+                    elif info["cor"] == "red":
+                        red_count += 1
+                    alarmes.append(info.copy())
+                    info.clear()
+                except IndexError:
+                    # Ignorar linhas que não estão no formato esperado
+                    pass
     return alarmes, black_count, red_count
+
 
 
 # Diretório onde estão os arquivos
