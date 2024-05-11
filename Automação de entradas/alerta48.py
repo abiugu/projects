@@ -229,13 +229,13 @@ def main():
                     log_to_file("Ultimas 100 porcentagens: " + ', '.join(map(str, percentuais100_1)))
                     log_to_file("Ultimas 500 porcentagens: " + ', '.join(map(str, percentuais500_1)))
 
-                    while ultimas_tres_cores_1 == sequencia_1[:3]:
+                    while sequencia == sequencia_1:
                         recent_results_element = driver.find_element(By.ID, "roulette-recent")
                         box_elements = recent_results_element.find_elements(By.CLASS_NAME, "sm-box")
                         sequencia_1 = [box_element.get_attribute("class").split()[-1] for box_element in box_elements[:15]]
 
                         time.sleep(1)
-                    if ultimas_tres_cores_1 != sequencia_1[:3]:
+                    if sequencia != sequencia_1:
                         percentuais100_2 = extrair_cores(driver, 100)
                         percentuais25_2 = extrair_cores(driver, 25)
                         percentuais50_2 = extrair_cores(driver, 50)
@@ -254,21 +254,21 @@ def main():
                     if ultimas_tres_cores_1[0] == 'white':
                         print("Acerto branco !!")
                         acertos_branco += 1
-
-                    if ultimas_tres_cores_2[0] == 'white':
-                        print("Acerto gale branco !!")
-                        acertos_gale_branco += 1
-
-                    if ultimas_tres_cores_1 != sequencia_anterior[:3]:
-                        print("Acerto direto !!")
-                        acertos_direto += 1
                     else:
-                        if ultimas_tres_cores_1 != ultimas_tres_cores_2:
-                            print("Acerto gale !!")
-                            acertos_gale += 1
+                        if ultimas_tres_cores_1 != sequencia_anterior[:3]:
+                            print("Acerto direto !!")
+                            acertos_direto += 1
                         else:
-                            print("Erro gale !!")
-                            erros += 3
+                            if ultimas_tres_cores_2[0] == 'white':
+                                print("Acerto gale branco !!")
+                                acertos_gale_branco += 1
+                            else:
+                                if ultimas_tres_cores_1 != ultimas_tres_cores_2:
+                                    print("Acerto gale !!")
+                                    acertos_gale += 1
+                                else:
+                                    print("Erro gale !!")
+                                    erros += 3
                     log_to_file(f"Acertos branco: {acertos_branco} / gale: {acertos_gale_branco}, Acertos direto: {
                                 acertos_direto}, Acertos gale: {acertos_gale}, Erros: {erros}")
                     print(f"Acertos branco: {acertos_branco} / gale: {acertos_gale_branco}, Acertos direto: {
