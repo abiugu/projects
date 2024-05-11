@@ -229,13 +229,13 @@ def main():
                     log_to_file("Ultimas 100 porcentagens: " + ', '.join(map(str, percentuais100_1)))
                     log_to_file("Ultimas 500 porcentagens: " + ', '.join(map(str, percentuais500_1)))
 
-                    while ultimas_tres_cores_1 == sequencia_1:
+                    while ultimas_tres_cores_1 == sequencia_1[:3]:
                         recent_results_element = driver.find_element(By.ID, "roulette-recent")
                         box_elements = recent_results_element.find_elements(By.CLASS_NAME, "sm-box")
-                        sequencia = [box_element.get_attribute("class").split()[-1] for box_element in box_elements[:15]]
+                        sequencia_1 = [box_element.get_attribute("class").split()[-1] for box_element in box_elements[:15]]
 
                         time.sleep(1)
-                    if ultimas_tres_cores_1 != sequencia:
+                    if ultimas_tres_cores_1 != sequencia_1[:3]:
                         percentuais100_2 = extrair_cores(driver, 100)
                         percentuais25_2 = extrair_cores(driver, 25)
                         percentuais50_2 = extrair_cores(driver, 50)
@@ -250,6 +250,10 @@ def main():
                         log_to_file("Ultimas 50 porcentagens: " + ', '.join(map(str, percentuais50_2)))
                         log_to_file("Ultimas 100 porcentagens: " + ', '.join(map(str, percentuais100_2)))
                         log_to_file("Ultimas 500 porcentagens: " + ', '.join(map(str, percentuais500_2)))
+
+                    if ultimas_tres_cores_1[:1] == 'white':
+                        print("Acerto branco !!")
+                        acertos_branco += 1
 
                     if ultimas_tres_cores_2[:1] == 'white':
                         print("Acerto gale branco !!")
