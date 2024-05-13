@@ -273,7 +273,7 @@ def main():
                                 acertos_direto}, Acertos gale: {acertos_gale}, Erros: {erros}")
                     print(f"Acertos branco: {acertos_branco} / gale: {acertos_gale_branco}, Acertos direto: {
                           acertos_direto}, Acertos gale: {acertos_gale}, Erros: {erros}")
-                    
+                    atualizar_log_interativo(acertos_direto, acertos_gale, erros)
                     # Define alarme_acionado como False após coletar a segunda sequência
                     alarme_acionado = False
                     time.sleep(1)
