@@ -1,7 +1,7 @@
 import os
 
 # Define o caminho para o arquivo de log
-caminho_arquivo = os.path.join(os.path.expanduser('~'), 'Desktop', 'LOGS', 'log 48 estrategico.txt')
+caminho_arquivo = os.path.join(os.path.expanduser('~'), 'Desktop', 'LOGS', 'log 48.txt')
 
 # Função para extrair as linhas de erro
 def extrair_erros(arquivo_log):
@@ -35,7 +35,7 @@ def salvar_erros(arquivo_saida, linhas_erros):
 linhas_erros = extrair_erros(caminho_arquivo)
 
 # Define o caminho para o arquivo de saída
-caminho_saida = os.path.join(os.path.expanduser('~'), 'Desktop', 'LOGS', 'erros log 48 estrategico.txt')
+caminho_saida = os.path.join(os.path.expanduser('~'), 'Desktop', 'LOGS', 'erros log 48.txt')
 
 # Salva as linhas de erro em um novo arquivo
 salvar_erros(caminho_saida, linhas_erros)
