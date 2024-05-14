@@ -3,7 +3,7 @@ import os
 def extrair_texto(arquivo_entrada, caminho_saida):
     try:
         # Caminho completo para o arquivo de entrada
-        caminho_entrada = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", arquivo_entrada)
+        caminho_entrada = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS",'resultados', arquivo_entrada)
         
         with open(caminho_entrada, 'r') as entrada:
             linhas = entrada.readlines()
@@ -38,8 +38,8 @@ arquivo_entrada2 = "resultados_erros_log_60 branco.txt"
 arquivo_entrada3 = "resultados_branco_log.txt"
 
 # Caminhos dos arquivos de saída
-caminho_saida1 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "jogadas.txt")
-caminho_saida2 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "erros.txt")
+caminho_saida1 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "jogadas branco.txt")
+caminho_saida2 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "erros branco.txt")
 caminho_saida3 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "brancos.txt")
 
 # Chamar a função para extrair o texto

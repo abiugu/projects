@@ -43,8 +43,8 @@ if not os.path.exists(logs_path):
 
 # Arquivos de jogadas e erros
 arquivo_jogadas = os.path.join(logs_path, 'jogadas branco.txt')
-arquivo_erros = os.path.join(logs_path, 'erros branco.txt')
-arquivo_saida = os.path.join(logs_path, 'planilha_jogadas_erros branco.xlsx')
+arquivo_erros = os.path.join(logs_path,'erros', 'erros branco.txt')
+arquivo_saida = os.path.join(logs_path, 'planilha jogadas e erros branco.xlsx')
 
 # Verificar se os arquivos existem
 if not os.path.exists(arquivo_jogadas):
@@ -69,7 +69,7 @@ df_erros = pd.DataFrame(erros)
 
 # Adicionar a coluna de erros totais ao DataFrame de jogadas (erro * 3)
 df_jogadas["Erros Totais"] = df_jogadas["Sequência"].map(
-    lambda x: df_erros.loc[df_erros["Sequência"] == x, "Quantidade"].sum() * 3)
+    lambda x: df_erros.loc[df_erros["Sequência"] == x, "Quantidade"].sum())
 
 # Adicionar a coluna de percentual de erro ao DataFrame de jogadas
 df_jogadas["Percentual de Erro"] = (
