@@ -33,8 +33,8 @@ def extrair_texto(arquivo_entrada, caminho_saida):
         print(f"Arquivo de entrada {arquivo_entrada} não encontrado.")
 
 # Nomes dos arquivos de entrada
-arquivo_entrada1 = "resultados_log_48.txt"
-arquivo_entrada2 = "resultados_erros_log_48.txt"
+arquivo_entrada1 = "resultados_log_60 branco.txt"
+arquivo_entrada2 = "resultados_erros_log_60 branco.txt"
 arquivo_entrada3 = "resultados_branco_log.txt"
 
 # Caminhos dos arquivos de saída
