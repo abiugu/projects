@@ -38,7 +38,7 @@ desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
 logs_path = os.path.join(desktop_path, "LOGS")
 
 # Caminho completo para o arquivo de log
-log_file_path = os.path.join(logs_path, "log 48.txt")
+log_file_path = os.path.join(logs_path, "log 48 direto.txt")
 
 # Inicializa o mixer de áudio do pygame
 pygame.mixer.init()
@@ -50,7 +50,7 @@ sound_file_path = "ENTRADA CONFIRMADA.mp3"
 alarm_sound = pygame.mixer.Sound(sound_file_path)
 
 # Arquivo de log interativo
-log_interativo_path = os.path.join(logs_path, "resultados 48.txt")
+log_interativo_path = os.path.join(logs_path, "resultados 48 direto.txt")
 
 # Dicionário para armazenar valores anteriores
 valores_anteriores = {"acertos_direto": 0, "acertos_gale": 0, "erros": 0}
