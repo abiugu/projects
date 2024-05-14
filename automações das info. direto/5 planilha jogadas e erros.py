@@ -44,7 +44,7 @@ if not os.path.exists(logs_path):
 # Arquivos de jogadas e erros
 arquivo_jogadas = os.path.join(logs_path, 'jogadas direto.txt')
 arquivo_erros = os.path.join(logs_path, 'erros direto.txt')
-arquivo_saida = os.path.join(logs_path, 'planilha_jogadas_erros direto.xlsx')
+arquivo_saida = os.path.join(logs_path, 'planilha jogadas erros direto.xlsx')
 
 # Verificar se os arquivos existem
 if not os.path.exists(arquivo_jogadas):

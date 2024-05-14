@@ -35,7 +35,7 @@ def salvar_erros(arquivo_saida, linhas_erros):
 linhas_erros = extrair_erros(caminho_arquivo)
 
 # Define o caminho para o arquivo de saída
-caminho_saida = os.path.join(os.path.expanduser('~'), 'Desktop', 'LOGS', 'erros log 48 direto.txt')
+caminho_saida = os.path.join(os.path.expanduser('~'), 'Desktop', 'LOGS','erros', 'erros log 48 direto.txt')
 
 # Salva as linhas de erro em um novo arquivo
 salvar_erros(caminho_saida, linhas_erros)

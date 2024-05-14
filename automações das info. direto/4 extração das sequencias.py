@@ -3,7 +3,7 @@ import os
 def extrair_texto(arquivo_entrada, caminho_saida):
     try:
         # Caminho completo para o arquivo de entrada
-        caminho_entrada = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", arquivo_entrada)
+        caminho_entrada = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS",'resultados', arquivo_entrada)
         
         with open(caminho_entrada, 'r') as entrada:
             linhas = entrada.readlines()
