@@ -50,7 +50,7 @@ sound_file_path = "ENTRADA CONFIRMADA.mp3"
 alarm_sound = pygame.mixer.Sound(sound_file_path)
 
 # Arquivo de log interativo
-log_interativo_path = os.path.join(logs_path, "resultados 48 direto.txt")
+log_interativo_path = os.path.join(logs_path, "log interativo 48 direto.txt")
 
 # Dicionário para armazenar valores anteriores
 valores_anteriores = {"acertos_direto": 0, "acertos_gale": 0, "erros": 0}
