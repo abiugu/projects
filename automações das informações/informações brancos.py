@@ -75,7 +75,7 @@ def identificar_alarmes(arquivo):
 diretorio_logs = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS")
 
 # Arquivo a ser lido
-arquivo_entrada = os.path.join(diretorio_logs, "historico_branco_log.txt")
+arquivo_entrada = os.path.join(diretorio_logs, "branco log 48.txt")
 # Arquivo de saída
 arquivo_saida = os.path.join(diretorio_logs, "resultados_branco_log.txt")
 
@@ -88,6 +88,8 @@ def imprimir_resultados(alarmes, black_count, red_count, white_count):
                 "50": {"<": 0, "=": 0, ">": 0},
                 "100": {"<": 0, "=": 0, ">": 0},
                 "500": {"<": 0, "=": 0, ">": 0}}
+    possibilidades = {}
+
     with open(arquivo_saida, 'w') as file:
         for info in alarmes:
             cor_atual = info["cor"]
@@ -111,6 +113,11 @@ def imprimir_resultados(alarmes, black_count, red_count, white_count):
                 # Construindo a sequência de contagem
                 sequencia += comp
 
+            if sequencia in possibilidades:
+                possibilidades[sequencia] += 1
+            else:
+                possibilidades[sequencia] = 1
+
         file.write("\nContagem:\n")
         file.write("Black: {}\n".format(black_count))
         file.write("Red: {}\n".format(red_count))
@@ -124,6 +131,12 @@ def imprimir_resultados(alarmes, black_count, red_count, white_count):
                     sinal, contagem[rodadas][sinal]))
             file.write("\n")
 
+        file.write("\nPossibilidades:\n")
+        for seq, count in sorted(possibilidades.items(), key=lambda x: x[1], reverse=True):
+            # Convertendo seq para uma lista de inteiros
+            file.write("Sequencia: {}\n".format(", ".join(seq)))
+            file.write("Quantidade: {}\n".format(count))
+            file.write("\n")              
 
 # Imprimir resultados
 imprimir_resultados(alarmes, black_count, red_count, white_count)

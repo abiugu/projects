@@ -36,7 +36,7 @@ def extrair_informacoes_alarmes(arquivo_log):
 contador_alarmes, informacoes_alarmes = extrair_informacoes_alarmes(caminho_arquivo)
 
 # Salva as informações em um arquivo chamado "resultados_branco_log.txt"
-arquivo_saida = os.path.join(caminho_pasta_logs, 'resultados_branco_log.txt')
+arquivo_saida = os.path.join(caminho_pasta_logs, 'branco log 48.txt')
 with open(arquivo_saida, 'w') as saida:
     saida.write("Número de alarmes acionados com 'white' na linha abaixo: {}\n\n".format(contador_alarmes))
     for informacoes in informacoes_alarmes:
