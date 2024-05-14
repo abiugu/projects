@@ -121,18 +121,18 @@ def extrair_cores(driver, valor):
 
 
 # Função para atualizar o log interativo
-def atualizar_log_interativo(acertos_direto, acertos_gale, erros):
+def atualizar_log_interativo(acertos_direto, acertos_branco, erros):
     with open(log_interativo_path, "w") as log_interativo_file:
         log_interativo_file.write("=== LOG INTERATIVO ===\n")
         log_interativo_file.write(f"Acertos diretos: {acertos_direto}\n")
-        log_interativo_file.write(f"Acertos gale: {acertos_gale}\n")
+        log_interativo_file.write(f"Acertos branco: {acertos_branco}\n")
         log_interativo_file.write(f"Erros: {erros}\n")
-        entrada_direta = int(acertos_direto - (acertos_gale + erros / 3))
-        entrada_secundaria = int(acertos_gale - (erros / 3))
-        entrada_gale = int(acertos_direto + acertos_gale - erros)
+        entrada_direta = int(acertos_direto - erros)
+        entrada_branco = int((acertos_branco * 14) - erros)
+        entrada_dupla = int(acertos_direto  - (erros*1,33))
         log_interativo_file.write(f"Entrada direta: {entrada_direta}\n")
-        log_interativo_file.write(f"Entrada secundária: {entrada_secundaria}\n")
-        log_interativo_file.write(f"Entrada gale: {entrada_gale}\n")
+        log_interativo_file.write(f"Entrada branco: {entrada_branco}\n")
+        log_interativo_file.write(f"Entrada dupla: {entrada_dupla}\n")
 
 
 # Função principal
@@ -185,7 +185,7 @@ def main():
                             if cor_atual_percentual_25 is not None:
                                 print(f"Cor atual: {cor_atual}, Percentual: {cor_atual_percentual_25}")
 
-                            if cor_atual_percentual_25 <= 48:
+                            if cor_atual_percentual_25 <= 60:
 
                                 current_time = datetime.datetime.now(pytz.timezone('America/Sao_Paulo'))
                                 hora_atual = current_time.strftime("%H:%M:%S")
@@ -235,21 +235,6 @@ def main():
                         sequencia_1 = [box_element.get_attribute("class").split()[-1] for box_element in box_elements[:15]]
 
                         time.sleep(1)
-                    if sequencia != sequencia_1:
-                        percentuais100_2 = extrair_cores(driver, 100)
-                        percentuais25_2 = extrair_cores(driver, 25)
-                        percentuais50_2 = extrair_cores(driver, 50)
-                        percentuais500_2 = extrair_cores(driver, 500)
-
-                        recent_results_element = driver.find_element(By.ID, "roulette-recent")
-                        box_elements = recent_results_element.find_elements(By.CLASS_NAME, "sm-box")
-                        sequencia_2 = [box_element.get_attribute("class").split()[-1] for box_element in box_elements[:15]]
-                        ultimas_tres_cores_2 = sequencia_2[:3]
-                        log_to_file("Ultimos 3 resultados: " + ', '.join(ultimas_tres_cores_2))
-                        log_to_file("Ultimas 25 porcentagens: " + ', '.join(map(str, percentuais25_2)))
-                        log_to_file("Ultimas 50 porcentagens: " + ', '.join(map(str, percentuais50_2)))
-                        log_to_file("Ultimas 100 porcentagens: " + ', '.join(map(str, percentuais100_2)))
-                        log_to_file("Ultimas 500 porcentagens: " + ', '.join(map(str, percentuais500_2)))
 
                     if ultimas_tres_cores_1[0] == 'white':
                         print("Acerto branco !!")
@@ -259,21 +244,11 @@ def main():
                             print("Acerto direto !!")
                             acertos_direto += 1
                         else:
-                            if ultimas_tres_cores_2[0] == 'white':
-                                print("Acerto gale branco !!")
-                                acertos_gale_branco += 1
-                            else:
-                                if ultimas_tres_cores_1 != ultimas_tres_cores_2:
-                                    print("Acerto gale !!")
-                                    acertos_gale += 1
-                                else:
-                                    print("Erro gale !!")
-                                    erros += 3
-                    log_to_file(f"Acertos branco: {acertos_branco} / gale: {acertos_gale_branco}, Acertos direto: {
-                                acertos_direto}, Acertos gale: {acertos_gale}, Erros: {erros}")
-                    print(f"Acertos branco: {acertos_branco} / gale: {acertos_gale_branco}, Acertos direto: {
-                          acertos_direto}, Acertos gale: {acertos_gale}, Erros: {erros}")
-                    atualizar_log_interativo(acertos_direto, acertos_gale, erros)
+                            print("Erro !!")
+                            erros += 1
+                    log_to_file(f"Acertos branco: {acertos_branco}, Acertos direto: {acertos_direto}, Erros: {erros}")
+                    print(f"Acertos branco: {acertos_branco}, Acertos direto: {acertos_direto}, Erros: {erros}")
+                    atualizar_log_interativo(acertos_direto, acertos_branco, erros)
                     # Define alarme_acionado como False após coletar a segunda sequência
                     alarme_acionado = False
                     time.sleep(1)
