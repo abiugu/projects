@@ -55,17 +55,6 @@ log_interativo_path = os.path.join(logs_path, "resultados 48 estrategico.txt")
 # Dicionário para armazenar valores anteriores
 valores_anteriores = {"acertos_direto": 0, "acertos_gale": 0, "erros": 0}
 
-# Lendo os valores anteriores do log interativo apenas uma vez no início do programa
-if os.path.exists(log_interativo_path):
-    with open(log_interativo_path, "r") as log_interativo_file:
-        for line in log_interativo_file:
-            if line.startswith("Acertos diretos:"):
-                valores_anteriores["acertos_direto"] = int(line.split(":")[1])
-            elif line.startswith("Acertos gale:"):
-                valores_anteriores["acertos_gale"] = int(line.split(":")[1])
-            elif line.startswith("Erros:"):
-                valores_anteriores["erros"] = int(line.split(":")[1])
-
 
 # Função para registrar mensagens no arquivo de log
 def log_to_file(message):
@@ -127,9 +116,9 @@ def atualizar_log_interativo(acertos_direto, acertos_gale, erros):
         log_interativo_file.write(f"Acertos diretos: {acertos_direto}\n")
         log_interativo_file.write(f"Acertos gale: {acertos_gale}\n")
         log_interativo_file.write(f"Erros: {erros}\n")
-        entrada_direta = int(acertos_direto - (acertos_gale + erros / 3))
-        entrada_secundaria = int(acertos_gale - (erros / 3))
-        entrada_gale = int(acertos_direto + acertos_gale - erros)
+        entrada_direta = int((acertos_direto * 14) - ((acertos_gale + erros)))
+        entrada_secundaria = int((acertos_gale * 14) - erros)
+        entrada_gale = int((acertos_direto * 14 + acertos_gale * 13) - (erros * 2))
         log_interativo_file.write(f"Entrada direta: {entrada_direta}\n")
         log_interativo_file.write(f"Entrada secundária: {
                                   entrada_secundaria}\n")
@@ -216,49 +205,17 @@ def main():
                                 print(f"Cor atual: {cor_atual}, Percentual: {
                                       cor_atual_percentual_25}")
 
-                            if cor_atual_percentual_25 <= 48 and ((cor_atual_percentual_25 < cor_oposta_percentual_25 and
-                                                                   cor_atual_percentual_50 > cor_oposta_percentual_50 and
-                                                                   cor_atual_percentual_100 > cor_oposta_percentual_100 and
-                                                                   cor_atual_percentual_500 > cor_oposta_percentual_500) or
-                                                                  (cor_atual_percentual_25 > cor_oposta_percentual_25 and
-                                                                   cor_atual_percentual_50 < cor_oposta_percentual_50 and
-                                                                   cor_atual_percentual_100 < cor_oposta_percentual_100 and
-                                                                   cor_atual_percentual_500 < cor_oposta_percentual_500) or
-                                                                  (cor_atual_percentual_25 < cor_oposta_percentual_25 and
-                                                                   cor_atual_percentual_50 > cor_oposta_percentual_50 and
-                                                                   cor_atual_percentual_100 > cor_oposta_percentual_100 and
-                                                                   cor_atual_percentual_500 < cor_oposta_percentual_500) or
-                                                                  (cor_atual_percentual_25 < cor_oposta_percentual_25 and
-                                                                   cor_atual_percentual_50 < cor_oposta_percentual_50 and
-                                                                   cor_atual_percentual_100 > cor_oposta_percentual_100 and
-                                                                   cor_atual_percentual_500 < cor_oposta_percentual_500) or
-                                                                  (cor_atual_percentual_25 < cor_oposta_percentual_25 and
-                                                                   cor_atual_percentual_50 > cor_oposta_percentual_50 and
-                                                                   cor_atual_percentual_100 < cor_oposta_percentual_100 and
-                                                                   cor_atual_percentual_500 < cor_oposta_percentual_500) or
-                                                                  (cor_atual_percentual_25 < cor_oposta_percentual_25 and
-                                                                   cor_atual_percentual_50 < cor_oposta_percentual_50 and
-                                                                   cor_atual_percentual_100 < cor_oposta_percentual_100 and
-                                                                   cor_atual_percentual_500 < cor_oposta_percentual_500) or
-                                                                  (cor_atual_percentual_25 > cor_oposta_percentual_25 and
-                                                                   cor_atual_percentual_50 > cor_oposta_percentual_50 and
-                                                                   cor_atual_percentual_100 > cor_oposta_percentual_100 and
-                                                                   cor_atual_percentual_500 > cor_oposta_percentual_500) or
-                                                                  (cor_atual_percentual_25 < cor_oposta_percentual_25 and
+                            if cor_atual_percentual_25 <= 60 and ((cor_atual_percentual_25 > cor_oposta_percentual_25 and
                                                                    cor_atual_percentual_50 < cor_oposta_percentual_50 and
                                                                    cor_atual_percentual_100 < cor_oposta_percentual_100 and
                                                                    cor_atual_percentual_500 > cor_oposta_percentual_500) or
-                                                                  (cor_atual_percentual_25 > cor_oposta_percentual_25 and
-                                                                   cor_atual_percentual_50 > cor_oposta_percentual_50 and
-                                                                   cor_atual_percentual_100 > cor_oposta_percentual_100 and
-                                                                   cor_atual_percentual_500 < cor_oposta_percentual_500) or
                                                                   (cor_atual_percentual_25 < cor_oposta_percentual_25 and
-                                                                   cor_atual_percentual_50 < cor_oposta_percentual_50 and
-                                                                   cor_atual_percentual_100 > cor_oposta_percentual_100 and
+                                                                   cor_atual_percentual_50 == cor_oposta_percentual_50 and
+                                                                   cor_atual_percentual_100 < cor_oposta_percentual_100 and
                                                                    cor_atual_percentual_500 > cor_oposta_percentual_500) or
                                                                   (cor_atual_percentual_25 < cor_oposta_percentual_25 and
                                                                    cor_atual_percentual_50 > cor_oposta_percentual_50 and
-                                                                   cor_atual_percentual_100 < cor_oposta_percentual_100 and
+                                                                   cor_atual_percentual_100 == cor_oposta_percentual_100 and
                                                                    cor_atual_percentual_500 > cor_oposta_percentual_500)):
 
                                 current_time = datetime.datetime.now(
@@ -332,25 +289,16 @@ def main():
                         print("Acerto branco !!")
                         acertos_branco += 1
                     else:
-                        if ultimas_tres_cores_1 != sequencia_anterior[:3]:
-                            print("Acerto direto !!")
-                            acertos_direto += 1
+                        if ultimas_tres_cores_2[0] == 'white':
+                            print("Acerto gale branco !!")
+                            acertos_gale_branco += 1
+
                         else:
-                            if ultimas_tres_cores_2[0] == 'white':
-                                print("Acerto gale branco !!")
-                                acertos_gale_branco += 1
-                            else:
-                                if ultimas_tres_cores_1 != ultimas_tres_cores_2:
-                                    print("Acerto gale !!")
-                                    acertos_gale += 1
-                                else:
-                                    print("Erro gale !!")
-                                    erros += 3
-                    log_to_file(f"Acertos branco: {acertos_branco} / gale: {acertos_gale_branco}, Acertos direto: {
-                                acertos_direto}, Acertos gale: {acertos_gale}, Erros: {erros}")
-                    print(f"Acertos branco: {acertos_branco} / gale: {acertos_gale_branco}, Acertos direto: {
-                          acertos_direto}, Acertos gale: {acertos_gale}, Erros: {erros}")
-                    atualizar_log_interativo(acertos_direto, acertos_gale, erros)
+                            print("Erro gale !!")
+                            erros += 1
+                    log_to_file(f"Acertos branco: {acertos_branco}, Acertos gale branco: {acertos_gale_branco}, Erros: {erros}")
+                    print(f"Acertos branco: {acertos_branco}, Acertos gale branco: {acertos_gale_branco}, Erros: {erros}")
+                    atualizar_log_interativo(acertos_branco, acertos_gale_branco, erros)
                     # Define alarme_acionado como False após coletar a segunda sequência
                     alarme_acionado = False
                     time.sleep(1)

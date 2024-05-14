@@ -55,17 +55,6 @@ log_interativo_path = os.path.join(logs_path, "resultados 48.txt")
 # Dicionário para armazenar valores anteriores
 valores_anteriores = {"acertos_direto": 0, "acertos_gale": 0, "erros": 0}
 
-# Lendo os valores anteriores do log interativo apenas uma vez no início do programa
-if os.path.exists(log_interativo_path):
-    with open(log_interativo_path, "r") as log_interativo_file:
-        for line in log_interativo_file:
-            if line.startswith("Acertos diretos:"):
-                valores_anteriores["acertos_direto"] = int(line.split(":")[1])
-            elif line.startswith("Acertos gale:"):
-                valores_anteriores["acertos_gale"] = int(line.split(":")[1])
-            elif line.startswith("Erros:"):
-                valores_anteriores["erros"] = int(line.split(":")[1])
-
 
 # Função para registrar mensagens no arquivo de log
 def log_to_file(message):
@@ -185,7 +174,7 @@ def main():
                             if cor_atual_percentual_25 is not None:
                                 print(f"Cor atual: {cor_atual}, Percentual: {cor_atual_percentual_25}")
 
-                            if cor_atual_percentual_25 <= 60:
+                            if cor_atual_percentual_25 <= 48:
 
                                 current_time = datetime.datetime.now(pytz.timezone('America/Sao_Paulo'))
                                 hora_atual = current_time.strftime("%H:%M:%S")
