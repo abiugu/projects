@@ -40,9 +40,7 @@ arquivo_entrada3 = "resultados_branco_log.txt"
 # Caminhos dos arquivos de saída
 caminho_saida1 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "jogadas direto.txt")
 caminho_saida2 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS",'erros', "erros direto.txt")
-caminho_saida3 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "brancos direto.txt")
 
 # Chamar a função para extrair o texto
 extrair_texto(arquivo_entrada1, caminho_saida1)
 extrair_texto(arquivo_entrada2, caminho_saida2)
-extrair_texto(arquivo_entrada3, caminho_saida3)
