@@ -26,23 +26,33 @@ def encontrar_acertos(jogadas, erros, tamanho_bloco=9):  # Tamanho do bloco padr
                 break
         if not bloco_encontrado:
             acertos.extend(bloco_jogadas)
+        else:
+            for k in range(tamanho_bloco):
+                # Removendo cada linha de erro que foi encontrada nas jogadas
+                erros.remove(bloco_jogadas[k])
         i += tamanho_bloco
+    return acertos
+
+def extrair_jogadas_acertos(caminho_jogadas, caminho_erros):
+    # Ler os arquivos de jogadas e erros
+    jogadas = ler_arquivo(caminho_jogadas)
+    erros = ler_arquivo(caminho_erros)
+
+    # Encontrar os acertos
+    acertos = encontrar_acertos(jogadas, erros)
+
     return acertos
 
 # Caminhos dos arquivos
 pasta_desktop = os.path.join(os.path.expanduser("~"), "Desktop")
 caminho_jogadas = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "resultados", "resultados_log_48 direto.txt")
 caminho_erros = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "resultados", "resultados_erros_log_48 direto.txt")
-caminho_acertos = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "resultados", "resultados_acertos direto.txt")
+caminho_acertos = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "resultados", "resultados_acertos 48 direto.txt")
 
-# Ler os arquivos de jogadas e erros
-jogadas = ler_arquivo(caminho_jogadas)
-erros = ler_arquivo(caminho_erros)
-
-# Encontrar os acertos
-acertos = encontrar_acertos(jogadas, erros)
+# Extrair jogadas que são acertos
+acertos = extrair_jogadas_acertos(caminho_jogadas, caminho_erros)
 
 # Escrever os acertos em um novo arquivo
 escrever_arquivo(caminho_acertos, acertos)
 
-print("Acertos foram salvos em 'resultados_acertos direto.txt'.")
+print("Acertos foram salvos em 'resultados_acertos 48 direto.txt'.")

@@ -69,11 +69,11 @@ df_acertos = pd.DataFrame(acertos)
 
 # Adicionar a coluna de erros totais ao DataFrame de jogadas (erro * 3)
 df_jogadas["Erros Totais"] = df_jogadas["Sequência"].map(
-    lambda x: df_erros.loc[df_erros["Sequência"] == x, "Total de Jogadas"].sum())
+    lambda x: df_erros.loc[df_erros["Sequência"] == x, "Total de Jogadas"].sum() if x in df_erros["Sequência"].values else 0)
 
 # Adicionar a coluna de acertos totais ao DataFrame de jogadas
 df_jogadas["Acertos Totais"] = df_jogadas["Sequência"].map(
-    lambda x: df_acertos.loc[df_acertos["Sequência"] == x, "Total de Jogadas"].sum())
+    lambda x: df_acertos.loc[df_acertos["Sequência"] == x, "Total de Jogadas"].sum() if x in df_acertos["Sequência"].values else 0)
 
 # Adicionar a coluna de percentual de acerto ao DataFrame de jogadas
 df_jogadas["Percentual de Acerto"] = df_jogadas["Acertos Totais"] / df_jogadas["Total de Jogadas"]
