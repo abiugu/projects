@@ -37,4 +37,4 @@ acertos = encontrar_acertos(jogadas, erros)
 # Escrever os acertos em um novo arquivo
 escrever_arquivo(caminho_acertos, acertos)
 
-print("Acertos foram salvos em 'acertos.txt'.")
+print("Acertos foram salvos em 'acertos direto.txt'.")
