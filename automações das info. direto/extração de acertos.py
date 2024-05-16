@@ -1,9 +1,14 @@
 import os
 
 def ler_arquivo(caminho):
-    with open(caminho, 'r', encoding='utf-8') as arquivo:
-        linhas = arquivo.readlines()
+    try:
+        with open(caminho, 'r', encoding='utf-8') as arquivo:
+            linhas = arquivo.readlines()
+    except UnicodeDecodeError:
+        with open(caminho, 'r', encoding='latin-1') as arquivo:  # Tenta usar latin-1 se utf-8 falhar
+            linhas = arquivo.readlines()
     return linhas
+
 
 def escrever_arquivo(caminho, linhas):
     with open(caminho, 'w', encoding='utf-8') as arquivo:
