@@ -1,7 +1,6 @@
-import pandas as pd
 import os
+import pandas as pd
 
-# Função para ler o conteúdo de um arquivo de texto e retornar como lista de dicionários
 def ler_arquivo(arquivo):
     with open(arquivo, 'r') as f:
         linhas = f.readlines()
@@ -15,21 +14,18 @@ def ler_arquivo(arquivo):
             if i < len(linhas) and linhas[i].startswith("Quantidade:"):
                 quantidade = int(linhas[i].split(": ")[1].strip())
                 lista.append({"Sequência": f'\'{sequencia}',
-                             "Quantidade": quantidade})
+                             "Total de Jogadas": quantidade})
                 i += 1
             else:
                 print(f"Erro: Formato inválido na linha {i + 1} do arquivo {arquivo}.")
-                i += 1  # Avança para a próxima linha
+                i += 1
         elif linhas[i].startswith("Quantidade:"):
-            # Se a linha for uma quantidade sem uma sequência correspondente, pule
             i += 1
         elif linhas[i].strip() == "":
-            # Pular linhas em branco
             i += 1
         else:
-            # Ignorar linhas que não seguem o formato esperado
             print(f"Ignorando linha {i + 1} do arquivo {arquivo}.")
-            i += 1  # Avança para a próxima linha
+            i += 1
 
     return lista
 
@@ -41,18 +37,17 @@ logs_path = os.path.join(desktop_path, 'LOGS')
 if not os.path.exists(logs_path):
     os.makedirs(logs_path)
 
-# Arquivos de jogadas e erros
-arquivo_jogadas = os.path.join(logs_path, 'jogadas branco.txt')
-arquivo_erros = os.path.join(logs_path,'erros', 'erros branco.txt')
-arquivo_saida = os.path.join(logs_path, 'planilha jogadas erros branco.xlsx')
+# Arquivos de jogadas, erros e acertos
+arquivo_jogadas = os.path.join(logs_path, "sequencias", 'sequencias 60 branco.txt')
+arquivo_erros = os.path.join(logs_path, "sequencias", 'sequencias erros 60 branco.txt')
+arquivo_acertos = os.path.join(logs_path, "sequencias", 'sequencias acertos 60 branco.txt')
+arquivo_saida = os.path.join(logs_path, 'planilha acertos 60 branco.xlsx')
 
 # Verificar se os arquivos existem
-if not os.path.exists(arquivo_jogadas):
-    print(f"Erro: O arquivo {arquivo_jogadas} não existe.")
-    exit()
-if not os.path.exists(arquivo_erros):
-    print(f"Erro: O arquivo {arquivo_erros} não existe.")
-    exit()
+for arquivo in [arquivo_jogadas, arquivo_erros, arquivo_acertos]:
+    if not os.path.exists(arquivo):
+        print(f"Erro: O arquivo {arquivo} não existe.")
+        exit()
 
 # Ler os dados dos arquivos
 jogadas = ler_arquivo(arquivo_jogadas)
@@ -63,41 +58,30 @@ erros = ler_arquivo(arquivo_erros)
 if erros is None:
     exit()
 
+acertos = ler_arquivo(arquivo_acertos)
+if acertos is None:
+    exit()
+
 # Criar DataFrames
 df_jogadas = pd.DataFrame(jogadas)
 df_erros = pd.DataFrame(erros)
+df_acertos = pd.DataFrame(acertos)
 
 # Adicionar a coluna de erros totais ao DataFrame de jogadas (erro * 3)
 df_jogadas["Erros Totais"] = df_jogadas["Sequência"].map(
-    lambda x: df_erros.loc[df_erros["Sequência"] == x, "Quantidade"].sum())
+    lambda x: df_erros.loc[df_erros["Sequência"] == x, "Total de Jogadas"].sum())
 
-# Adicionar a coluna de percentual de erro ao DataFrame de jogadas
-df_jogadas["Percentual de Erro"] = (
-    df_jogadas["Erros Totais"] / df_jogadas["Quantidade"])
+# Adicionar a coluna de acertos totais ao DataFrame de jogadas
+df_jogadas["Acertos Totais"] = df_jogadas["Sequência"].map(
+    lambda x: df_acertos.loc[df_acertos["Sequência"] == x, "Total de Jogadas"].sum())
 
-# Calcular a média do percentual de erro
-media_percentual_erro = df_jogadas["Percentual de Erro"].mean()
+# Adicionar a coluna de percentual de acerto ao DataFrame de jogadas
+df_jogadas["Percentual de Acerto"] = df_jogadas["Acertos Totais"] / df_jogadas["Total de Jogadas"]
 
-# Função para aplicar a formatação condicional
-def formata_cor(val):
-    return 'font-weight: bold;'
+# Selecionar apenas as colunas necessárias
+df_jogadas = df_jogadas[["Sequência", "Total de Jogadas", "Erros Totais", "Acertos Totais", "Percentual de Acerto"]]
 
-# Aplicar a formatação condicional em toda a planilha
-df_jogadas_styled = df_jogadas.style
-
-# Aplicar estilo negrito para todo o DataFrame
-df_jogadas_styled = df_jogadas_styled.set_properties(**{'font-weight': 'bold'})
-
-# Aplicar estilo de centralização e largura das colunas em toda a tabela
-df_jogadas_styled = df_jogadas_styled.set_table_styles([
-    {'selector': 'td, th', 'props': [
-        ('text-align', 'center'), ('border', '1px solid black'), ('width', '17px')]},
-    {'selector': 'th', 'props': [('background-color', 'lightgrey')]},
-    {'selector': 'table', 'props': [
-        ('width', '100%'), ('border-collapse', 'collapse')]},
-])
-
-# Salvar o DataFrame estilizado em um arquivo Excel
-df_jogadas_styled.to_excel(arquivo_saida, index=False)
+# Salvar o DataFrame em um arquivo Excel
+df_jogadas.to_excel(arquivo_saida, index=False)
 
 print(f"Arquivo salvo com sucesso em: {arquivo_saida}")
