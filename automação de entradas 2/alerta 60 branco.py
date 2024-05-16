@@ -205,7 +205,7 @@ def main():
                                 print(f"Cor atual: {cor_atual}, Percentual: {
                                       cor_atual_percentual_25}")
 
-                            if cor_atual_percentual_25 >= 52:
+                            if cor_atual_percentual_25 <= 60:
 
                                 current_time = datetime.datetime.now(
                                     pytz.timezone('America/Sao_Paulo'))
