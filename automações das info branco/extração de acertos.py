@@ -33,7 +33,7 @@ def encontrar_acertos(jogadas, erros, tamanho_bloco=9):  # Tamanho do bloco padr
 pasta_desktop = os.path.join(os.path.expanduser("~"), "Desktop")
 caminho_jogadas = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "resultados", "resultados_log_60 branco.txt")
 caminho_erros = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "resultados", "resultados_erros_log_60 branco.txt")
-caminho_acertos = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "resultados", "acertos branco.txt")
+caminho_acertos = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "resultados", "resultados_acertos branco.txt")
 
 # Ler os arquivos de jogadas e erros
 jogadas = ler_arquivo(caminho_jogadas)
@@ -45,4 +45,4 @@ acertos = encontrar_acertos(jogadas, erros)
 # Escrever os acertos em um novo arquivo
 escrever_arquivo(caminho_acertos, acertos)
 
-print("Acertos foram salvos em 'acertos branco.txt'.")
+print("Acertos foram salvos em 'resultados_acertos branco.txt'.")
