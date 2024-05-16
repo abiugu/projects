@@ -35,11 +35,14 @@ def extrair_texto(arquivo_entrada, caminho_saida):
 # Nomes dos arquivos de entrada
 arquivo_entrada1 = "resultados_log_48 direto.txt"
 arquivo_entrada2 = "resultados_erros_log_48 direto.txt"
+arquivo_entrada3 = "resultados_acertos direto.txt"
 
 # Caminhos dos arquivos de saída
-caminho_saida1 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "jogadas direto.txt")
-caminho_saida2 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS",'erros', "erros direto.txt")
+caminho_saida1 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "sequencias", "sequencias 48 direto.txt")
+caminho_saida2 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "sequencias", "sequencias erros 48 direto.txt")
+caminho_saida3 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "sequencias", "sequencias acertos 48 direto.txt")
 
 # Chamar a função para extrair o texto
 extrair_texto(arquivo_entrada1, caminho_saida1)
 extrair_texto(arquivo_entrada2, caminho_saida2)
+extrair_texto(arquivo_entrada3, caminho_saida3)
