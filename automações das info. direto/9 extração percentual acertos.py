@@ -34,10 +34,10 @@ def extrair_resultados_porcentagens(arquivo_entrada, arquivo_saida):
                 out_file.write(f"{porcentagem}: {quantidade}\n")
 
 # Caminhos dos arquivos de entrada e saída
-caminho_entrada = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "acertos", "acertos log 60 branco.txt")
-caminho_saida = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "percentual das cores 60 branco.txt")
+caminho_entrada = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "acertos", "acertos log 48 direto.txt")
+caminho_saida = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS","percentual", "percentual dos acertos 48 direto.txt")
 
 # Extrair resultados e porcentagens e salvar em um arquivo
 extrair_resultados_porcentagens(caminho_entrada, caminho_saida)
 
-print("Informações salvas em 'percentual das cores 60 branco.txt'.")
+print("Informações salvas em 'percentual dos acertos 48 direto.txt'.")
