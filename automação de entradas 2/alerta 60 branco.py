@@ -110,7 +110,7 @@ def extrair_cores(driver, valor):
 
 
 # Função para atualizar o log interativo
-def atualizar_log_interativo(acertos_direto, acertos_gale, erros):
+def atualizar_log_interativo(acertos_direto, acertos_gale,acertos_duplo, erros):
     with open(log_interativo_path, "w") as log_interativo_file:
         log_interativo_file.write("=== LOG INTERATIVO ===\n")
         log_interativo_file.write(f"Acertos diretos: {acertos_direto}\n")
@@ -118,7 +118,7 @@ def atualizar_log_interativo(acertos_direto, acertos_gale, erros):
         log_interativo_file.write(f"Erros: {erros}\n")
         entrada_direta = int((acertos_direto * 13) -  erros)
         entrada_secundaria = int((acertos_gale * 13) - erros)
-        entrada_gale = int((acertos_direto * 13 + acertos_gale * 13) - (erros * 2))
+        entrada_gale = int((acertos_duplo) - (erros * 2))
         log_interativo_file.write(f"Entrada direta: {entrada_direta}\n")
         log_interativo_file.write(f"Entrada secundária: {
                                   entrada_secundaria}\n")
@@ -281,7 +281,7 @@ def main():
                         if ultimas_tres_cores_2[0] == 'white':
                             print("Acerto gale branco !!")
                             acertos_gale_branco += 1
-
+                        
                         else:
                             print("Erro gale !!")
                             erros += 1
