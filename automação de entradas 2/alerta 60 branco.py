@@ -30,6 +30,7 @@ last_alarm_time = 0  # Inicializar last_alarm_time
 alarme_acionado = False  # Inicializa o estado do alarme como falso
 acertos_branco = 0
 acertos_gale_branco = 0
+acertos_duplo = 0
 
 # Caminho da área de trabalho
 desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
@@ -118,7 +119,7 @@ def atualizar_log_interativo(acertos_direto, acertos_gale,acertos_duplo, erros):
         log_interativo_file.write(f"Erros: {erros}\n")
         entrada_direta = int((acertos_direto * 13) -  erros)
         entrada_secundaria = int((acertos_gale * 13) - erros)
-        entrada_gale = int((acertos_duplo*13) - (erros * 2))
+        entrada_gale = int((acertos_duplo * 13) - (erros * 2))
         log_interativo_file.write(f"Entrada direta: {entrada_direta}\n")
         log_interativo_file.write(f"Entrada secundária: {
                                   entrada_secundaria}\n")
@@ -290,7 +291,7 @@ def main():
                         erros += 1
                     log_to_file(f"Acertos branco: {acertos_branco}, Acertos gale branco: {acertos_gale_branco}, Erros: {erros}")
                     print(f"Acertos branco: {acertos_branco}, Acertos gale branco: {acertos_gale_branco}, Erros: {erros}")
-                    atualizar_log_interativo(acertos_branco, acertos_gale_branco, erros)
+                    atualizar_log_interativo(acertos_branco, acertos_gale_branco,acertos_duplo, erros)
                     # Define alarme_acionado como False após coletar a segunda sequência
                     alarme_acionado = False
                     time.sleep(1)
