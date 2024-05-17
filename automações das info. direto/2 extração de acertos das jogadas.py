@@ -20,7 +20,7 @@ def extrair_acertos(arquivo_log):
                 # Verifica se algum dos valores mudou e não é zero
                 if (valor_acertos_brancos != acertos_brancos_anteriores or valor_acertos_direto != acertos_direto_anteriores) and (valor_acertos_brancos != '0' or valor_acertos_direto != '0'):
                     # Adiciona as 16 linhas anteriores à linha de acertos
-                    linhas_acertos.extend(linhas[max(0, i-16):i+1])  # Se i < 16, começa da linha 0
+                    linhas_acertos.extend(linhas[max(0, i-11):i+1])  # Se i < 16, começa da linha 0
                     # Adiciona uma linha vazia para separar os acertos
                     linhas_acertos.append('\n')
                     # Atualiza os valores de acertos anteriores
