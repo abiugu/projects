@@ -119,7 +119,7 @@ def atualizar_log_interativo(acertos_direto, acertos_branco,acertos_duplo, erros
         log_interativo_file.write(f"Erros: {erros}\n")
         entrada_direta = int(acertos_direto - erros)
         entrada_branco = int((acertos_branco * 13) - erros)
-        entrada_dupla = int(acertos_duplo - (erros * 1.33))
+        entrada_dupla = int(acertos_direto + acertos_branco - (erros * 1.33))
         log_interativo_file.write(f"Entrada direta: {entrada_direta}\n")
         log_interativo_file.write(f"Entrada branco: {entrada_branco}\n")
         log_interativo_file.write(f"Entrada dupla: {entrada_dupla}\n")
