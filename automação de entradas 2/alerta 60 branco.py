@@ -30,7 +30,6 @@ last_alarm_time = 0  # Inicializar last_alarm_time
 alarme_acionado = False  # Inicializa o estado do alarme como falso
 acertos_branco = 0
 acertos_gale_branco = 0
-acertos_duplo = 0
 
 # Caminho da área de trabalho
 desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
@@ -56,25 +55,21 @@ log_interativo_path = os.path.join(logs_path, "log interativo 60 branco.txt")
 # Dicionário para armazenar valores anteriores
 valores_anteriores = {"acertos_direto": 0, "acertos_gale": 0, "erros": 0}
 
-
 # Função para registrar mensagens no arquivo de log
 def log_to_file(message):
     with open(log_file_path, "a") as log_file:
         log_file.write(message + "\n")
-
 
 # Função para verificar se o arquivo stop.txt existe
 def verificar_stop():
     stop_path = os.path.join(desktop_path, "stop.txt")
     return os.path.exists(stop_path)
 
-
 # Função para extrair as porcentagens das cores
 def extrair_cores(driver, valor):
     # Abrir o site se ainda não estiver aberto
     if driver.current_url != "https://blaze1.space/pt/games/double?modal=double_history_index":
-        driver.get(
-            "https://blaze1.space/pt/games/double?modal=double_history_index")
+        driver.get("https://blaze1.space/pt/games/double?modal=double_history_index")
         # Aguarda até 5 segundos para elementos aparecerem
         driver.implicitly_wait(5)
 
@@ -109,9 +104,8 @@ def extrair_cores(driver, valor):
 
     return percentuais
 
-
 # Função para atualizar o log interativo
-def atualizar_log_interativo(acertos_direto, acertos_gale,acertos_duplo, erros):
+def atualizar_log_interativo(acertos_direto, acertos_gale, erros):
     with open(log_interativo_path, "w") as log_interativo_file:
         log_interativo_file.write("=== LOG INTERATIVO ===\n")
         log_interativo_file.write(f"Acertos diretos: {acertos_direto}\n")
@@ -119,16 +113,14 @@ def atualizar_log_interativo(acertos_direto, acertos_gale,acertos_duplo, erros):
         log_interativo_file.write(f"Erros: {erros}\n")
         entrada_direta = int((acertos_direto * 13) -  erros)
         entrada_secundaria = int((acertos_gale * 13) - erros)
-        entrada_gale = int((acertos_duplo * 13) - (erros * 2))
+        entrada_gale = int((acertos_direto + acertos_gale * 13) - (erros * 2))
         log_interativo_file.write(f"Entrada direta: {entrada_direta}\n")
-        log_interativo_file.write(f"Entrada secundária: {
-                                  entrada_secundaria}\n")
+        log_interativo_file.write(f"Entrada secundária: {entrada_secundaria}\n")
         log_interativo_file.write(f"Entrada gale: {entrada_gale}\n")
-
 
 # Função principal
 def main():
-    global count_alarm, acertos_direto, acertos_gale, erros, last_alarm_time, alarme_acionado, acertos_branco, acertos_gale_branco
+    global count_alarm, acertos_direto, acertos_gale, erros, last_alarm_time, alarme_acionado, acertos_branco, acertos_gale_branco, acertos_duplo
 
     last_alarm_time = time.time()  # Inicializa o tempo do último alarme
 
@@ -203,25 +195,20 @@ def main():
                                 percentuais25[['white', 'black', 'red'].index(cor_atual)])
 
                             if cor_atual_percentual_25 is not None:
-                                print(f"Cor atual: {cor_atual}, Percentual: {
-                                      cor_atual_percentual_25}")
+                                print(f"Cor atual: {cor_atual}, Percentual: {cor_atual_percentual_25}")
 
                             if cor_atual_percentual_25 <= 60:
-
                                 current_time = datetime.datetime.now(
                                     pytz.timezone('America/Sao_Paulo'))
                                 hora_atual = current_time.strftime("%H:%M:%S")
-                                data_atual = current_time.strftime(
-                                    "%d-%m-%Y")  # Ajuste para dia-mês-ano
+                                data_atual = current_time.strftime("%d-%m-%Y")  # Ajuste para dia-mês-ano
 
                                 current_time = time.time()
                                 if current_time - last_alarm_time >= 60:
                                     alarm_sound.play()
                                     count_alarm += 1
-                                    print(f"Alarme acionado. {hora_atual}, {
-                                          data_atual}, Contagem: {count_alarm}")
-                                    log_to_file(f"Alarme acionado. {hora_atual}, {
-                                                data_atual}, Contagem: {count_alarm}")
+                                    print(f"Alarme acionado. {hora_atual}, {data_atual}, Contagem: {count_alarm}")
+                                    log_to_file(f"Alarme acionado. {hora_atual}, {data_atual}, Contagem: {count_alarm}")
 
                                     last_alarm_time = current_time
                                     alarme_acionado = True  # Define alarme_acionado como True
@@ -283,15 +270,13 @@ def main():
                         print("Acerto gale branco !!")
                         acertos_gale_branco += 1
 
-                    if ultimas_tres_cores_1[0] or ultimas_tres_cores_2[0] == 'white':
-                        acertos_duplo += 1
-
                     else:
                         print("Erro gale !!")
                         erros += 1
+
                     log_to_file(f"Acertos branco: {acertos_branco}, Acertos gale branco: {acertos_gale_branco}, Erros: {erros}")
                     print(f"Acertos branco: {acertos_branco}, Acertos gale branco: {acertos_gale_branco}, Erros: {erros}")
-                    atualizar_log_interativo(acertos_branco, acertos_gale_branco,acertos_duplo, erros)
+                    atualizar_log_interativo(acertos_branco, acertos_gale_branco, erros)
                     # Define alarme_acionado como False após coletar a segunda sequência
                     alarme_acionado = False
                     time.sleep(1)
@@ -305,7 +290,6 @@ def main():
         # Finalizando o driver
         if driver:
             driver.quit()
-
 
 # Chamando a função principal
 if __name__ == "__main__":
