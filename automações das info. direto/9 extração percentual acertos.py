@@ -19,7 +19,7 @@ def extrair_resultados_porcentagens(arquivo_entrada, arquivo_saida):
                     resultados[resultado] += 1
                     # Atualiza contagem de porcentagens
                     porcentagens[valor_usado] = porcentagens.get(valor_usado, 0) + 1
-                    i += 16  # Pular 16 linhas para a próxima jogada
+                    i += 11  # Pular 11 linhas para a próxima jogada
                 else:
                     i += 1
 
