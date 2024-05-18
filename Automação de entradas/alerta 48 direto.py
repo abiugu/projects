@@ -110,7 +110,7 @@ def extrair_cores(driver, valor):
 
 
 # Função para atualizar o log interativo
-def atualizar_log_interativo(acertos_direto, acertos_branco,acertos_duplo, erros):
+def atualizar_log_interativo(acertos_direto, acertos_branco, erros):
     with open(log_interativo_path, "w") as log_interativo_file:
         log_interativo_file.write("=== LOG INTERATIVO ===\n")
         log_interativo_file.write(f"Acertos diretos: {acertos_direto}\n")
@@ -126,7 +126,7 @@ def atualizar_log_interativo(acertos_direto, acertos_branco,acertos_duplo, erros
 
 # Função principal
 def main():
-    global count_alarm, acertos_direto, acertos_gale, erros, last_alarm_time, alarme_acionado, acertos_branco, acertos_gale_branco
+    global count_alarm, acertos_direto, erros, last_alarm_time, alarme_acionado, acertos_branco, acertos_gale_branco
     last_alarm_time = time.time()  # Inicializa o tempo do último alarme
 
     # Variável para armazenar a última sequência de cores registrada no log
