@@ -30,7 +30,6 @@ last_alarm_time = 0  # Inicializar last_alarm_time
 alarme_acionado = False  # Inicializa o estado do alarme como falso
 acertos_branco = 0
 acertos_gale_branco = 0
-acertos_duplo = 0
 
 # Caminho da área de trabalho
 desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
@@ -234,16 +233,13 @@ def main():
                         print("Acerto direto !!")
                         acertos_direto += 1
 
-                    if ultimas_tres_cores_1[0] == 'white' or ultimas_tres_cores_1 != sequencia_anterior[:3]:
-                        acertos_duplo += 1
-
                     else:
                         print("Erro !!")
                         erros += 1
 
                     log_to_file(f"Acertos branco: {acertos_branco}, Acertos direto: {acertos_direto}, Erros: {erros}")
                     print(f"Acertos branco: {acertos_branco}, Acertos direto: {acertos_direto}, Erros: {erros}")
-                    atualizar_log_interativo(acertos_direto, acertos_branco, acertos_duplo, erros)
+                    atualizar_log_interativo(acertos_direto, acertos_branco, erros)
                     # Define alarme_acionado como False após coletar a segunda sequência
                     alarme_acionado = False
                     time.sleep(1)
