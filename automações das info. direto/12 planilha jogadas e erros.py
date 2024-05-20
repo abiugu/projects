@@ -40,8 +40,8 @@ if not os.path.exists(logs_path):
 # Arquivos de jogadas, erros e acertos
 arquivo_jogadas = os.path.join(logs_path, "sequencias", 'sequencias 48 direto.txt')
 arquivo_erros = os.path.join(logs_path, "sequencias", 'sequencias erros 48 direto.txt')
-arquivo_acertos_direto = os.path.join(logs_path, "sequencias", 'sequencias acertos direto 48 direto.txt')
-arquivo_acertos_branco = os.path.join(logs_path, "sequencias", 'sequencias acertos branco 48 direto.txt')
+arquivo_acertos_direto = os.path.join(logs_path, "sequencias", 'sequencias acertos direto 48.txt')
+arquivo_acertos_branco = os.path.join(logs_path, "sequencias", 'sequencias acertos branco 48.txt')
 arquivo_saida = os.path.join(logs_path, 'planilha acertos 48 direto.xlsx')
 
 # Verificar se os arquivos existem

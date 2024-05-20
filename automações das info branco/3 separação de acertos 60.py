@@ -46,11 +46,11 @@ linhas_acertos_brancos = extrair_acertos_brancos(caminho_arquivo)
 linhas_acertos_gale_brancos = extrair_acertos_gale_brancos(caminho_arquivo)
 
 # Define os caminhos para os arquivos de saída
-caminho_saida_brancos = os.path.join(os.path.expanduser('~'), 'Desktop', 'LOGS', 'acertos', 'acertos_brancos 60.txt')
-caminho_saida_gale_brancos = os.path.join(os.path.expanduser('~'), 'Desktop', 'LOGS', 'acertos', 'acertos_gale_brancos 60.txt')
+caminho_saida_brancos = os.path.join(os.path.expanduser('~'), 'Desktop', 'LOGS', 'acertos', 'acertos_branco 60.txt')
+caminho_saida_gale_brancos = os.path.join(os.path.expanduser('~'), 'Desktop', 'LOGS', 'acertos', 'acertos_gale_branco 60.txt')
 
 # Salva as linhas de acerto em novos arquivos
 salvar_acertos(caminho_saida_brancos, linhas_acertos_brancos)
 salvar_acertos(caminho_saida_gale_brancos, linhas_acertos_gale_brancos)
 
-print("Linhas de acerto brancos e gale brancos extraídas e salvas com sucesso!")
+print("Linhas de acertos branco e gale branco extraídas e salvas com sucesso!")

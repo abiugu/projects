@@ -41,8 +41,8 @@ arquivo_entrada4 = "resultados_acertos_branco_log_48 direto.txt"
 # Caminhos dos arquivos de saída
 caminho_saida1 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "sequencias", "sequencias 48 direto.txt")
 caminho_saida2 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "sequencias", "sequencias erros 48 direto.txt")
-caminho_saida3 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "sequencias", "sequencias acertos direto 48 direto.txt")
-caminho_saida4 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "sequencias", "sequencias acertos branco 48 direto.txt")
+caminho_saida3 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "sequencias", "sequencias acertos direto 48.txt")
+caminho_saida4 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "sequencias", "sequencias acertos branco 48.txt")
 
 # Chamar a função para extrair o texto
 extrair_texto(arquivo_entrada1, caminho_saida1)
