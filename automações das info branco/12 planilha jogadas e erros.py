@@ -78,20 +78,20 @@ df_jogadas["Erros Totais"] = df_jogadas["Sequência"].map(
     lambda x: df_erros.loc[df_erros["Sequência"] == x, "Total de Jogadas"].sum())
 
 # Adicionar as colunas de acertos brancos e acertos gale brancos totais ao DataFrame de jogadas
-df_jogadas["Acertos Brancos Totais"] = df_jogadas["Sequência"].map(
+df_jogadas["Acertos Brancos"] = df_jogadas["Sequência"].map(
     lambda x: df_acertos_brancos.loc[df_acertos_brancos["Sequência"] == x, "Total de Jogadas"].sum())
 
-df_jogadas["Acertos Gale Brancos Totais"] = df_jogadas["Sequência"].map(
+df_jogadas["Acertos Gale Brancos"] = df_jogadas["Sequência"].map(
     lambda x: df_acertos_gale_brancos.loc[df_acertos_gale_brancos["Sequência"] == x, "Total de Jogadas"].sum())
 
 # Adicionar as colunas de percentual de acerto ao DataFrame de jogadas
-df_jogadas["Percentual de Acerto Brancos"] = df_jogadas["Acertos Brancos Totais"] / df_jogadas["Total de Jogadas"]
-df_jogadas["Percentual de Acerto Gale Brancos"] = df_jogadas["Acertos Gale Brancos Totais"] / df_jogadas["Total de Jogadas"]
+df_jogadas["Percentual de Acerto Brancos"] = df_jogadas["Acertos Brancos"] / df_jogadas["Total de Jogadas"]
+df_jogadas["Percentual de Acerto Gale Brancos"] = df_jogadas["Acertos Gale Brancos"] / df_jogadas["Total de Jogadas"]
 
 # Selecionar apenas as colunas necessárias na ordem desejada
 df_jogadas = df_jogadas[["Sequência", "Total de Jogadas", "Erros Totais",
-                         "Acertos Brancos Totais", "Percentual de Acerto Brancos",
-                         "Acertos Gale Brancos Totais", "Percentual de Acerto Gale Brancos"]]
+                         "Acertos Brancos", "Percentual de Acerto Brancos",
+                         "Acertos Gale Brancos", "Percentual de Acerto Gale Brancos"]]
 
 # Salvar o DataFrame em um arquivo Excel
 df_jogadas.to_excel(arquivo_saida, index=False)
