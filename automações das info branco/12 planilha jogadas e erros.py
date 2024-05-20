@@ -40,11 +40,12 @@ if not os.path.exists(logs_path):
 # Arquivos de jogadas, erros e acertos
 arquivo_jogadas = os.path.join(logs_path, "sequencias", 'sequencias 60 branco.txt')
 arquivo_erros = os.path.join(logs_path, "sequencias", 'sequencias erros 60 branco.txt')
-arquivo_acertos = os.path.join(logs_path, "sequencias", 'sequencias acertos 60 branco.txt')
+arquivo_acertos_brancos = os.path.join(logs_path, "sequencias", 'sequencias acertos branco 60.txt')
+arquivo_acertos_gale_brancos = os.path.join(logs_path, "sequencias", 'sequencias acertos gale branco 60.txt')
 arquivo_saida = os.path.join(logs_path, 'planilha acertos 60 branco.xlsx')
 
 # Verificar se os arquivos existem
-for arquivo in [arquivo_jogadas, arquivo_erros, arquivo_acertos]:
+for arquivo in [arquivo_jogadas, arquivo_erros, arquivo_acertos_brancos, arquivo_acertos_gale_brancos]:
     if not os.path.exists(arquivo):
         print(f"Erro: O arquivo {arquivo} não existe.")
         exit()
@@ -58,28 +59,37 @@ erros = ler_arquivo(arquivo_erros)
 if erros is None:
     exit()
 
-acertos = ler_arquivo(arquivo_acertos)
-if acertos is None:
+acertos_brancos = ler_arquivo(arquivo_acertos_brancos)
+if acertos_brancos is None:
+    exit()
+
+acertos_gale_brancos = ler_arquivo(arquivo_acertos_gale_brancos)
+if acertos_gale_brancos is None:
     exit()
 
 # Criar DataFrames
 df_jogadas = pd.DataFrame(jogadas)
 df_erros = pd.DataFrame(erros)
-df_acertos = pd.DataFrame(acertos)
+df_acertos_brancos = pd.DataFrame(acertos_brancos)
+df_acertos_gale_brancos = pd.DataFrame(acertos_gale_brancos)
 
 # Adicionar a coluna de erros totais ao DataFrame de jogadas (erro * 3)
 df_jogadas["Erros Totais"] = df_jogadas["Sequência"].map(
     lambda x: df_erros.loc[df_erros["Sequência"] == x, "Total de Jogadas"].sum())
 
-# Adicionar a coluna de acertos totais ao DataFrame de jogadas
-df_jogadas["Acertos Totais"] = df_jogadas["Sequência"].map(
-    lambda x: df_acertos.loc[df_acertos["Sequência"] == x, "Total de Jogadas"].sum())
+# Adicionar as colunas de acertos brancos e acertos gale brancos totais ao DataFrame de jogadas
+df_jogadas["Acertos Brancos Totais"] = df_jogadas["Sequência"].map(
+    lambda x: df_acertos_brancos.loc[df_acertos_brancos["Sequência"] == x, "Total de Jogadas"].sum())
 
-# Adicionar a coluna de percentual de acerto ao DataFrame de jogadas
-df_jogadas["Percentual de Acerto"] = df_jogadas["Acertos Totais"] / df_jogadas["Total de Jogadas"]
+df_jogadas["Acertos Gale Brancos Totais"] = df_jogadas["Sequência"].map(
+    lambda x: df_acertos_gale_brancos.loc[df_acertos_gale_brancos["Sequência"] == x, "Total de Jogadas"].sum())
+
+# Adicionar as colunas de percentual de acerto ao DataFrame de jogadas
+df_jogadas["Percentual de Acerto Brancos"] = df_jogadas["Acertos Brancos Totais"] / df_jogadas["Total de Jogadas"]
+df_jogadas["Percentual de Acerto Gale Brancos"] = df_jogadas["Acertos Gale Brancos Totais"] / df_jogadas["Total de Jogadas"]
 
 # Selecionar apenas as colunas necessárias
-df_jogadas = df_jogadas[["Sequência", "Total de Jogadas", "Erros Totais", "Acertos Totais", "Percentual de Acerto"]]
+df_jogadas = df_jogadas[["Sequência", "Total de Jogadas", "Erros Totais", "Acertos Brancos Totais", "Acertos Gale Brancos Totais", "Percentual de Acerto Brancos", "Percentual de Acerto Gale Brancos"]]
 
 # Salvar o DataFrame em um arquivo Excel
 df_jogadas.to_excel(arquivo_saida, index=False)

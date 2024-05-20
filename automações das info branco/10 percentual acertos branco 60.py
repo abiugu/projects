@@ -19,7 +19,7 @@ def extrair_resultados_porcentagens(arquivo_entrada, arquivo_saida):
                     resultados[resultado] += 1
                     # Atualiza contagem de porcentagens
                     porcentagens[valor_usado] = porcentagens.get(valor_usado, 0) + 1
-                    i += 16  # Pular 16 linhas para a próxima jogada
+                    i += 11  # Pular 11 linhas para a próxima jogada
                 else:
                     i += 1
 
@@ -34,10 +34,10 @@ def extrair_resultados_porcentagens(arquivo_entrada, arquivo_saida):
                 out_file.write(f"{porcentagem}: {quantidade}\n")
 
 # Caminhos dos arquivos de entrada e saída
-caminho_entrada = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "acertos", "acertos log 60 branco.txt")
-caminho_saida = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS","percentual", "percentual dos acertos 60 branco.txt")
+caminho_entrada = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "acertos", "acertos_branco 60.txt")
+caminho_saida = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS","percentual", "percentual dos acertos branco 60.txt")
 
 # Extrair resultados e porcentagens e salvar em um arquivo
 extrair_resultados_porcentagens(caminho_entrada, caminho_saida)
 
-print("Informações salvas em 'percentual dos acertos 60 branco.txt'.")
+print("Informações salvas em 'percentual dos acertos branco 60.txt'.")
