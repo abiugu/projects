@@ -88,8 +88,10 @@ df_jogadas["Acertos Gale Brancos Totais"] = df_jogadas["Sequência"].map(
 df_jogadas["Percentual de Acerto Brancos"] = df_jogadas["Acertos Brancos Totais"] / df_jogadas["Total de Jogadas"]
 df_jogadas["Percentual de Acerto Gale Brancos"] = df_jogadas["Acertos Gale Brancos Totais"] / df_jogadas["Total de Jogadas"]
 
-# Selecionar apenas as colunas necessárias
-df_jogadas = df_jogadas[["Sequência", "Total de Jogadas", "Erros Totais", "Acertos Brancos Totais", "Acertos Gale Brancos Totais", "Percentual de Acerto Brancos", "Percentual de Acerto Gale Brancos"]]
+# Selecionar apenas as colunas necessárias na ordem desejada
+df_jogadas = df_jogadas[["Sequência", "Total de Jogadas", "Erros Totais",
+                         "Acertos Brancos Totais", "Percentual de Acerto Brancos",
+                         "Acertos Gale Brancos Totais", "Percentual de Acerto Gale Brancos"]]
 
 # Salvar o DataFrame em um arquivo Excel
 df_jogadas.to_excel(arquivo_saida, index=False)
