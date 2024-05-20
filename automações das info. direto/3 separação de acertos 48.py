@@ -46,8 +46,8 @@ linhas_acertos_brancos = extrair_acertos_brancos(caminho_arquivo)
 linhas_acertos_diretos = extrair_acertos_diretos(caminho_arquivo)
 
 # Define os caminhos para os arquivos de saída
-caminho_saida_brancos = os.path.join(os.path.expanduser('~'), 'Desktop', 'LOGS', 'acertos', 'acertos_brancos 48.txt')
-caminho_saida_diretos = os.path.join(os.path.expanduser('~'), 'Desktop', 'LOGS', 'acertos', 'acertos_diretos 48.txt')
+caminho_saida_brancos = os.path.join(os.path.expanduser('~'), 'Desktop', 'LOGS', 'acertos', 'acertos_branco 48.txt')
+caminho_saida_diretos = os.path.join(os.path.expanduser('~'), 'Desktop', 'LOGS', 'acertos', 'acertos_direto 48.txt')
 
 # Salva as linhas de acerto em novos arquivos
 salvar_acertos(caminho_saida_brancos, linhas_acertos_brancos)
