@@ -81,7 +81,7 @@ arquivo_entrada = os.path.join(
     diretorio_logs, "acertos", "acertos_branco 48.txt")
 # Arquivo de saída
 arquivo_saida = os.path.join(
-    diretorio_logs, 'resultados', "resultados_acertos_branco_log_48 direto.txt")
+    diretorio_logs, 'resultados', "resultados_acertos_branco_48 direto.txt")
 
 # Identificar alarmes e contar quantos black e quantos red
 alarmes, black_count, red_count = identificar_alarmes(arquivo_entrada)
@@ -89,6 +89,7 @@ alarmes, black_count, red_count = identificar_alarmes(arquivo_entrada)
 # Função para imprimir os resultados e contar as ocorrências
 
 
+# Função para imprimir os resultados e contar as ocorrências
 def imprimir_resultados(alarmes, black_count, red_count):
     contagem = {"25": {"<": 0, "=": 0, ">": 0},
                 "50": {"<": 0, "=": 0, ">": 0},
@@ -99,7 +100,7 @@ def imprimir_resultados(alarmes, black_count, red_count):
         for info in alarmes:
             cor_atual = info["cor"]
             cor_oposta = "red" if cor_atual == "black" else "black"
-            sequencia = ""
+            sequencia = []
             file.write("Ultimos 3 resultados: {}, {}, {}\n".format(
                 cor_atual, cor_atual, cor_atual))
             file.write("Ultimas 25 porcentagens: {}\n".format(
@@ -110,17 +111,22 @@ def imprimir_resultados(alarmes, black_count, red_count):
                 ", ".join(map(str, info["comp_100"]))))
             file.write("Ultimas 500 porcentagens: {}\n".format(
                 ", ".join(map(str, info["comp_500"]))))
+
+            # Obtendo o percentual da cor atual
+            percentual_cor_atual = info["comp_25"][1] if cor_atual == "black" else info["comp_25"][2]
+
             for rodadas in ["25", "50", "100", "500"]:
                 comp = comparar_porcentagens(cor_atual, cor_oposta, info.get(
                     "comp_" + rodadas, [0, 0, 0]), info.get("comp_" + rodadas, [0, 0, 0]))
                 file.write("Percentual {} rodadas: {}\n".format(rodadas, comp))
                 contagem[rodadas][comp] += 1
                 # Construindo a sequência de contagem
-                sequencia += comp
-            if sequencia in possibilidades:
-                possibilidades[sequencia] += 1
+                sequencia.append((comp, percentual_cor_atual))
+            sequencia_str = ", ".join(f"{comp}_{perc:.2f}%" for comp, perc in sequencia)
+            if sequencia_str in possibilidades:
+                possibilidades[sequencia_str] += 1
             else:
-                possibilidades[sequencia] = 1
+                possibilidades[sequencia_str] = 1
 
         file.write("\nContagem:\n")
         file.write("Black: {}\n".format(black_count))
@@ -136,12 +142,10 @@ def imprimir_resultados(alarmes, black_count, red_count):
 
         file.write("\nPossibilidades:\n")
         for seq, count in sorted(possibilidades.items(), key=lambda x: x[1], reverse=True):
-            # Convertendo seq para uma lista de inteiros
-            file.write("Sequencia: {}\n".format(", ".join(seq)))
+            file.write("Sequencia: {}\n".format(seq))
             file.write("Quantidade: {}\n".format(count))
             file.write("\n")
 
-
 # Imprimir resultados
 imprimir_resultados(alarmes, black_count, red_count)
-print("Informaçoes extraidas com sucesso!")
+print("Informações extraídas com sucesso!")
