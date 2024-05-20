@@ -33,8 +33,8 @@ def extrair_texto(arquivo_entrada, caminho_saida):
         print(f"Arquivo de entrada {arquivo_entrada} não encontrado.")
 
 # Nomes dos arquivos de entrada
-arquivo_entrada1 = "resultados_log_60 branco.txt"
-arquivo_entrada2 = "resultados_erros_log_60 branco.txt"
+arquivo_entrada1 = "resultados_60 branco.txt"
+arquivo_entrada2 = "resultados_erros_60 branco.txt"
 arquivo_entrada3 = "resultados_acertos_branco_60 branco.txt"
 arquivo_entrada4 = "resultados_acertos_gale_branco_60 branco.txt"
 
@@ -42,7 +42,7 @@ arquivo_entrada4 = "resultados_acertos_gale_branco_60 branco.txt"
 caminho_saida1 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "sequencias", "sequencias 60 branco.txt")
 caminho_saida2 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "sequencias", "sequencias erros 60 branco.txt")
 caminho_saida3 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "sequencias", "sequencias acertos branco 60.txt")
-caminho_saida4 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "sequencias", "sequencias acertos branco gale 60.txt")
+caminho_saida4 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "sequencias", "sequencias acertos gale branco 60.txt")
 
 # Chamar a função para extrair o texto
 extrair_texto(arquivo_entrada1, caminho_saida1)
