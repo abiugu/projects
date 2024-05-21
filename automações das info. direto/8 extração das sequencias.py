@@ -35,8 +35,8 @@ def extrair_texto(arquivo_entrada, caminho_saida):
 # Nomes dos arquivos de entrada
 arquivo_entrada1 = "resultados_48 direto.txt"
 arquivo_entrada2 = "resultados_erros_log_48 direto.txt"
-arquivo_entrada3 = "resultados_acertos_direto_log_48 direto.txt"
-arquivo_entrada4 = "resultados_acertos_branco_log_48 direto.txt"
+arquivo_entrada3 = "resultados_acertos_direto_48 direto.txt"
+arquivo_entrada4 = "resultados_acertos_branco_48 direto.txt"
 
 # Caminhos dos arquivos de saída
 caminho_saida1 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "sequencias", "sequencias 48 direto.txt")
