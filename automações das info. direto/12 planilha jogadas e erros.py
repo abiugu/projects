@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+from openpyxl import Workbook
 
 def ler_arquivo(arquivo):
     with open(arquivo, 'r') as f:
@@ -91,10 +92,18 @@ df_jogadas["Percentual de Acerto Direto"] = df_jogadas["Acertos Direto Totais"] 
 # Adicionar a coluna de percentual de acertos branco ao DataFrame de jogadas
 df_jogadas["Percentual de Acerto Branco"] = df_jogadas["Acertos Branco Totais"] / df_jogadas["Total de Jogadas"]
 
-# Selecionar apenas as colunas necessárias
-df_jogadas = df_jogadas[["Sequência", "Total de Jogadas", "Erros Totais", "Acertos Direto Totais", "Percentual de Acerto Direto", "Acertos Branco Totais", "Percentual de Acerto Branco"]]
+# Adicionar a coluna de percentual de erros totais ao DataFrame de jogadas
+df_jogadas["Percentual de Erros Totais"] = df_jogadas["Erros Totais"] / df_jogadas["Total de Jogadas"]
 
-# Salvar o DataFrame em um arquivo Excel
-df_jogadas.to_excel(arquivo_saida, index=False)
+# Selecionar as colunas para a primeira aba
+df_acertos = df_jogadas[["Sequência", "Total de Jogadas", "Erros Totais", "Acertos Direto Totais", "Percentual de Acerto Direto", "Acertos Branco Totais", "Percentual de Acerto Branco"]]
+
+# Selecionar as colunas para a segunda aba
+df_percentual_erros = df_jogadas[["Sequência", "Percentual de Erros Totais"]]
+
+# Criar o arquivo Excel com duas abas
+with pd.ExcelWriter(arquivo_saida, engine='openpyxl') as writer:
+    df_acertos.to_excel(writer, index=False, sheet_name='Acertos e Erros')
+    df_percentual_erros.to_excel(writer, index=False, sheet_name='Percentual de Erros Totais')
 
 print(f"Arquivo salvo com sucesso em: {arquivo_saida}")

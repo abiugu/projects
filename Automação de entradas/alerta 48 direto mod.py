@@ -169,7 +169,7 @@ def main():
                                 ', '.join(map(str, percentuais500)))
 
                     # Verifica se há alguma sequência de 3 cores iguais
-                    if len(set(sequencia[:2])) == 1:
+                    if len(set(sequencia[:3])) == 1:
                         cor_atual = sequencia[0]
                         cor_oposta = None
                         if cor_atual == 'red':
@@ -226,12 +226,9 @@ def main():
 
             if alarme_acionado:
                 while sequencia == sequencia_anterior:
-                    recent_results_element = driver.find_element(
-                        By.ID, "roulette-recent")
-                    box_elements = recent_results_element.find_elements(
-                        By.CLASS_NAME, "sm-box")
-                    sequencia = [box_element.get_attribute(
-                        "class").split()[-1] for box_element in box_elements[:15]]
+                    recent_results_element = driver.find_element(By.ID, "roulette-recent")
+                    box_elements = recent_results_element.find_elements(By.CLASS_NAME, "sm-box")
+                    sequencia = [box_element.get_attribute("class").split()[-1] for box_element in box_elements[:15]]
 
                     time.sleep(1)
 
@@ -241,39 +238,45 @@ def main():
                     percentuais50_1 = extrair_cores(driver, 50)
                     percentuais500_1 = extrair_cores(driver, 500)
 
-                    recent_results_element = driver.find_element(
-                        By.ID, "roulette-recent")
-                    box_elements = recent_results_element.find_elements(
-                        By.CLASS_NAME, "sm-box")
-                    sequencia_1 = [box_element.get_attribute(
-                        "class").split()[-1] for box_element in box_elements[:15]]
+                    recent_results_element = driver.find_element(By.ID, "roulette-recent")
+                    box_elements = recent_results_element.find_elements(By.CLASS_NAME, "sm-box")
+                    sequencia_1 = [box_element.get_attribute("class").split()[-1] for box_element in box_elements[:15]]
                     ultimas_tres_cores_1 = sequencia_1[:3]
-                    log_to_file("Ultimos 3 resultados: " +
-                                ', '.join(ultimas_tres_cores_1))
-                    log_to_file("Ultimas 25 porcentagens: " +
-                                ', '.join(map(str, percentuais25_1)))
-                    log_to_file("Ultimas 50 porcentagens: " +
-                                ', '.join(map(str, percentuais50_1)))
-                    log_to_file("Ultimas 100 porcentagens: " +
-                                ', '.join(map(str, percentuais100_1)))
-                    log_to_file("Ultimas 500 porcentagens: " +
-                                ', '.join(map(str, percentuais500_1)))
+                    log_to_file("Ultimos 3 resultados: " + ', '.join(ultimas_tres_cores_1))
+                    log_to_file("Ultimas 25 porcentagens: " + ', '.join(map(str, percentuais25_1)))
+                    log_to_file("Ultimas 50 porcentagens: " + ', '.join(map(str, percentuais50_1)))
+                    log_to_file("Ultimas 100 porcentagens: " + ', '.join(map(str, percentuais100_1)))
+                    log_to_file("Ultimas 500 porcentagens: " + ', '.join(map(str, percentuais500_1)))
 
                     while sequencia == sequencia_1:
-                        recent_results_element = driver.find_element(
-                            By.ID, "roulette-recent")
-                        box_elements = recent_results_element.find_elements(
-                            By.CLASS_NAME, "sm-box")
-                        sequencia_1 = [box_element.get_attribute(
-                            "class").split()[-1] for box_element in box_elements[:15]]
+                        recent_results_element = driver.find_element(By.ID, "roulette-recent")
+                        box_elements = recent_results_element.find_elements(By.CLASS_NAME, "sm-box")
+                        sequencia_1 = [box_element.get_attribute("class").split()[-1] for box_element in box_elements[:15]]
+
+                        time.sleep(1)
+                    if sequencia != sequencia_1:
+                        percentuais100_2 = extrair_cores(driver, 100)
+                        percentuais25_2 = extrair_cores(driver, 25)
+                        percentuais50_2 = extrair_cores(driver, 50)
+                        percentuais500_2 = extrair_cores(driver, 500)
+
+                        recent_results_element = driver.find_element(By.ID, "roulette-recent")
+                        box_elements = recent_results_element.find_elements(By.CLASS_NAME, "sm-box")
+                        sequencia_2 = [box_element.get_attribute("class").split()[-1] for box_element in box_elements[:15]]
+                        ultimas_tres_cores_2 = sequencia_2[:3]
+                        log_to_file("Ultimos 3 resultados: " + ', '.join(ultimas_tres_cores_2))
+                        log_to_file("Ultimas 25 porcentagens: " + ', '.join(map(str, percentuais25_2)))
+                        log_to_file("Ultimas 50 porcentagens: " + ', '.join(map(str, percentuais50_2)))
+                        log_to_file("Ultimas 100 porcentagens: " + ', '.join(map(str, percentuais100_2)))
+                        log_to_file("Ultimas 500 porcentagens: " + ', '.join(map(str, percentuais500_2)))
 
                         time.sleep(1)
 
-                    if ultimas_tres_cores_1[0] == 'white':
+                    if ultimas_tres_cores_2[0] == 'white':
                         print("Acerto branco !!")
                         acertos_branco += 1
 
-                    elif ultimas_tres_cores_1 != sequencia_anterior[:3]:
+                    elif ultimas_tres_cores_2 != ultimas_tres_cores_1:
                         print("Acerto direto !!")
                         acertos_direto += 1
 
