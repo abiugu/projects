@@ -88,8 +88,11 @@ df_jogadas["Acertos Gale Brancos"] = df_jogadas["Sequência"].map(
 df_jogadas["Percentual de Acerto Brancos"] = df_jogadas["Acertos Brancos"] / df_jogadas["Total de Jogadas"]
 df_jogadas["Percentual de Acerto Gale Brancos"] = df_jogadas["Acertos Gale Brancos"] / df_jogadas["Total de Jogadas"]
 
+# Adicionar a coluna de percentual de erros ao DataFrame de jogadas
+df_jogadas["Percentual de Erros"] = df_jogadas["Erros Totais"] / df_jogadas["Total de Jogadas"]
+
 # Selecionar apenas as colunas necessárias na ordem desejada
-df_jogadas = df_jogadas[["Sequência", "Total de Jogadas", "Erros Totais",
+df_jogadas = df_jogadas[["Sequência", "Total de Jogadas", "Erros Totais", "Percentual de Erros",
                          "Acertos Brancos", "Percentual de Acerto Brancos",
                          "Acertos Gale Brancos", "Percentual de Acerto Gale Brancos"]]
 
