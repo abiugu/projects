@@ -46,8 +46,12 @@ pygame.mixer.init()
 # Carrega o arquivo de som
 sound_file_path = "ENTRADA CONFIRMADA.mp3"
 
+sound_file_path2 = "MONEY ALARM.mp3"
+
 # Carrega o som
 alarm_sound = pygame.mixer.Sound(sound_file_path)
+
+alarm_sound2 = pygame.mixer.Sound(sound_file_path2)
 
 # Arquivo de log interativo
 log_interativo_path = os.path.join(
@@ -169,7 +173,46 @@ def main():
                     log_to_file("Ultimas 500 porcentagens: " +
                                 ', '.join(map(str, percentuais500)))
 
-                    # Verifica se há alguma sequência de 3 cores iguais
+                    if len(set(sequencia[:2])) == 1:
+                        cor_atual = sequencia[0]
+                        cor_oposta = None
+                        if cor_atual == 'red':
+                            cor_oposta = 'black'
+                        elif cor_atual == 'black':
+                            cor_oposta = 'red'
+                        if cor_oposta:
+                            cor_atual_percentual_500 = int(
+                                percentuais500[['white', 'black', 'red'].index(cor_atual)])
+                            cor_oposta_percentual_500 = int(
+                                percentuais500[['white', 'black', 'red'].index(cor_oposta)])
+
+                            cor_atual_percentual_100 = int(
+                                percentuais100[['white', 'black', 'red'].index(cor_atual)])
+                            cor_oposta_percentual_100 = int(
+                                percentuais100[['white', 'black', 'red'].index(cor_oposta)])
+
+                            cor_atual_percentual_50 = int(
+                                percentuais50[['white', 'black', 'red'].index(cor_atual)])
+                            cor_oposta_percentual_50 = int(
+                                percentuais50[['white', 'black', 'red'].index(cor_oposta)])
+
+                            cor_atual_percentual_25 = int(
+                                percentuais25[['white', 'black', 'red'].index(cor_atual)])
+                            cor_oposta_percentual_25 = int(
+                                percentuais25[['white', 'black', 'red'].index(cor_oposta)])
+
+                            if cor_atual_percentual_25 <= 48 and ((cor_atual_percentual_25 > cor_oposta_percentual_25 and cor_atual_percentual_50 < cor_oposta_percentual_50 and cor_atual_percentual_100 < cor_oposta_percentual_100 and cor_atual_percentual_500 < cor_oposta_percentual_500) or
+                                                                  (cor_atual_percentual_25 < cor_oposta_percentual_25 and cor_atual_percentual_50 > cor_oposta_percentual_50 and cor_atual_percentual_100 > cor_oposta_percentual_100 and cor_atual_percentual_500 < cor_oposta_percentual_500) or
+                                                                  (cor_atual_percentual_25 > cor_oposta_percentual_25 and cor_atual_percentual_50 > cor_oposta_percentual_50 and cor_atual_percentual_100 < cor_oposta_percentual_100 and cor_atual_percentual_500 < cor_oposta_percentual_500) or
+                                                                  (cor_atual_percentual_25 < cor_oposta_percentual_25 and cor_atual_percentual_50 > cor_oposta_percentual_50 and cor_atual_percentual_100 < cor_oposta_percentual_100 and cor_atual_percentual_500 > cor_oposta_percentual_500) or
+                                                                  (cor_atual_percentual_25 > cor_oposta_percentual_25 and cor_atual_percentual_50 < cor_oposta_percentual_50 and cor_atual_percentual_100 < cor_oposta_percentual_100 and cor_atual_percentual_500 > cor_oposta_percentual_500) or
+                                                                  (cor_atual_percentual_25 == cor_oposta_percentual_25 and cor_atual_percentual_50 > cor_oposta_percentual_50 and cor_atual_percentual_100 < cor_oposta_percentual_100 and cor_atual_percentual_500 < cor_oposta_percentual_500) or
+                                                                  (cor_atual_percentual_25 > cor_oposta_percentual_25 and cor_atual_percentual_50 > cor_oposta_percentual_50 and cor_atual_percentual_100 < cor_oposta_percentual_100 and cor_atual_percentual_500 > cor_oposta_percentual_500) or
+                                                                  (cor_atual_percentual_25 == cor_oposta_percentual_25 and cor_atual_percentual_50 > cor_oposta_percentual_50 and cor_atual_percentual_100 < cor_oposta_percentual_100 and cor_atual_percentual_500 > cor_oposta_percentual_500) or
+                                                                  (cor_atual_percentual_25 > cor_oposta_percentual_25 and cor_atual_percentual_50 < cor_oposta_percentual_50 and cor_atual_percentual_100 > cor_oposta_percentual_100 and cor_atual_percentual_500 < cor_oposta_percentual_500)):
+                                alarm_sound.play()
+
+
                     if len(set(sequencia[:3])) == 1:
                         cor_atual = sequencia[0]
                         cor_oposta = None
@@ -202,6 +245,7 @@ def main():
                                 print(f"Cor atual: {cor_atual}, Percentual: {
                                       cor_atual_percentual_25}")
 
+
                             if cor_atual_percentual_25 <= 48 and ((cor_atual_percentual_25 > cor_oposta_percentual_25 and cor_atual_percentual_50 < cor_oposta_percentual_50 and cor_atual_percentual_100 < cor_oposta_percentual_100 and cor_atual_percentual_500 < cor_oposta_percentual_500) or
                                                                   (cor_atual_percentual_25 < cor_oposta_percentual_25 and cor_atual_percentual_50 > cor_oposta_percentual_50 and cor_atual_percentual_100 > cor_oposta_percentual_100 and cor_atual_percentual_500 < cor_oposta_percentual_500) or
                                                                   (cor_atual_percentual_25 > cor_oposta_percentual_25 and cor_atual_percentual_50 > cor_oposta_percentual_50 and cor_atual_percentual_100 < cor_oposta_percentual_100 and cor_atual_percentual_500 < cor_oposta_percentual_500) or
@@ -220,7 +264,7 @@ def main():
 
                                 current_time = time.time()
                                 if current_time - last_alarm_time >= 60:
-                                    alarm_sound.play()
+                                    alarm_sound2.play()
                                     count_alarm += 1
                                     print(f"Alarme acionado. {hora_atual}, {
                                           data_atual}, Contagem: {count_alarm}")
