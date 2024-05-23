@@ -109,20 +109,6 @@ def extrair_cores(driver, valor):
     return percentuais
 
 
-# Função para atualizar o log interativo
-def atualizar_log_interativo(acertos_direto, acertos_branco, erros):
-    with open(log_interativo_path, "w") as log_interativo_file:
-        log_interativo_file.write("=== LOG INTERATIVO ===\n")
-        log_interativo_file.write(f"Acertos diretos: {acertos_direto}\n")
-        log_interativo_file.write(f"Acertos branco: {acertos_branco}\n")
-        log_interativo_file.write(f"Erros: {erros}\n")
-        entrada_direta = int(acertos_direto - (acertos_branco + erros))
-        entrada_branco = int((acertos_branco * 13) - (acertos_direto + erros))
-        entrada_dupla = int((acertos_direto + acertos_branco) - (erros * 1.34))
-        log_interativo_file.write(f"Entrada direta: {entrada_direta}\n")
-        log_interativo_file.write(f"Entrada branco: {entrada_branco}\n")
-        log_interativo_file.write(f"Entrada dupla: {entrada_dupla}\n")
-
 
 # Função principal
 def main():
@@ -156,17 +142,6 @@ def main():
                     percentuais25 = extrair_cores(driver, 25)
                     percentuais50 = extrair_cores(driver, 50)
                     percentuais500 = extrair_cores(driver, 500)
-
-                    log_to_file("Ultimos 3 resultados: " +
-                                ', '.join(sequencia[:3]))
-                    log_to_file("Ultimas 25 porcentagens: " +
-                                ', '.join(map(str, percentuais25)))
-                    log_to_file("Ultimas 50 porcentagens: " +
-                                ', '.join(map(str, percentuais50)))
-                    log_to_file("Ultimas 100 porcentagens: " +
-                                ', '.join(map(str, percentuais100)))
-                    log_to_file("Ultimas 500 porcentagens: " +
-                                ', '.join(map(str, percentuais500)))
                     
 
                     # Verifica se há alguma sequência de 3 cores iguais
@@ -248,8 +223,6 @@ def main():
                                     count_alarm += 1
                                     print(f"Alarme acionado. {hora_atual}, {
                                           data_atual}, Contagem: {count_alarm}")
-                                    log_to_file(f"Alarme acionado. {hora_atual}, {
-                                                data_atual}, Contagem: {count_alarm}")
 
                                     last_alarm_time = current_time
                                     alarme_acionado = True  # Define alarme_acionado como True
@@ -280,14 +253,7 @@ def main():
                         sequencia_1 = [box_element.get_attribute(
                             "class").split()[-1] for box_element in box_elements[:15]]
                         ultimas_tres_cores_1 = sequencia_1[:3]
-                        log_to_file("Ultimos 3 resultados: " +
-                                    ', '.join(ultimas_tres_cores_1))
-                        log_to_file("Ultimas 25 porcentagens: " +
-                                    ', '.join(map(str, percentuais25_1)))
-                        log_to_file("Ultimas 100 porcentagens: " +
-                                    ', '.join(map(str, percentuais100_1)))
-                        log_to_file("Ultimas 500 porcentagens: " +
-                                    ', '.join(map(str, percentuais500_1)))
+
 
                         while ultimas_tres_cores_1 == sequencia_1:
                             recent_results_element = driver.find_element(
@@ -310,14 +276,7 @@ def main():
                             sequencia_2 = [box_element.get_attribute(
                                 "class").split()[-1] for box_element in box_elements[:15]]
                             ultimas_tres_cores_2 = sequencia_2[:3]
-                            log_to_file("Ultimos 3 resultados: " +
-                                        ', '.join(ultimas_tres_cores_2))
-                            log_to_file("Ultimas 25 porcentagens: " +
-                                        ', '.join(map(str, percentuais25_2)))
-                            log_to_file("Ultimas 100 porcentagens: " +
-                                        ', '.join(map(str, percentuais100_2)))
-                            log_to_file("Ultimas 500 porcentagens: " +
-                                        ', '.join(map(str, percentuais500_2)))
+
 
                         # Define alarme_acionado como False após coletar a segunda sequênci
                         alarme_acionado = False
@@ -333,12 +292,10 @@ def main():
                         else:
                             print("Erro !!")
                             erros += 1
-                        log_to_file(f"Acertos branco: {acertos_branco}, Acertos direto: {
-                                acertos_direto}, Erros: {erros}")
+
                     print(f"Acertos branco: {acertos_branco}, Acertos direto: {
                           acertos_direto}, Erros: {erros}")
-                    atualizar_log_interativo(
-                        acertos_direto, acertos_branco, erros)
+
                     # Define alarme_acionado como False após coletar a segunda sequência
                     alarme_acionado = False
                     time.sleep(1)
