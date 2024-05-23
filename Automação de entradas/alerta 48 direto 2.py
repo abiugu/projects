@@ -167,8 +167,11 @@ def main():
                                 ', '.join(map(str, percentuais100)))
                     log_to_file("Ultimas 500 porcentagens: " +
                                 ', '.join(map(str, percentuais500)))
+                    
 
                     # Verifica se há alguma sequência de 3 cores iguais
+                    cor_atual_percentual_25 = int(
+                                percentuais25[['white', 'black', 'red'].index(cor_atual)])
                     if len(set(sequencia[:2])) == 1 and cor_atual_percentual_25 <= 48:
                         alarm_sound.play()
 
