@@ -169,7 +169,10 @@ def main():
                                 ', '.join(map(str, percentuais500)))
 
                     # Verifica se há alguma sequência de 3 cores iguais
-                    if len(set(sequencia[:2])) == 1:
+                    if len(set(sequencia[:2])) == 1 and cor_atual_percentual_25 <= 48:
+                        alarm_sound.play()
+
+                    if len(set(sequencia[:3])) == 1:
                         cor_atual = sequencia[0]
                         cor_oposta = None
                         if cor_atual == 'red':
@@ -289,19 +292,18 @@ def main():
                         # Define alarme_acionado como False após coletar a segunda sequênci
                         alarme_acionado = False
 
-                        # Verifica se as duas sequências são iguais
-                        if ultimas_tres_cores_2[0] == 'white':
+                        if ultimas_tres_cores_1[0] == 'white':
                             print("Acerto branco !!")
                             acertos_branco += 1
-                        else:
-                            if ultimas_tres_cores_1 != ultimas_tres_cores_2:
-                                print("Acerto direto !!")
-                                acertos_direto += 1
-                            else:
-                                print("Erro!!")
-                                erros += 1
 
-                    log_to_file(f"Acertos branco: {acertos_branco}, Acertos direto: {
+                        elif ultimas_tres_cores_1 != sequencia_anterior[:3]:
+                            print("Acerto direto !!")
+                            acertos_direto += 1
+
+                        else:
+                            print("Erro !!")
+                            erros += 1
+                        log_to_file(f"Acertos branco: {acertos_branco}, Acertos direto: {
                                 acertos_direto}, Erros: {erros}")
                     print(f"Acertos branco: {acertos_branco}, Acertos direto: {
                           acertos_direto}, Erros: {erros}")
