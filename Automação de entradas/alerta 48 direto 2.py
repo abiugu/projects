@@ -170,10 +170,37 @@ def main():
                     
 
                     # Verifica se há alguma sequência de 3 cores iguais
-                    cor_atual_percentual_25 = int(
+                    if len(set(sequencia[:2])) == 1:
+                        cor_atual = sequencia[0]
+                        cor_oposta = None
+                        if cor_atual == 'red':
+                            cor_oposta = 'black'
+                        elif cor_atual == 'black':
+                            cor_oposta = 'red'
+                        if cor_oposta:
+                            cor_atual_percentual_500 = int(
+                                percentuais500[['white', 'black', 'red'].index(cor_atual)])
+                            cor_oposta_percentual_500 = int(
+                                percentuais500[['white', 'black', 'red'].index(cor_oposta)])
+
+                            cor_atual_percentual_100 = int(
+                                percentuais100[['white', 'black', 'red'].index(cor_atual)])
+                            cor_oposta_percentual_100 = int(
+                                percentuais100[['white', 'black', 'red'].index(cor_oposta)])
+
+                            cor_atual_percentual_50 = int(
+                                percentuais50[['white', 'black', 'red'].index(cor_atual)])
+                            cor_oposta_percentual_50 = int(
+                                percentuais50[['white', 'black', 'red'].index(cor_oposta)])
+
+                            cor_atual_percentual_25 = int(
                                 percentuais25[['white', 'black', 'red'].index(cor_atual)])
-                    if len(set(sequencia[:2])) == 1 and cor_atual_percentual_25 <= 48:
-                        alarm_sound.play()
+                            cor_oposta_percentual_25 = int(
+                                percentuais25[['white', 'black', 'red'].index(cor_oposta)])
+
+                            if cor_atual_percentual_25 <= 48:
+                                alarm_sound.play()
+
 
                     if len(set(sequencia[:3])) == 1:
                         cor_atual = sequencia[0]
