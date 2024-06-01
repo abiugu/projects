@@ -1,7 +1,7 @@
 import os
 
 # Define o caminho para o arquivo de log
-caminho_arquivo = os.path.join(os.path.expanduser('~'), 'Desktop', 'LOGS', 'log 48 direto mod.txt')
+caminho_arquivo = os.path.join(os.path.expanduser('~'), 'Desktop', 'LOGS', 'log 40 direto mod.txt')
 
 # Função para extrair as linhas de acertos
 def extrair_acertos(arquivo_log):
@@ -38,7 +38,7 @@ def salvar_acertos(arquivo_saida, linhas_acertos):
 linhas_acertos = extrair_acertos(caminho_arquivo)
 
 # Define o caminho para o arquivo de saída
-caminho_saida = os.path.join(os.path.expanduser('~'), 'Desktop', 'LOGS', 'acertos', 'acertos log 48 direto mod.txt')
+caminho_saida = os.path.join(os.path.expanduser('~'), 'Desktop', 'LOGS', 'acertos', 'acertos log 40 direto mod.txt')
 
 # Salva as linhas de acerto em um novo arquivo
 salvar_acertos(caminho_saida, linhas_acertos)

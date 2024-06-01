@@ -73,14 +73,15 @@ def identificar_alarmes(arquivo):
     return alarmes, black_count, red_count
 
 
-
 # Diretório onde estão os arquivos
 diretorio_logs = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS")
 
 # Arquivo a ser lido
-arquivo_entrada = os.path.join(diretorio_logs, "log 48 direto mod.txt")
+arquivo_entrada = os.path.join(
+    diretorio_logs, "acertos", "acertos_direto 40 mod.txt")
 # Arquivo de saída
-arquivo_saida = os.path.join(diretorio_logs,'resultados', "resultados_48 direto mod.txt")
+arquivo_saida = os.path.join(
+    diretorio_logs, 'resultados', "resultados_acertos_direto_40 direto mod.txt")
 
 # Identificar alarmes e contar quantos black e quantos red
 alarmes, black_count, red_count = identificar_alarmes(arquivo_entrada)

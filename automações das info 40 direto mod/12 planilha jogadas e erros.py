@@ -38,11 +38,11 @@ if not os.path.exists(logs_path):
     os.makedirs(logs_path)
 
 # Arquivos de jogadas, erros e acertos
-arquivo_jogadas = os.path.join(logs_path, "sequencias", 'sequencias 48 direto.txt')
-arquivo_erros = os.path.join(logs_path, "sequencias", 'sequencias erros 48 direto.txt')
-arquivo_acertos_direto = os.path.join(logs_path, "sequencias", 'sequencias acertos direto 48.txt')
-arquivo_acertos_branco = os.path.join(logs_path, "sequencias", 'sequencias acertos branco 48.txt')
-arquivo_saida = os.path.join(logs_path, 'planilha acertos 48 direto.xlsx')
+arquivo_jogadas = os.path.join(logs_path, "sequencias", 'sequencias 40 direto mod.txt')
+arquivo_erros = os.path.join(logs_path, "sequencias", 'sequencias erros 40 direto mod.txt')
+arquivo_acertos_direto = os.path.join(logs_path, "sequencias", 'sequencias acertos direto 40 mod.txt')
+arquivo_acertos_branco = os.path.join(logs_path, "sequencias", 'sequencias acertos branco 40 mod.txt')
+arquivo_saida = os.path.join(logs_path, 'planilha acertos 40 direto mod.xlsx')
 
 # Verificar se os arquivos existem
 for arquivo in [arquivo_jogadas, arquivo_erros, arquivo_acertos_direto, arquivo_acertos_branco]:
@@ -75,15 +75,15 @@ df_acertos_branco = pd.DataFrame(acertos_branco)
 
 # Adicionar a coluna de erros totais ao DataFrame de jogadas (erro * 3)
 df_jogadas["Erros Totais"] = df_jogadas["Sequência"].map(
-    lambda x: df_erros.loc[df_erros["Sequência"] == x, "Total de Jogadas"].sum())
+    lambda x: df_erros.loc[df_erros["Sequência"] == x, "Total de Jogadas"].sum() if not df_erros.empty else 0)
 
 # Adicionar a coluna de acertos direto totais ao DataFrame de jogadas
 df_jogadas["Acertos Direto Totais"] = df_jogadas["Sequência"].map(
-    lambda x: df_acertos_direto.loc[df_acertos_direto["Sequência"] == x, "Total de Jogadas"].sum())
+    lambda x: df_acertos_direto.loc[df_acertos_direto["Sequência"] == x, "Total de Jogadas"].sum() if not df_acertos_direto.empty else 0)
 
 # Adicionar a coluna de acertos branco totais ao DataFrame de jogadas
 df_jogadas["Acertos Branco Totais"] = df_jogadas["Sequência"].map(
-    lambda x: df_acertos_branco.loc[df_acertos_branco["Sequência"] == x, "Total de Jogadas"].sum())
+    lambda x: df_acertos_branco.loc[df_acertos_branco["Sequência"] == x, "Total de Jogadas"].sum() if not df_acertos_branco.empty else 0)
 
 # Adicionar a coluna de percentual de erros ao DataFrame de jogadas
 df_jogadas["Percentual de Erros"] = df_jogadas["Erros Totais"] / df_jogadas["Total de Jogadas"]

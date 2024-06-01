@@ -33,16 +33,16 @@ def extrair_texto(arquivo_entrada, caminho_saida):
         print(f"Arquivo de entrada {arquivo_entrada} não encontrado.")
 
 # Nomes dos arquivos de entrada
-arquivo_entrada1 = "resultados_48 direto.txt"
-arquivo_entrada2 = "resultados_erros_log_48 direto.txt"
-arquivo_entrada3 = "resultados_acertos_direto_48 direto.txt"
-arquivo_entrada4 = "resultados_acertos_branco_48 direto.txt"
+arquivo_entrada1 = "resultados_52 direto mod.txt"
+arquivo_entrada2 = "resultados_erros_log_52 direto mod.txt"
+arquivo_entrada3 = "resultados_acertos_direto_52 direto mod.txt"
+arquivo_entrada4 = "resultados_acertos_branco_52 direto mod.txt"
 
 # Caminhos dos arquivos de saída
-caminho_saida1 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "sequencias", "sequencias 48 direto.txt")
-caminho_saida2 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "sequencias", "sequencias erros 48 direto.txt")
-caminho_saida3 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "sequencias", "sequencias acertos direto 48.txt")
-caminho_saida4 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "sequencias", "sequencias acertos branco 48.txt")
+caminho_saida1 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "sequencias", "sequencias 52 direto mod.txt")
+caminho_saida2 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "sequencias", "sequencias erros 52 direto mod.txt")
+caminho_saida3 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "sequencias", "sequencias acertos direto 52 mod.txt")
+caminho_saida4 = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "sequencias", "sequencias acertos branco 52 mod.txt")
 
 # Chamar a função para extrair o texto
 extrair_texto(arquivo_entrada1, caminho_saida1)
