@@ -5,6 +5,7 @@ def extrair_dados(arquivo_entrada, arquivo_saida):
         linhas = f.readlines()
         
         sequencias = []
+        sequencias_percentuais = []
         percentuais = {}
         
         i = 0
@@ -23,10 +24,12 @@ def extrair_dados(arquivo_entrada, arquivo_saida):
                     sequencia_str = ', '.join(sequencia)
                     percentual_cor_atual_str = str(percentual_cor_atual)
 
-                    sequencias.append((sequencia_str, cor_atual, percentual_cor_atual_str))
+                    sequencias.append(f"Sequencia: ({sequencia_str}) - Percentual da cor atual: {percentual_cor_atual_str}")
+                    sequencias_percentuais.append((sequencia_str, percentual_cor_atual_str))
                     
                     # Contagem de ocorrências de cada percentual
-                    percentuais[percentual_cor_atual_str] = percentuais.get(percentual_cor_atual_str, 0) + 1
+                    percentuais[sequencia_str] = percentuais.get(sequencia_str, {})
+                    percentuais[sequencia_str][percentual_cor_atual_str] = percentuais[sequencia_str].get(percentual_cor_atual_str, 0) + 1
                     
                 except (IndexError, ValueError):
                     pass
@@ -34,13 +37,14 @@ def extrair_dados(arquivo_entrada, arquivo_saida):
 
     # Escrever os dados extraídos no arquivo de saída
     with open(arquivo_saida, 'w') as out_file:
-        for sequencia, cor_atual, percentual in sequencias:
-            out_file.write(f"sequencia ({sequencia}) - percentual ({cor_atual}): {percentual}\n")
+        for item in sequencias:
+            out_file.write(f"{item}\n")
         
-        # Escrever a contagem de sequências para cada percentual
         out_file.write("\nContagem de Sequências por Percentual:\n")
-        for percentual, quantidade in percentuais.items():
-            out_file.write(f"Percentual ({percentual}): {quantidade}\n")
+        for sequencia, percentuais_diferentes in percentuais.items():
+            out_file.write(f"Sequencia: {sequencia}\n")
+            for percentual, quantidade in percentuais_diferentes.items():
+                out_file.write(f"  Percentual: {percentual} - Quantidade: {quantidade}\n")
 
 # Caminhos dos arquivos de entrada e saída
 arquivo_entrada = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "resultados", "resultados_100 direto mod.txt")
