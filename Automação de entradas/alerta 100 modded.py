@@ -201,9 +201,8 @@ def main():
                             cor_oposta_percentual_25 = int(
                                 percentuais25[['white', 'black', 'red'].index(cor_oposta)])
 
-                            if cor_atual_percentual_25 <= 100 and ((cor_atual_percentual_25 > cor_oposta_percentual_25 and cor_atual_percentual_50 < cor_oposta_percentual_50 and cor_atual_percentual_100 < cor_oposta_percentual_100 and cor_atual_percentual_500 < cor_oposta_percentual_500) or
-                                                                  (cor_atual_percentual_25 > cor_oposta_percentual_25 and cor_atual_percentual_50 > cor_oposta_percentual_50 and cor_atual_percentual_100 < cor_oposta_percentual_100 and cor_atual_percentual_500 < cor_oposta_percentual_500) or
-                                                                  (cor_atual_percentual_25 > cor_oposta_percentual_25 and cor_atual_percentual_50 > cor_oposta_percentual_50 and cor_atual_percentual_100 < cor_oposta_percentual_100 and cor_atual_percentual_500 > cor_oposta_percentual_500) or
+                            if cor_atual_percentual_25 <= 100 and ((cor_atual_percentual_25 > cor_oposta_percentual_25 and cor_atual_percentual_50 > cor_oposta_percentual_50 and cor_atual_percentual_100 < cor_oposta_percentual_100 and cor_atual_percentual_500 < cor_oposta_percentual_500) or
+                                                                  (cor_atual_percentual_25 < cor_oposta_percentual_25 and cor_atual_percentual_50 > cor_oposta_percentual_50 and cor_atual_percentual_100 < cor_oposta_percentual_100 and cor_atual_percentual_500 < cor_oposta_percentual_500) or
                                                                   (cor_atual_percentual_25 == cor_oposta_percentual_25 and cor_atual_percentual_50 > cor_oposta_percentual_50 and cor_atual_percentual_100 < cor_oposta_percentual_100 and cor_atual_percentual_500 < cor_oposta_percentual_500) or
                                                                   (cor_atual_percentual_25 < cor_oposta_percentual_25 and cor_atual_percentual_50 > cor_oposta_percentual_50 and cor_atual_percentual_100 < cor_oposta_percentual_100 and cor_atual_percentual_500 > cor_oposta_percentual_500)):
                                 alarm_sound.play()
