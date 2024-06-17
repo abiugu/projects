@@ -38,7 +38,7 @@ desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
 logs_path = os.path.join(desktop_path, "LOGS")
 
 # Caminho completo para o arquivo de log
-log_file_path = os.path.join(logs_path, "log 100 direto modded.txt")
+log_file_path = os.path.join(logs_path, "log 100 direto mod.txt")
 
 # Inicializa o mixer de áudio do pygame
 pygame.mixer.init()
@@ -55,7 +55,7 @@ alarm_sound2 = pygame.mixer.Sound(sound_file_path2)
 
 # Arquivo de log interativo
 log_interativo_path = os.path.join(
-    logs_path, "log interativo 100 direto modded.txt")
+    logs_path, "log interativo 100 direto mod.txt")
 
 # Dicionário para armazenar valores anteriores
 valores_anteriores = {"acertos_direto": 0, "acertos_gale": 0, "erros": 0}
@@ -204,7 +204,7 @@ def main():
                             if cor_atual_percentual_25 <= 100 and ((cor_atual_percentual_25 > cor_oposta_percentual_25 and cor_atual_percentual_50 > cor_oposta_percentual_50 and cor_atual_percentual_100 < cor_oposta_percentual_100 and cor_atual_percentual_500 < cor_oposta_percentual_500) or
                                                                    (cor_atual_percentual_25 < cor_oposta_percentual_25 and cor_atual_percentual_50 > cor_oposta_percentual_50 and cor_atual_percentual_100 < cor_oposta_percentual_100 and cor_atual_percentual_500 < cor_oposta_percentual_500) or
                                                                    (cor_atual_percentual_25 == cor_oposta_percentual_25 and cor_atual_percentual_50 > cor_oposta_percentual_50 and cor_atual_percentual_100 < cor_oposta_percentual_100 and cor_atual_percentual_500 < cor_oposta_percentual_500) or
-                                                                   (cor_atual_percentual_25 < cor_oposta_percentual_25 and cor_atual_percentual_50 > cor_oposta_percentual_50 and cor_atual_percentual_100 < cor_oposta_percentual_100 and cor_atual_percentual_500 > cor_oposta_percentual_500)):
+                                                                   (cor_atual_percentual_25 < cor_oposta_percentual_25 and cor_atual_percentual_50 > cor_oposta_percentual_50 and cor_atual_percentual_100 < cor_oposta_percentual_100 and cor_atual_percentual_500 > cor_oposta_percentual_500)) or cor_atual_percentual_25 == 60 or 64 and (cor_atual_percentual_25 > cor_oposta_percentual_25 and cor_atual_percentual_50 > cor_oposta_percentual_50 and cor_atual_percentual_100 < cor_oposta_percentual_100 and cor_atual_percentual_500 > cor_oposta_percentual_500):
                                 alarm_sound.play()
 
                     if len(set(sequencia[:3])) == 1:
