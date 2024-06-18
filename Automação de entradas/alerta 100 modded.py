@@ -38,7 +38,7 @@ desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
 logs_path = os.path.join(desktop_path, "LOGS")
 
 # Caminho completo para o arquivo de log
-log_file_path = os.path.join(logs_path, "log 100 direto mod.txt")
+log_file_path = os.path.join(logs_path, "log 100 direto modded.txt")
 
 # Inicializa o mixer de áudio do pygame
 pygame.mixer.init()
@@ -55,7 +55,7 @@ alarm_sound2 = pygame.mixer.Sound(sound_file_path2)
 
 # Arquivo de log interativo
 log_interativo_path = os.path.join(
-    logs_path, "log interativo 100 direto mod.txt")
+    logs_path, "log interativo 100 direto modded.txt")
 
 # Dicionário para armazenar valores anteriores
 valores_anteriores = {"acertos_direto": 0, "acertos_gale": 0, "erros": 0}
