@@ -78,7 +78,7 @@ def identificar_alarmes(arquivo):
 diretorio_logs = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS")
 
 # Arquivo a ser lido
-arquivo_entrada = os.path.join(diretorio_logs, "log 100 direto mod.txt")
+arquivo_entrada = os.path.join(diretorio_logs, "log 100 direto modded.txt")
 # Arquivo de saída
 arquivo_saida = os.path.join(diretorio_logs,'resultados', "resultados_100 direto modded.txt")
 

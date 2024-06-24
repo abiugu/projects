@@ -78,7 +78,7 @@ diretorio_logs = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS")
 
 # Arquivo a ser lido
 arquivo_entrada = os.path.join(
-    diretorio_logs, "acertos", "acertos_branco 100 mod.txt")
+    diretorio_logs, "acertos", "acertos_branco 100 modded.txt")
 # Arquivo de saída
 arquivo_saida = os.path.join(
     diretorio_logs, 'resultados', "resultados_acertos_branco_100 direto modded.txt")
