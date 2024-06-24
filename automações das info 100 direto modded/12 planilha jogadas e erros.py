@@ -42,7 +42,7 @@ arquivo_jogadas = os.path.join(logs_path, "sequencias", 'sequencias 100 direto m
 arquivo_erros = os.path.join(logs_path, "sequencias", 'sequencias erros 100 direto modded.txt')
 arquivo_acertos_direto = os.path.join(logs_path, "sequencias", 'sequencias acertos direto 100 modded.txt')
 arquivo_acertos_branco = os.path.join(logs_path, "sequencias", 'sequencias acertos branco 100 modded.txt')
-arquivo_saida = os.path.join(logs_path, 'planilha acertos 100 direto mod.xlsx')
+arquivo_saida = os.path.join(logs_path, 'planilha acertos 100 direto modded.xlsx')
 
 # Verificar se os arquivos existem
 for arquivo in [arquivo_jogadas, arquivo_erros, arquivo_acertos_direto, arquivo_acertos_branco]:
