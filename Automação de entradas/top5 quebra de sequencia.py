@@ -50,7 +50,7 @@ def main():
     
     black_count, red_count = contar_black_red(quebras)
 
-    with open(os.path.expanduser('~/Desktop/top_10_quebras.txt'), 'w') as arquivo_saida:
+    with open(os.path.expanduser('~/Desktop/top 10 quebras log 100 modded.txt'), 'w') as arquivo_saida:
         arquivo_saida.write("Top 10 linhas mais repetidas após a quebra de sequência:\n")
         for linha, contagem in top_10_quebras:
             arquivo_saida.write(f"{linha}: {contagem} vezes\n")
