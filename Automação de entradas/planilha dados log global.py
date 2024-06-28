@@ -89,7 +89,7 @@ def main():
         acertos = dados['acertos']
         assertividade = (acertos / total) * 100 if total > 0 else 0
 
-        if assertividade > 60:
+        if assertividade > 50:
             row = [cor_atual, percentual_atual, comp_25, comp_50, comp_100, comp_500, acertos, total, f"{assertividade:.2f}%"]
             sheet.append(row)
 
