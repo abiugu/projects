@@ -88,7 +88,7 @@ def main():
             acertos = dados['acertos']
             assertividade = (acertos / total) * 100 if total > 0 else 0
 
-            if assertividade > 70:
+            if assertividade > 50:
                 f.write(f"Ultimos 3 resultados: {cor_atual}, {cor_atual}, {cor_atual}\n")
                 f.write(f"percentual cor atual: {percentual_atual}%\n")
                 f.write(f"Ultimas 25 porcentagens: {comp_25}\n")
