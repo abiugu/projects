@@ -102,7 +102,7 @@ def main():
         assertividade_formatada = f"{assertividade:.2f}"  # Formata a assertividade com duas casas decimais
         
         # Filtro para incluir apenas linhas com assertividade maior que 50%
-        if assertividade > 66:
+        if assertividade > 50:
             row = [percentual] + list(comparacoes) + [total_acertos, total, assertividade_formatada]
             sheet.append(row)
 
