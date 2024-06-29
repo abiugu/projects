@@ -75,7 +75,7 @@ def main():
     resultados, porcentagens_25, porcentagens_50, porcentagens_100, porcentagens_500 = ler_e_analisar_log(arquivo_log)
     padroes_analise = analisar_padroes(resultados, porcentagens_25, porcentagens_50, porcentagens_100, porcentagens_500)
     
-    arquivo_excel = os.path.join(desktop_path, 'Dados log global cor.xlsx')
+    arquivo_excel = os.path.join(desktop_path,'LOGS', 'Dados log global cor.xlsx')
     workbook = Workbook()
     sheet = workbook.active
     sheet.title = 'Análise de Comparações'
