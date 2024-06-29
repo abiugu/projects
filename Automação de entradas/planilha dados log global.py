@@ -83,7 +83,7 @@ def criar_planilha(dados_agrupados, caminho_arquivo_excel):
 def main():
     desktop_path = os.path.join(os.path.expanduser('~'), 'Desktop')
     caminho_arquivo_log = os.path.join(desktop_path, 'previsoes_quebras_padrao.txt')
-    caminho_arquivo_excel = os.path.join(desktop_path, 'analise_previsoes.xlsx')
+    caminho_arquivo_excel = os.path.join(desktop_path, 'Dados log global.xlsx')
 
     resultados, percentuais, porcentagens_25, porcentagens_50, porcentagens_100, porcentagens_500, acertos, total, assertividade = ler_e_analisar_log(caminho_arquivo_log)
     dados_agrupados = processar_dados(resultados, percentuais, porcentagens_25, porcentagens_50, porcentagens_100, porcentagens_500, acertos, total, assertividade)
