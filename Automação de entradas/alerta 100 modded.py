@@ -38,7 +38,7 @@ desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
 logs_path = os.path.join(desktop_path, "LOGS")
 
 # Caminho completo para o arquivo de log
-log_file_path = os.path.join(logs_path, "log 100 direto modded.txt")
+log_file_path = os.path.join(logs_path, "log global.txt")
 
 # Inicializa o mixer de áudio do pygame
 pygame.mixer.init()
