@@ -30,7 +30,7 @@ def comparar_percentuais(atual, oposta):
         return '='
 
 def analisar_padroes(resultados, porcentagens_25, porcentagens_50, porcentagens_100, porcentagens_500):
-    padroes_analise = defaultdict(lambda: {'acertos': 0, 'total': 0})
+    padroes_analise = defaultdict(lambda: {'acertos': 0, 'erros': 0, 'jogadas': 0, 'erros_consecutivos': 0, 'max_erros_consecutivos': 0})
 
     for i in range(len(resultados) - 1):
         cor_atual = resultados[i][0]
@@ -62,39 +62,61 @@ def analisar_padroes(resultados, porcentagens_25, porcentagens_50, porcentagens_
             chave_padrao = (cor_atual, porcentagem_atual_25, comparacao_25, comparacao_50, comparacao_100, comparacao_500)
             acerto = resultados[i + 1][0] != cor_atual
 
-            padroes_analise[chave_padrao]['total'] += 1
+            padroes_analise[chave_padrao]['jogadas'] += 1
+
             if acerto:
+                if padroes_analise[chave_padrao]['erros_consecutivos'] > padroes_analise[chave_padrao]['max_erros_consecutivos']:
+                    padroes_analise[chave_padrao]['max_erros_consecutivos'] = padroes_analise[chave_padrao]['erros_consecutivos']
+                padroes_analise[chave_padrao]['erros_consecutivos'] = 0
                 padroes_analise[chave_padrao]['acertos'] += 1
+            else:
+                padroes_analise[chave_padrao]['erros'] += 1
+                padroes_analise[chave_padrao]['erros_consecutivos'] += 1
+
+                if padroes_analise[chave_padrao]['erros_consecutivos'] > padroes_analise[chave_padrao]['max_erros_consecutivos']:
+                    padroes_analise[chave_padrao]['max_erros_consecutivos'] = padroes_analise[chave_padrao]['erros_consecutivos']
 
     return padroes_analise
 
-def main():
-    desktop_path = os.path.join(os.path.expanduser('~'), 'Desktop')
-    arquivo_log = os.path.join(desktop_path, 'LOGS', 'log global.txt')
-    
-    resultados, porcentagens_25, porcentagens_50, porcentagens_100, porcentagens_500 = ler_e_analisar_log(arquivo_log)
-    padroes_analise = analisar_padroes(resultados, porcentagens_25, porcentagens_50, porcentagens_100, porcentagens_500)
-    
-    arquivo_excel = os.path.join(desktop_path,'LOGS', 'Dados log global cor.xlsx')
+def calcular_assertividade_acertos(padroes_analise):
+    for chave, dados in padroes_analise.items():
+        acertos = dados['acertos']
+        jogadas = dados['jogadas']
+        assertividade_acertos = (acertos / jogadas) * 100 if jogadas > 0 else 0
+        dados['assertividade_acertos'] = assertividade_acertos
+
+def gerar_planilha_excel(padroes_analise, caminho_arquivo_excel):
     workbook = Workbook()
     sheet = workbook.active
     sheet.title = 'Análise de Comparações'
 
-    header = ["Cor Atual", "Percentual Atual", "Comparação 25", "Comparação 50", "Comparação 100", "Comparação 500", "Acertos", "Total", "Assertividade (%)"]
+    header = ["Cor Atual", "Percentual Atual", "Comparação 25", "Comparação 50", "Comparação 100", "Comparação 500", "Acertos", "Erros", "Jogadas", "Últimos Erros Consecutivos", "Máx. Erros Consecutivos", "Assertividade Acertos (%)"]
     sheet.append(header)
 
     for chave_padrao, dados in padroes_analise.items():
         cor_atual, percentual_atual, comp_25, comp_50, comp_100, comp_500 = chave_padrao
-        total = dados['total']
         acertos = dados['acertos']
-        assertividade = (acertos / total) * 100 if total > 0 else 0
+        erros = dados['erros']
+        jogadas = dados['jogadas']
+        erros_consecutivos = dados['erros_consecutivos']
+        max_erros_consecutivos = dados['max_erros_consecutivos']
+        assertividade_acertos = dados['assertividade_acertos']
 
-        if assertividade > 50:
-            row = [cor_atual, percentual_atual, comp_25, comp_50, comp_100, comp_500, acertos, total, f"{assertividade:.2f}%"]
-            sheet.append(row)
+        row = [cor_atual, percentual_atual, comp_25, comp_50, comp_100, comp_500, acertos, erros, jogadas, erros_consecutivos, max_erros_consecutivos, f"{assertividade_acertos:.2f}%"]
+        sheet.append(row)
 
-    workbook.save(arquivo_excel)
-    print(f"Planilha Excel gerada com sucesso em: {arquivo_excel}")
+    workbook.save(caminho_arquivo_excel)
+    print(f"Planilha Excel gerada com sucesso em: {caminho_arquivo_excel}")
+
+def main():
+    desktop_path = os.path.join(os.path.expanduser('~'), 'Desktop')
+    arquivo_log = os.path.join(desktop_path, 'LOGS', 'log global.txt')
+    caminho_arquivo_excel = os.path.join(desktop_path, 'LOGS', 'Dados log global cor.xlsx')
+    
+    resultados, porcentagens_25, porcentagens_50, porcentagens_100, porcentagens_500 = ler_e_analisar_log(arquivo_log)
+    padroes_analise = analisar_padroes(resultados, porcentagens_25, porcentagens_50, porcentagens_100, porcentagens_500)
+    calcular_assertividade_acertos(padroes_analise)
+    gerar_planilha_excel(padroes_analise, caminho_arquivo_excel)
 
 if __name__ == "__main__":
     main()
