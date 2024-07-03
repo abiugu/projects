@@ -159,7 +159,7 @@ def calcular_assertividade_acertos(padroes_analise):
 
         assertividade_acertos = (acertos / jogadas) * 100 if jogadas > 0 else 0
         assertividade_acertos_branco = (acertos_branco / jogadas) * 100 if jogadas > 0 else 0
-        assertividade_acertos_total = (acertos + acertos_branco / jogadas) * 100 if jogadas > 0 else 0
+        assertividade_acertos_total = ((acertos + acertos_branco) / jogadas) * 100 if jogadas > 0 else 0
 
         dados['assertividade_acertos'] = assertividade_acertos
         dados['assertividade_acertos_branco'] = assertividade_acertos_branco
@@ -186,7 +186,7 @@ def gerar_planilha_excel(padroes_analise, caminho_arquivo_excel):
         assertividade_acertos_branco = dados['assertividade_acertos_branco']
         assertividade_acertos_total = dados['assertividade_acertos_total']
 
-        row = [percentual_atual, comp_25, comp_50, comp_100, comp_500, acertos, acertos_branco, erros, jogadas, erros_consecutivos, max_erros_consecutivos, f"{assertividade_acertos:.2f}%", f"{assertividade_acertos_branco:.2f}%", f"{assertividade_acertos_total:.2f}%"]
+        row = [percentual_atual, comp_25, comp_50, comp_100, comp_500, acertos, acertos_branco, erros, jogadas, erros_consecutivos, max_erros_consecutivos, f"{assertividade_acertos:.0f}%", f"{assertividade_acertos_branco:.0f}%", f"{assertividade_acertos_total:.0f}%"]
         sheet.append(row)
 
     workbook.save(caminho_arquivo_excel)
