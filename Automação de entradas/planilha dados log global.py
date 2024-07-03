@@ -194,7 +194,7 @@ def gerar_planilha_excel(padroes_analise, caminho_arquivo_excel):
 
 def main():
     desktop_path = os.path.join(os.path.expanduser('~'), 'Desktop')
-    arquivo_log = os.path.join(desktop_path, 'LOGS', 'log global 2.txt')
+    arquivo_log = os.path.join(desktop_path, 'LOGS', 'log global.txt')
     caminho_arquivo_excel = os.path.join(desktop_path, 'LOGS', 'Dados log global.xlsx')
     
     resultados, porcentagens_25, porcentagens_50, porcentagens_100, porcentagens_500 = ler_e_analisar_log(arquivo_log)
