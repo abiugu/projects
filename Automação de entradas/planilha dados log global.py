@@ -2,6 +2,7 @@ import os
 import re
 from collections import defaultdict
 from openpyxl import Workbook
+from openpyxl.styles import numbers
 
 def ler_e_analisar_log(caminho_arquivo_log):
     with open(caminho_arquivo_log, 'r') as f:
@@ -186,8 +187,14 @@ def gerar_planilha_excel(padroes_analise, caminho_arquivo_excel):
         assertividade_acertos_branco = dados['assertividade_acertos_branco']
         assertividade_acertos_total = dados['assertividade_acertos_total']
 
-        row = [percentual_atual, comp_25, comp_50, comp_100, comp_500, acertos, acertos_branco, erros, jogadas, erros_consecutivos, max_erros_consecutivos, f"{assertividade_acertos:.0f}%", f"{assertividade_acertos_branco:.0f}%", f"{assertividade_acertos_total:.0f}%"]
+        row = [percentual_atual, comp_25, comp_50, comp_100, comp_500, acertos, acertos_branco, erros, jogadas, erros_consecutivos, max_erros_consecutivos, assertividade_acertos, assertividade_acertos_branco, assertividade_acertos_total]
         sheet.append(row)
+
+    # Ajuste para formatar as colunas de porcentagem como números
+    for col in range(2, 6):
+        for row in range(2, sheet.max_row + 1):
+            cell = sheet.cell(row=row, column=col)
+            cell.number_format = numbers.FORMAT_PERCENTAGE_00
 
     workbook.save(caminho_arquivo_excel)
     print(f"Planilha Excel gerada com sucesso em: {caminho_arquivo_excel}")
