@@ -39,7 +39,7 @@ try:
     for _ in range(332):
         prev_button = driver.find_element(By.CSS_SELECTOR, 'button.pagination__button svg[style*="rotate(180deg)"]')
         prev_button.click()
-        WebDriverWait (2)  # Aguardar o carregamento completo da próxima página
+        WebDriverWait  # Aguardar o carregamento completo da próxima página
 
     # Retroceder e extrair dados de cada página
     backward_pages = 332  # Retroceder até a primeira página
@@ -77,7 +77,7 @@ try:
         if backward_pages > 1:
             next_button = driver.find_element(By.CSS_SELECTOR, 'button.pagination__button svg[style*="rotate(0deg)"]')
             next_button.click()
-            WebDriverWait (2)   # Aguardar o carregamento completo da página anterior
+            WebDriverWait  # Aguardar o carregamento completo da página anterior
 
         backward_pages -= 1
 
