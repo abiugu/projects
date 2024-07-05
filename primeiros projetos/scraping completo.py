@@ -2,9 +2,8 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 import os
+import time
 
 # Configurações do ChromeDriver
 service = Service()  # Substitua pelo caminho do seu chromedriver
@@ -39,7 +38,7 @@ try:
     for _ in range(332):
         prev_button = driver.find_element(By.CSS_SELECTOR, 'button.pagination__button svg[style*="rotate(180deg)"]')
         prev_button.click()
-        WebDriverWait  # Aguardar o carregamento completo da próxima página
+        time.sleep(1)  # Aguardar o carregamento completo da próxima página
 
     # Retroceder e extrair dados de cada página
     backward_pages = 332  # Retroceder até a primeira página
@@ -77,7 +76,7 @@ try:
         if backward_pages > 1:
             next_button = driver.find_element(By.CSS_SELECTOR, 'button.pagination__button svg[style*="rotate(0deg)"]')
             next_button.click()
-            WebDriverWait  # Aguardar o carregamento completo da página anterior
+            time.sleep(1)  # Aguardar o carregamento completo da página anterior
 
         backward_pages -= 1
 
