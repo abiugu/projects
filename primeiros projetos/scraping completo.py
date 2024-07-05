@@ -5,7 +5,7 @@ import os
 import time
 
 # Configurações do ChromeDriver
-service = Service('/path/to/chromedriver')  # Substitua pelo caminho do seu chromedriver
+service = Service()
 options = webdriver.ChromeOptions()
 
 # Executar em modo headless (sem interface gráfica)
