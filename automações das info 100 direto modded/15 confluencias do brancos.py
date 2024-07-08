@@ -47,8 +47,8 @@ def extrair_dados(arquivo_entrada, arquivo_saida):
                 out_file.write(f"  Percentual: {percentual} - Quantidade: {quantidade}\n")
 
 # Caminhos dos arquivos de entrada e saída
-arquivo_entrada = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "resultados", "resultados_acertos_branco_100 direto modded.txt")
-arquivo_saida = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "confluencias", "confluencia_acertos_100_branco_modded.txt")
+arquivo_entrada = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "resultados", "resultados_acertos_branco_100 direto mod.txt")
+arquivo_saida = os.path.join(os.path.expanduser("~"), "Desktop", "LOGS", "confluencias", "confluencia_acertos_100_branco_mod.txt")
 
 # Remova o arquivo de saída se já existir
 if os.path.exists(arquivo_saida):
@@ -57,4 +57,4 @@ if os.path.exists(arquivo_saida):
 # Chamar a função para extrair dados
 extrair_dados(arquivo_entrada, arquivo_saida)
 
-print("Informações confluentes salvas em 'confluencia_jogadas_100_direto_modded.txt'.")
+print("Informações confluentes salvas em 'confluencia_jogadas_100_direto_mod.txt'.")
