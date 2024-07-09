@@ -35,13 +35,13 @@ try:
     driver.implicitly_wait(10)  # Espera implícita de até 10 segundos
 
     # Avançar até a página 10 (índice 9)
-    for _ in range(120):
+    for _ in range(50):
         prev_button = driver.find_element(By.CSS_SELECTOR, 'button.pagination__button svg[style*="rotate(180deg)"]')
         prev_button.click()
         time.sleep(1)  # Aguardar o carregamento completo da próxima página
 
     # Retroceder e extrair dados de cada página
-    backward_pages = 120  # Retroceder até a primeira página
+    backward_pages = 50  # Retroceder até a primeira página
     while backward_pages > 0:
         # Encontrar todos os elementos de aposta 'bet'
         bet_elements = driver.find_elements(By.CSS_SELECTOR, 'div#history div.bet')
