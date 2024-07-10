@@ -3,6 +3,7 @@ import re
 from datetime import datetime
 from collections import defaultdict
 from openpyxl import Workbook
+from openpyxl.utils import get_column_letter
 
 # Função para ler o arquivo e extrair os dados
 def ler_arquivo(filepath):
@@ -63,65 +64,49 @@ def analisar_dados(dados):
     # Preparar os dados para a planilha Excel
     resultados = []
     
-    # Cabeçalho dos padrões de 3 anteriores
-    resultados.append(["Padrão de 3 anteriores", "Quantidade Vista", "Quantidade de Acertos", "% de Assertividade"])
-    
     # Adicionar os padrões de 3 anteriores
+    resultados.append(["Padrão de 3 anteriores", "Quantidade Vista", "Quantidade de Acertos", "% de Assertividade"])
     for padrao, info in padroes_3.items():
         resultados.append([str(padrao), info['total'], info['acima_2'], f"{info['assertividade']:.2f}%"])
     
     # Espaço em branco
     resultados.append([])
     
-    # Cabeçalho dos padrões de 2 anteriores
-    resultados.append(["Padrão de 2 anteriores", "Quantidade Vista", "Quantidade de Acertos", "% de Assertividade"])
-    
     # Adicionar os padrões de 2 anteriores
+    resultados.append(["Padrão de 2 anteriores", "Quantidade Vista", "Quantidade de Acertos", "% de Assertividade"])
     for padrao, info in padroes_2.items():
         resultados.append([str(padrao), info['total'], info['acima_2'], f"{info['assertividade']:.2f}%"])
     
     # Espaço em branco
     resultados.append([])
     
-    # Cabeçalho dos padrões de 1 anterior
-    resultados.append(["Padrão de 1 anterior", "Quantidade Vista", "Quantidade de Acertos", "% de Assertividade"])
-    
     # Adicionar os padrões de 1 anterior
+    resultados.append(["Padrão de 1 anterior", "Quantidade Vista", "Quantidade de Acertos", "% de Assertividade"])
     for padrao, info in padroes_1.items():
         resultados.append([str(padrao), info['total'], info['acima_2'], f"{info['assertividade']:.2f}%"])
-    
-    # Adicionar os top 3 padrões mais assertivos de cada tipo
-    top_3_padroes_3 = list(padroes_3.items())[:3]
-    top_3_padroes_2 = list(padroes_2.items())[:3]
-    top_3_padroes_1 = list(padroes_1.items())[:3]
     
     # Espaço em branco
     resultados.append([])
     
-    # Cabeçalho dos top 3 padrões mais assertivos de 3 anteriores
+    # Adicionar os top 3 padrões mais assertivos de cada tipo
     resultados.append(["Top 3 padrões mais assertivos de 3 anteriores", "", "", ""])
-    
-    # Adicionar os top 3 padrões mais assertivos de 3 anteriores
+    top_3_padroes_3 = list(padroes_3.items())[:3]
     for padrao, info in top_3_padroes_3:
         resultados.append([str(padrao), info['total'], info['acima_2'], f"{info['assertividade']:.2f}%"])
     
     # Espaço em branco
     resultados.append([])
     
-    # Cabeçalho dos top 3 padrões mais assertivos de 2 anteriores
     resultados.append(["Top 3 padrões mais assertivos de 2 anteriores", "", "", ""])
-    
-    # Adicionar os top 3 padrões mais assertivos de 2 anteriores
+    top_3_padroes_2 = list(padroes_2.items())[:3]
     for padrao, info in top_3_padroes_2:
         resultados.append([str(padrao), info['total'], info['acima_2'], f"{info['assertividade']:.2f}%"])
     
     # Espaço em branco
     resultados.append([])
     
-    # Cabeçalho dos top 3 padrões mais assertivos de 1 anterior
     resultados.append(["Top 3 padrões mais assertivos de 1 anterior", "", "", ""])
-    
-    # Adicionar os top 3 padrões mais assertivos de 1 anterior
+    top_3_padroes_1 = list(padroes_1.items())[:3]
     for padrao, info in top_3_padroes_1:
         resultados.append([str(padrao), info['total'], info['acima_2'], f"{info['assertividade']:.2f}%"])
     
@@ -135,6 +120,19 @@ def salvar_resultados_excel(resultados, filepath):
     
     for linha in resultados:
         sheet.append(linha)
+    
+    # Ajustar a largura das colunas
+    for col in sheet.columns:
+        max_length = 0
+        column = col[0].column_letter
+        for cell in col:
+            try:
+                if len(str(cell.value)) > max_length:
+                    max_length = len(cell.value)
+            except:
+                pass
+        adjusted_width = (max_length + 2)
+        sheet.column_dimensions[column].width = adjusted_width
     
     workbook.save(filepath)
     print(f"Resultados salvos em: {filepath}")
