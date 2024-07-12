@@ -216,36 +216,13 @@ def main():
                     if len(set(sequencia[:3])) == 1:
                         cor_atual = sequencia[0]
                         cor_oposta = None
-                        if cor_atual == 'red':
-                            cor_oposta = 'black'
-                        elif cor_atual == 'black':
-                            cor_oposta = 'red'
-                        if cor_oposta:
-                            cor_atual_percentual_500 = int(
-                                percentuais500[['white', 'black', 'red'].index(cor_atual)])
-                            cor_oposta_percentual_500 = int(
-                                percentuais500[['white', 'black', 'red'].index(cor_oposta)])
+        
 
-                            cor_atual_percentual_100 = int(
-                                percentuais100[['white', 'black', 'red'].index(cor_atual)])
-                            cor_oposta_percentual_100 = int(
-                                percentuais100[['white', 'black', 'red'].index(cor_oposta)])
-
-                            cor_atual_percentual_50 = int(
-                                percentuais50[['white', 'black', 'red'].index(cor_atual)])
-                            cor_oposta_percentual_50 = int(
-                                percentuais50[['white', 'black', 'red'].index(cor_oposta)])
-
-                            cor_atual_percentual_25 = int(
-                                percentuais25[['white', 'black', 'red'].index(cor_atual)])
-                            cor_oposta_percentual_25 = int(
-                                percentuais25[['white', 'black', 'red'].index(cor_oposta)])
-
-                            if cor_atual_percentual_25 is not None and cor_atual_percentual_25 <= 100:
+                        if cor_atual_percentual_25 is not None and cor_atual_percentual_25 <= 100:
                                 print(f"Cor atual: {cor_atual}, Percentual: {
                                       cor_atual_percentual_25}")
 
-                            if cor_atual_percentual_25 == 72 and (cor_atual_percentual_25 > cor_oposta_percentual_25 and cor_atual_percentual_50 > cor_oposta_percentual_50 and cor_atual_percentual_100 < cor_oposta_percentual_100 and cor_atual_percentual_500 < cor_oposta_percentual_500) or \
+                        if cor_atual_percentual_25 == 72 and (cor_atual_percentual_25 > cor_oposta_percentual_25 and cor_atual_percentual_50 > cor_oposta_percentual_50 and cor_atual_percentual_100 < cor_oposta_percentual_100 and cor_atual_percentual_500 < cor_oposta_percentual_500) or \
                                     cor_atual_percentual_25 == 68 and (cor_atual_percentual_25 > cor_oposta_percentual_25 and cor_atual_percentual_50 > cor_oposta_percentual_50 and cor_atual_percentual_100 > cor_oposta_percentual_100 and cor_atual_percentual_500 == cor_oposta_percentual_500) or \
                                     cor_atual_percentual_25 == 60 and (cor_atual_percentual_25 > cor_oposta_percentual_25 and cor_atual_percentual_50 < cor_oposta_percentual_50 and cor_atual_percentual_100 > cor_oposta_percentual_100 and cor_atual_percentual_500 > cor_oposta_percentual_500) or \
                                     cor_atual_percentual_25 == 56 and (cor_atual_percentual_25 > cor_oposta_percentual_25 and cor_atual_percentual_50 < cor_oposta_percentual_50 and cor_atual_percentual_100 == cor_oposta_percentual_100 and cor_atual_percentual_500 < cor_oposta_percentual_500) or \
