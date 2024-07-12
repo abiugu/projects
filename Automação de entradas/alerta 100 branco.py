@@ -262,7 +262,7 @@ def main():
                                     "%d-%m-%Y")  # Ajuste para dia-mês-ano
 
                                 current_time = time.time()
-                                if current_time - last_alarm_time >= 60:
+                                if current_time - last_alarm_time >= 30:
                                     alarm_sound2.play()
                                     count_alarm += 1
                                     print(f"Alarme acionado. {hora_atual}, {
