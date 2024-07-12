@@ -1,70 +1,112 @@
 import time
-import requests
-from bs4 import BeautifulSoup
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 import pandas as pd
 from datetime import datetime
 import joblib
 import os
 
-# Diretório de entrada
-input_dir = os.path.join(os.path.expanduser('~'), 'Desktop')
+# Diretório onde o modelo está armazenado
+input_dir = os.path.join(os.path.expanduser('~'), 'Desktop', 'LOGS')
+
+# Caminho do modelo treinado
+model_path = os.path.join(input_dir, 'modelo.pkl')
 
 # Carregar o modelo
-model_path = os.path.join(input_dir,"LOGS", 'modelo.pkl')
 modelo = joblib.load(model_path)
 print("Modelo carregado com sucesso.")
 
-# Função para buscar dados ao vivo do site
-def buscar_dados_ao_vivo(url, modelo):
-    try:
-        response = requests.get(url)
-        if response.status_code == 200:
-            soup = BeautifulSoup(response.content, 'html.parser')
-            
-            # Buscar todas as entradas de histórico
-            entries = soup.find_all('div', class_='entries')
-
-            # Verificar se temos exatamente 22 entradas
-            if len(entries) == 22:
-                # Preparar dados das últimas 22 jogadas
-                ultimas_jogadas = []
-                for entry in entries:
-                    multiplicador_element = entry.find('div', class_='bet-amount')
-                    if multiplicador_element:
-                        multiplicador_text = multiplicador_element.text.strip()
-                        # Extrair o multiplicador da string
-                        multiplicador = float(multiplicador_text.split(' ')[0].replace(',', '.'))
-                        ultimas_jogadas.append(multiplicador)
-                
-                # Previsões com base no modelo treinado
-                X_novo = pd.DataFrame({
-                    'Multiplicador': ultimas_jogadas,
-                    'Dia': [datetime.now().day] * len(ultimas_jogadas),
-                    'Mês': [datetime.now().month] * len(ultimas_jogadas),
-                    'Hora': [datetime.now().hour] * len(ultimas_jogadas),
-                    'Minuto': [datetime.now().minute] * len(ultimas_jogadas)
-                })
-                
-                probabilidade = modelo.predict_proba(X_novo)[:, 1]
-                for i, prob in enumerate(probabilidade):
-                    if prob >= 0.5:
-                        print(f"Próxima jogada: Mais de 2.00x (Probabilidade: {prob:.2%})")
-                    else:
-                        print(f"Próxima jogada: Menor que 2.00x (Probabilidade: {prob:.2%})")
-            else:
-                print(f"Não foram encontradas exatamente 22 entradas de histórico.")
-        else:
-            print(f"Erro ao acessar a URL: {response.status_code}")
-    except Exception as e:
-        print(f"Erro ao buscar dados ao vivo: {str(e)}")
+# Configurar o webdriver do Selenium
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
 # URL do site para buscar dados ao vivo
-url = 'https://blaze1.space/pt/games/crash'
+url = 'https://blaze1.space/pt/games/crash?modal=crash_history_index'
 
+# Variável para armazenar o último multiplicador processado
+ultimo_multiplicador = None
+
+def prever_proxima_jogada(multiplicadores, modelo):
+    try:
+        # Preparar dados para previsão
+        X_teste = pd.DataFrame({
+            'Multiplicador': multiplicadores,
+            'Dia': [datetime.now().day] * len(multiplicadores),
+            'Mês': [datetime.now().month] * len(multiplicadores),
+            'Hora': [datetime.now().hour] * len(multiplicadores),
+            'Minuto': [datetime.now().minute] * len(multiplicadores)
+        })
+
+        # Realizar previsão
+        probabilidade = modelo.predict_proba(X_teste)[:, 1]
+
+        # Determinar a previsão com base na sequência atual
+        probabilidade_media = probabilidade.mean()
+        previsao = "Mais de 2.00x" if probabilidade_media >= 0.5 else "Menor que 2.00x"
+
+        return previsao, probabilidade_media
+
+    except Exception as e:
+        print(f"Erro durante a previsão: {e}")
+        return None, None
+
+def buscar_e_prever(url, modelo):
+    global ultimo_multiplicador
+    try:
+        while True:
+            # Navegar até a página inicial do histórico de apostas
+            driver.get(url)
+
+            # Aguardar o carregamento completo da página
+            driver.implicitly_wait(10)  # Espera implícita de até 10 segundos
+
+            # Encontrar todos os elementos de aposta 'bet' na página atual
+            bet_elements = driver.find_elements(By.CSS_SELECTOR, 'div#history div.bet')
+
+            # Lista para armazenar os multiplicadores desta página
+            multiplicadores_pagina = []
+
+            # Processar cada elemento de aposta para extrair o multiplicador
+            for bet_element in bet_elements:
+                try:
+                    multiplier_element = bet_element.find_element(By.CSS_SELECTOR, 'div.bet-amount')
+                    multiplier = float(multiplier_element.text.strip().replace('x', '').replace(',', '.'))
+                    multiplicadores_pagina.append(multiplier)
+                except Exception as e:
+                    print(f"Erro ao extrair multiplicador: {e}")
+
+            # Verificar se há novos multiplicadores nesta página
+            if multiplicadores_pagina:
+                # Obter o primeiro multiplicador (o mais recente)
+                novo_multiplicador = multiplicadores_pagina[0]
+
+                # Verificar se o multiplicador mudou desde a última iteração
+                if novo_multiplicador != ultimo_multiplicador:
+                    ultimo_multiplicador = novo_multiplicador
+
+                    # Imprimir o último multiplicador processado (o mais recente)
+                    print(f"\nÚltima jogada processada: {ultimo_multiplicador:.2f}")
+
+                    # Previsão com base no modelo treinado e na sequência da página atual
+                    resultado, probabilidade = prever_proxima_jogada(multiplicadores_pagina, modelo)
+
+                    if resultado:
+                        print(f"Próxima jogada: {resultado} (Probabilidade: {probabilidade:.2%})")
+
+            # Esperar um curto período antes de verificar novamente
+            time.sleep(1)
+
+    except KeyboardInterrupt:
+        print("\nPrograma interrompido pelo usuário.")
+    except Exception as e:
+        print(f"Erro ao buscar dados e prever: {str(e)}")
+    finally:
+        # Fechar o webdriver ao finalizar
+        driver.quit()
+
+# Iniciar a função para buscar dados e prever continuamente
 try:
-    while True:
-        # Buscar dados ao vivo e fazer previsões
-        buscar_dados_ao_vivo(url, modelo)
-        time.sleep(30)  # Espera 30 segundos antes de verificar novamente
-except KeyboardInterrupt:
-    print("\nPrograma interrompido pelo usuário.")
+    buscar_e_prever(url, modelo)
+except Exception as e:
+    print(f"Erro durante a execução do script: {e}")
