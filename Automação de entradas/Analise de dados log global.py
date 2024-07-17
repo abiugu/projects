@@ -31,7 +31,7 @@ def comparar_percentuais(atual, oposta):
 def analisar_padroes(resultados, porcentagens_25, porcentagens_50, porcentagens_100, porcentagens_500):
     padroes_analise = defaultdict(lambda: {'acertos': 0, 'total': 0})
 
-    for i in range(len(resultados) - 1):
+    for i in range(len(resultados) - 2):
         cor_atual = resultados[i][0]
         if resultados[i][0] == resultados[i][1] == resultados[i][2]:
             if cor_atual == "black":
@@ -59,11 +59,14 @@ def analisar_padroes(resultados, porcentagens_25, porcentagens_50, porcentagens_
             comparacao_500 = comparar_percentuais(porcentagem_atual_500, porcentagem_oposta_500)
 
             chave_padrao = (cor_atual, porcentagem_atual_25, comparacao_25, comparacao_50, comparacao_100, comparacao_500)
-            acerto = resultados[i + 1][0] != cor_atual
+            
+            # Verificar os próximos dois resultados
+            if i + 2 < len(resultados):
+                acerto = resultados[i + 1][0] != cor_atual or resultados[i + 2][0] != cor_atual
 
-            padroes_analise[chave_padrao]['total'] += 1
-            if acerto:
-                padroes_analise[chave_padrao]['acertos'] += 1
+                padroes_analise[chave_padrao]['total'] += 1
+                if acerto:
+                    padroes_analise[chave_padrao]['acertos'] += 1
 
     return padroes_analise
 
@@ -88,7 +91,7 @@ def main():
             acertos = dados['acertos']
             assertividade = (acertos / total) * 100 if total > 0 else 0
 
-            if assertividade > 50:
+            if assertividade > 90:
                 f.write(f"Ultimos 3 resultados: {cor_atual}, {cor_atual}, {cor_atual}\n")
                 f.write(f"percentual cor atual: {percentual_atual}%\n")
                 f.write(f"Ultimas 25 porcentagens: {comp_25}\n")
