@@ -11,15 +11,19 @@ def extrair_resultados_porcentagens(arquivo_entrada, arquivo_saida):
         with open(arquivo_saida, 'w') as out_file:  # Abre o arquivo em modo de escrita ('w')
             while i < len(linhas):
                 if "Ultimos 3 resultados:" in linhas[i]:
-                    resultado = re.findall(r'red|black', linhas[i])[0]
-                    porcentagens_linha = [float(p) for p in linhas[i+1].split(':')[1].strip().split(',')]
-                    valor_usado = porcentagens_linha[-1] if resultado == 'red' else porcentagens_linha[-2]
-                    out_file.write(f"Resultado: {resultado}, Porcentagem: {valor_usado}\n")
-                    # Atualiza contagem de resultados
-                    resultados[resultado] += 1
-                    # Atualiza contagem de porcentagens
-                    porcentagens[valor_usado] = porcentagens.get(valor_usado, 0) + 1
-                    i += 11  # Pular 11 linhas para a próxima jogada
+                    match = re.findall(r'red|black', linhas[i])
+                    if match:  # Verifica se há correspondências
+                        resultado = match[0]
+                        porcentagens_linha = [float(p) for p in linhas[i+1].split(':')[1].strip().split(',')]
+                        valor_usado = porcentagens_linha[-1] if resultado == 'red' else porcentagens_linha[-2]
+                        out_file.write(f"Resultado: {resultado}, Porcentagem: {valor_usado}\n")
+                        # Atualiza contagem de resultados
+                        resultados[resultado] += 1
+                        # Atualiza contagem de porcentagens
+                        porcentagens[valor_usado] = porcentagens.get(valor_usado, 0) + 1
+                        i += 11  # Pular 11 linhas para a próxima jogada
+                    else:
+                        i += 1
                 else:
                     i += 1
 
