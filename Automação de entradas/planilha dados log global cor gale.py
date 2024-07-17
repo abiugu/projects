@@ -120,7 +120,7 @@ def gerar_planilha_excel(padroes_analise, caminho_arquivo_excel):
         assertividade_acertos_branco = dados['assertividade_acertos_branco']
         assertividade_acertos_total = dados['assertividade_acertos_total']
 
-        row = [cor_atual, percentual_atual, comp_25, comp_50, comp_100, comp_500, acertos, acertos_branco, erros, jogadas, erros_consecutivos, max_erros_consecutivos, assertividade_acertos, assertividade_acertos_branco, assertividade_acertos_total]
+        row = [cor_atual, percentual_atual, comp_25, comp_50, comp_100, comp_500, acertos, acertos_branco, erros, jogadas, erros_consecutivos, max_erros_consecutivos, f"{assertividade_acertos:.2f}%", f"{assertividade_acertos_branco:.2f}%", f"{assertividade_acertos_total:.2f}%"]
         sheet.append(row)
 
     workbook.save(caminho_arquivo_excel)
