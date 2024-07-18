@@ -116,22 +116,7 @@ def extrair_cores(driver, valor):
 
     return percentuais
 
-# Função para atualizar o log interativo
 
-
-def atualizar_log_interativo(acertos_direto, acertos_gale, erros):
-    with open(log_interativo_path, "w") as log_interativo_file:
-        log_interativo_file.write("=== LOG INTERATIVO ===\n")
-        log_interativo_file.write(f"Acertos diretos: {acertos_direto}\n")
-        log_interativo_file.write(f"Acertos gale: {acertos_gale}\n")
-        log_interativo_file.write(f"Erros: {erros}\n")
-        entrada_direta = int((acertos_direto * 13) - erros)
-        entrada_secundaria = int((acertos_gale * 13) - erros)
-        entrada_gale = int((acertos_direto + acertos_gale) * 13 - (erros * 2))
-        log_interativo_file.write(f"Entrada direta: {entrada_direta}\n")
-        log_interativo_file.write(f"Entrada secundária: {
-                                  entrada_secundaria}\n")
-        log_interativo_file.write(f"Entrada gale: {entrada_gale}\n")
 
 # Função principal
 
@@ -369,7 +354,6 @@ def main():
 
                     log_to_file(f"Acertos branco: {acertos_branco}, Acertos branco gale : {acertos_gale_branco}, Acertos direto: {acertos_direto}, Acertos gale : {acertos_gale}, Erros: {erros}")
                     print(f"Acertos branco: {acertos_branco}, Acertos branco gale : {acertos_gale_branco}, Acertos direto: {acertos_direto}, Acertos gale : {acertos_gale}, Erros: {erros}")
-                    atualizar_log_interativo(acertos_direto, acertos_branco, acertos_gale, acertos_gale_branco, erros)
                     # Define alarme_acionado como False após coletar a segunda sequência
                     alarme_acionado = False
                     time.sleep(1)
