@@ -351,16 +351,23 @@ def main():
                         print("Acerto branco !!")
                         acertos_branco += 1
 
+                    elif ultimas_tres_cores_1 != sequencia_anterior[:3]:
+                        print("Acerto direto !!")
+                        acertos_direto += 1
+
                     elif ultimas_tres_cores_2[0] == 'white':
                         print("Acerto gale branco !!")
                         acertos_gale_branco += 1
+
+                    elif ultimas_tres_cores_2 != ultimas_tres_cores_1:
+                        print("Acerto gale !!")
+                        acertos_gale += 1
 
                     else:
                         print("Erro gale !!")
                         erros += 1
 
-                    log_to_file(f"Acertos branco: {acertos_branco}, Acertos gale branco: {
-                                acertos_gale_branco}, Erros: {erros}")
+                    log_to_file(f"Acertos branco: {acertos_branco}, Acertos branco gale : {acertos_gale_branco}, Acertos direto: {acertos_direto}, Acertos gale : {acertos_gale}, Erros: {erros}")
                     print(f"Acertos branco: {acertos_branco}, Acertos gale branco: {
                           acertos_gale_branco}, Erros: {erros}")
                     atualizar_log_interativo(
