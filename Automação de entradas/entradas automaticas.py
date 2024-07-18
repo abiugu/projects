@@ -5,7 +5,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
-from alerta1 import alarme_acionado  # Supondo que alarme_acionado seja uma função que verifica o alarme
 
 # Configurando o serviço do Chrome
 chrome_service = Service()  # Substitua pelo caminho do seu chromedriver
@@ -28,8 +27,7 @@ print("Login realizado com sucesso. Iniciando monitoramento de apostas...")
 
 try:
     while True:
-        # Aguardando o alarme ser acionado
-        if alarme_acionado:
+        try:
             # Acessa a página principal do jogo para monitorar a cor da última jogada
             driver.get("https://blaze1.space/pt/games/double")
 
@@ -53,37 +51,48 @@ try:
 
             print(f"Última jogada foi {cor_ultima_jogada}")
 
-            if cor_ultima_jogada == "red":
-                # Escolher a cor preta
-                cor_black_button = WebDriverWait(driver, 10).until(
-                    EC.element_to_be_clickable((By.CSS_SELECTOR, "div.black")))
-                cor_black_button.click()
-            elif cor_ultima_jogada == "black":
-                # Escolher a cor vermelha
-                cor_red_button = WebDriverWait(driver, 10).until(
-                    EC.element_to_be_clickable((By.CSS_SELECTOR, "div.red")))
-                cor_red_button.click()
+            if cor_ultima_jogada in ["red", "black"]:
+                # Escolher a cor oposta à última jogada
+                cor_oposta = "black" if cor_ultima_jogada == "red" else "red"
+                cor_oposta_button = WebDriverWait(driver, 10).until(
+                    EC.element_to_be_clickable((By.CSS_SELECTOR, f"div.{cor_oposta}"))
+                )
+                cor_oposta_button.click()
 
-            # Inserir o valor no campo de Quantia
-            valor_field = WebDriverWait(driver, 10).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, "div.input-field-wrapper input.input-field")))
-            driver.execute_script("arguments[0].setAttribute('value', '1.00');", valor_field)
+                # Inserir o valor no campo de Quantia
+                valor_field = WebDriverWait(driver, 10).until(
+                    EC.presence_of_element_located((By.CSS_SELECTOR, "div.input-field-wrapper input.input-field"))
+                )
+                driver.execute_script("arguments[0].setAttribute('value', '1.00');", valor_field)
 
-            # Aguardar até que o botão "Começar o jogo" esteja habilitado
-            comecar_jogo_button = WebDriverWait(driver, 10).until(
-                EC.element_to_be_clickable((By.CSS_SELECTOR, "div.place-bet button:not([disabled])")))
-            comecar_jogo_button.click()
+                # Tentar clicar no botão "Começar o jogo"
+                comecar_jogo_button = None
+                while not comecar_jogo_button:
+                    try:
+                        comecar_jogo_button = WebDriverWait(driver, 5).until(
+                            EC.element_to_be_clickable((By.CSS_SELECTOR, "div.place-bet button:not([disabled])"))
+                        )
+                        comecar_jogo_button.click()
+                    except Exception as e:
+                        print(f"Erro ao tentar clicar no botão 'Começar o jogo': {e}")
+                        time.sleep(5)  # Esperar 5 segundos antes de tentar novamente
 
-            print("Aposta realizada. Aguardando próxima rodada...")
+                print("Aposta realizada. Aguardando próxima rodada...")
+
+                # Aguardar 60 segundos após clicar no botão de aposta
+                time.sleep(60)
+
+            else:
+                print("Aguardando próxima rodada para decidir a aposta.")
+
+        except Exception as e:
+            print(f"Erro ao tentar realizar a entrada: {e}")
 
         # Aguardar um tempo antes de verificar novamente
         time.sleep(10)  # Aguarda 10 segundos antes de verificar novamente
 
 except KeyboardInterrupt:
     print("\nPrograma encerrado pelo usuário.")
-
-except Exception as e:
-    print(f"Erro ao tentar realizar a entrada: {e}")
 
 finally:
     # Manter o navegador aberto para verificação manual

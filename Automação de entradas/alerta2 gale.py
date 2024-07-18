@@ -368,10 +368,8 @@ def main():
                         erros += 1
 
                     log_to_file(f"Acertos branco: {acertos_branco}, Acertos branco gale : {acertos_gale_branco}, Acertos direto: {acertos_direto}, Acertos gale : {acertos_gale}, Erros: {erros}")
-                    print(f"Acertos branco: {acertos_branco}, Acertos gale branco: {
-                          acertos_gale_branco}, Erros: {erros}")
-                    atualizar_log_interativo(
-                        acertos_branco, acertos_gale_branco, erros)
+                    print(f"Acertos branco: {acertos_branco}, Acertos branco gale : {acertos_gale_branco}, Acertos direto: {acertos_direto}, Acertos gale : {acertos_gale}, Erros: {erros}")
+                    atualizar_log_interativo(acertos_direto, acertos_branco, acertos_gale, acertos_gale_branco, erros)
                     # Define alarme_acionado como False após coletar a segunda sequência
                     alarme_acionado = False
                     time.sleep(1)
