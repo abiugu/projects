@@ -5,6 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
+from alerta1 import alarme_acionado, cor_oposta
 
 # Configurando o serviço do Chrome
 chrome_service = Service()  # Substitua pelo caminho do seu chromedriver
@@ -15,6 +16,8 @@ chrome_options = Options()
 
 # Inicializando o driver do Chrome
 driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
+
+cor_button = None
 
 # Abrindo a página de login
 driver.get("https://blaze1.space/pt/games/double?modal=auth&tab=login")
@@ -31,65 +34,57 @@ try:
             # Acessa a página principal do jogo para monitorar a cor da última jogada
             driver.get("https://blaze1.space/pt/games/double")
 
-            # Aguardando até que o elemento da última jogada esteja presente na página
-            last_play_element = WebDriverWait(driver, 10).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, ".entries.main .entry .roulette-tile .sm-box"))
-            )
-
-            # Obtendo a cor da última jogada
-            class_attribute = last_play_element.get_attribute("class")
-
-            # Verificando a cor baseada na classe
-            if "red" in class_attribute:
-                cor_ultima_jogada = "red"
-            elif "black" in class_attribute:
-                cor_ultima_jogada = "black"
-            elif "white" in class_attribute:
-                cor_ultima_jogada = "white"
-            else:
-                cor_ultima_jogada = "cor não reconhecida"
-
-            print(f"Última jogada foi {cor_ultima_jogada}")
-
-            if cor_ultima_jogada in ["red", "black"]:
-                # Escolher a cor oposta à última jogada
-                cor_oposta = "black" if cor_ultima_jogada == "red" else "red"
-                cor_oposta_button = WebDriverWait(driver, 10).until(
-                    EC.element_to_be_clickable((By.CSS_SELECTOR, f"div.{cor_oposta}"))
+            if cor_oposta == "black":
+                cor_button = WebDriverWait(driver, 10).until(
+                    EC.element_to_be_clickable((By.CSS_SELECTOR, "div.black"))
                 )
-                cor_oposta_button.click()
-
+            elif cor_oposta == "red":
+                cor_button = WebDriverWait(driver, 10).until(
+                    EC.element_to_be_clickable((By.CSS_SELECTOR, "div.red"))
+                )
+            elif cor_oposta == "white":
+                cor_button = WebDriverWait(driver, 10).until(
+                    EC.element_to_be_clickable((By.CSS_SELECTOR, "div.white"))
+                )
+            if cor_button:
+                cor_button.click()
                 # Inserir o valor no campo de Quantia
                 valor_field = WebDriverWait(driver, 10).until(
                     EC.presence_of_element_located((By.CSS_SELECTOR, "div.input-field-wrapper input.input-field"))
                 )
-                driver.execute_script("arguments[0].setAttribute('value', '1.00');", valor_field)
-
-                # Tentar clicar no botão "Começar o jogo"
-                comecar_jogo_button = None
-                while not comecar_jogo_button:
-                    try:
-                        comecar_jogo_button = WebDriverWait(driver, 5).until(
-                            EC.element_to_be_clickable((By.CSS_SELECTOR, "div.place-bet button:not([disabled])"))
-                        )
-                        comecar_jogo_button.click()
-                    except Exception as e:
-                        print(f"Erro ao tentar clicar no botão 'Começar o jogo': {e}")
-                        time.sleep(5)  # Esperar 5 segundos antes de tentar novamente
-
-                print("Aposta realizada. Aguardando próxima rodada...")
-
+                driver.execute_script("arguments[0].value = '10.00';", valor_field)
+                # Verificar se a página está no estado "waiting" antes de clicar no botão "Começar o jogo"
+                while True:
+                    page_div = WebDriverWait(driver, 10).until(
+                        EC.presence_of_element_located((By.CSS_SELECTOR, "div#roulette"))
+                    )
+                    page_state = page_div.get_attribute("class")
+                    
+                    if "page waiting" in page_state:
+                        try:
+                            comecar_jogo_button = WebDriverWait(driver, 5).until(
+                                EC.element_to_be_clickable((By.CSS_SELECTOR, "div.place-bet button:not([disabled])"))
+                            )
+                            comecar_jogo_button.click()
+                            print("Aposta realizada. Aguardando próxima rodada...")
+                            break
+                        except Exception as e:
+                            print(f"Erro ao tentar clicar no botão 'Começar o jogo': {e}")
+                            time.sleep(2)  # Esperar 2 segundos antes de tentar novamente
+                    else:
+                        print("A página não está no estado 'waiting'. Aguardando próximo estado.")
+                        time.sleep(5)  # Esperar 5 segundos antes de verificar o estado novamente
                 # Aguardar 60 segundos após clicar no botão de aposta
                 time.sleep(60)
-
             else:
-                print("Aguardando próxima rodada para decidir a aposta.")
+                print("Não foi possível encontrar o botão da cor oposta.")
+
 
         except Exception as e:
             print(f"Erro ao tentar realizar a entrada: {e}")
 
-        # Aguardar um tempo antes de verificar novamente
-        time.sleep(10)  # Aguarda 10 segundos antes de verificar novamente
+        # Aguardar 30 segundos antes de verificar novamente
+        time.sleep(30)
 
 except KeyboardInterrupt:
     print("\nPrograma encerrado pelo usuário.")
