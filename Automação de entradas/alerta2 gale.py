@@ -53,9 +53,6 @@ alarm_sound = pygame.mixer.Sound(sound_file_path)
 
 alarm_sound2 = pygame.mixer.Sound(sound_file_path2)
 
-# Arquivo de log interativo
-log_interativo_path = os.path.join(
-    logs_path, "log interativo 100 mod gale.txt")
 
 # Dicionário para armazenar valores anteriores
 valores_anteriores = {"acertos_direto": 0, "acertos_gale": 0, "erros": 0}
