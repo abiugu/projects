@@ -6,7 +6,7 @@
     "stop_win_ratio":1.1,
     "wait_after_bet":60,
     "martingale":1,
-    "headless": true,
+    "headless": false,
     "language":"pt",
     "strategies": {
         "red": [
