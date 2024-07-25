@@ -1,0 +1,2 @@
+api = 'suachave'
+secret = 'suachave'
