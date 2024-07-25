@@ -68,7 +68,7 @@ def monitor_market():
     global running
     initial_balance = get_balance()
     if initial_balance is None:
-        print('Cannot connect to API')
+        print('Nao conectado a API')
         return
 
     while running:

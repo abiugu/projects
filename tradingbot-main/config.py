@@ -2,8 +2,8 @@
 
 # Configurações do Bot de Trading
 config = {
-    "tp": 0.1,  # Take Profit +10%
-    "sl": 0.009,  # Stop Loss -0.9%
+    "tp": 0.05,  # Take Profit +5%
+    "sl": 0.01,  # Stop Loss -1%
     "timeframe_4h": 240,  # 4 horas
     "timeframe_1d": 'D',  # 1 dia
     "mode": 1,  # 1 - Isolated, 0 - Cross
